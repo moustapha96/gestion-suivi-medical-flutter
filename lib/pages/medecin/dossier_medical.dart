@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mygsmp/widget/components/medecin/drawer.dart';
 import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
 import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 
-class CounterScreen extends StatelessWidget {
+class MedecinDms extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,8 +25,12 @@ class CounterScreen extends StatelessWidget {
   }
 
   buildCorpsPage(BuildContext context) {
-    return Center(
-      child: Text('dossier médical')
+    return Container(
+      child: Center(
+        child: Text('dossier medical'),
+      )
     );
   }
+
+
 }

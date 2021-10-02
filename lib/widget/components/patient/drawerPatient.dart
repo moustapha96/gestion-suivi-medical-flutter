@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Drawer buildDrawerNavgation(BuildContext context){
+Drawer buildDrawerNavgationPatient(BuildContext context){
   return Drawer(
     elevation: 10,
     child:  ListView(
@@ -15,7 +15,7 @@ Drawer buildDrawerNavgation(BuildContext context){
                   fit: BoxFit.fill,
                   image: AssetImage('images/md.jpg')))  ,
           child: Text(
-            'Dr. Diop',
+            'Ibou Khouma',
             style: TextStyle(
               color: Colors.amberAccent,
               fontSize: 24,
@@ -28,7 +28,7 @@ Drawer buildDrawerNavgation(BuildContext context){
           leading: Icon(Icons.connect_without_contact),
           title: Text('Rendez-vous'),
           onTap: () {
-            Navigator.pushNamed(context, '/medecin/rv');
+            Navigator.pushNamed(context, '/patient/rv');
           },
 
         ),
@@ -36,28 +36,21 @@ Drawer buildDrawerNavgation(BuildContext context){
           leading: Icon(Icons.post_add),
           title: Text('Publication'),
           onTap: () {
-            Navigator.pushNamed(context, '/medecin/memos');
+            Navigator.pushNamed(context, '/patient/memos');
           },
         ),
         ListTile(
           leading: Icon(Icons.group_add),
           title: Text('demande de RV'),
           onTap: () {
-            Navigator.pushNamed(context, '/medecin/demandeRv');
+            Navigator.pushNamed(context, '/patient/demandeRv');
           },
         ),
         ListTile(
           leading: Icon(Icons.medical_services),
           title: Text('Dossier Médical'),
           onTap: () {
-            Navigator.pushNamed(context, '/medecin/dm');
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.portrait_sharp),
-          title: Text('Liste des Patients'),
-          onTap: () {
-            Navigator.pushNamed(context, '/medecin/patient');
+            Navigator.pushNamed(context, '/patient/dm');
           },
         ),
         ListTile(
@@ -69,15 +62,12 @@ Drawer buildDrawerNavgation(BuildContext context){
         ),
         ListTile(
           leading: Icon(Icons.logout),
-          title: Text('déconnexion'),
+          title: Text('Déonnexion'),
           onTap: (){
-            Navigator.pushNamed(context, '/');
+              Navigator.pushNamed(context, '/');
           },
         ),
-
-      ],
-    ),
-    semanticLabel: 'espace Medecin',
-
+      ],),
+    semanticLabel: 'espace Patient',
   );
 }

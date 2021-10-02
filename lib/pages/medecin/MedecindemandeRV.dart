@@ -3,7 +3,7 @@ import 'package:mygsmp/widget/components/medecin/drawer.dart';
 import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
 import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 
-class CounterScreen extends StatelessWidget {
+class MedecinDemandeRv extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,14 +18,14 @@ class CounterScreen extends StatelessWidget {
         ),
         child: buildCorpsPage(context),
       ) ,
-      //body : buildCorpsPage(context),
       bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 
   buildCorpsPage(BuildContext context) {
-    return Center(
-      child: Text('dossier médical')
+    return Container(
+      child: Text('demande rendez-vous')
     );
   }
+
 }

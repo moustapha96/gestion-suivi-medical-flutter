@@ -1,15 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mygsmp/widget/components/medecin/drawer.dart';
 import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
 import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 
-class CounterScreen extends StatelessWidget {
+class MedecinNewMemos extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
+   
+   
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
-      drawer: buildDrawerNavgation(context),
-      backgroundColor: Colors.amberAccent,
+    appBar: buildAppBarNavgation(context),
+    drawer: buildDrawerNavgation(context),
+    backgroundColor: Colors.amberAccent,
       body: Container(
         margin: EdgeInsets.all(5),
         alignment: Alignment.center,
@@ -18,14 +21,16 @@ class CounterScreen extends StatelessWidget {
         ),
         child: buildCorpsPage(context),
       ) ,
-      //body : buildCorpsPage(context),
-      bottomNavigationBar: buildBottomNavigationBar(context),
+    bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 
   buildCorpsPage(BuildContext context) {
-    return Center(
-      child: Text('dossier médical')
+    return Container(
+        alignment:  Alignment.center,
+        child: Text('Nouveau mémos')
     );
   }
+  
+  
 }

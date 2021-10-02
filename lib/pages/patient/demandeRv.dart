@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mygsmp/widget/components/medecin/drawer.dart';
-import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
-import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
+import 'package:mygsmp/widget/components/patient/drawerPatient.dart';
+import 'package:mygsmp/widget/components/patient/footer_patient.dart';
+import 'package:mygsmp/widget/components/patient/header_patient.dart';
 
-class MedecinMemos extends StatelessWidget{
+class PatientDemandeRv extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
-      drawer: buildDrawerNavgation(context),
+      appBar: buildAppBarNavgationPatient(context),
+      drawer: buildDrawerNavgationPatient(context),
       backgroundColor: Colors.amberAccent,
       body: Container(
         margin: EdgeInsets.all(5),
@@ -19,17 +18,23 @@ class MedecinMemos extends StatelessWidget{
         ),
         child: buildCorpsPage(context),
       ) ,
+      bottomNavigationBar: buildBottomNavigationBarPatient(context),
       floatingActionButton: buildFloatingActionButton(context),
-      bottomNavigationBar: buildBottomNavigationBar(context),
+
     );
   }
 
-  buildCorpsPage(BuildContext context) {}
+  buildCorpsPage(BuildContext context) {
+    return Center(
+      child: Text('demande Rv'),
+    );
+  }
 
   buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(
+      tooltip: 'nouvelle demande',
       onPressed: (){
-        Navigator.pushNamed(context, '/medecin/newMemos');
+        Navigator.pushNamed(context, '/patient/nouveauDemande');
       },
       backgroundColor: Colors.green,
       child: Icon(

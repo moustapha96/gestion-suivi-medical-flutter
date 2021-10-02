@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
-class HeaderPatient extends StatelessWidget {
-  HeaderPatient({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Header patient'),
-      ),
-      body: Container(),
-    );
-  }
+AppBar buildAppBarNavgationPatient(BuildContext context){
+  return AppBar(
+    elevation: 10,
+    title: Text('Page Patient'),
+    backgroundColor: Colors.cyan,
+  );
 }

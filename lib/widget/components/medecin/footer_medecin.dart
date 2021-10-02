@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 BottomNavigationBar buildBottomNavigationBar(BuildContext context) {
-  return BottomNavigationBar(currentIndex: 1, items: [
+  return BottomNavigationBar(currentIndex: 1,backgroundColor: Colors.cyan ,items: [
+
     BottomNavigationBarItem(
       label: "Acceuil",
       icon: IconButton(
@@ -17,7 +18,7 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context) {
           onPressed: () {
             Navigator.pushNamed(context, "/medecin/rv");
           },
-          icon: Icon(Icons.people_alt)),
+          icon: Icon(Icons.connect_without_contact)),
     ),
     BottomNavigationBarItem(
       label: "Pub",
@@ -25,7 +26,15 @@ BottomNavigationBar buildBottomNavigationBar(BuildContext context) {
           onPressed: () {
             Navigator.pushNamed(context, "/medecin/memos");
           },
-          icon: Icon(Icons.admin_panel_settings)),
-    )
+          icon: Icon(Icons.message)),
+    ),
+    BottomNavigationBarItem(
+      label: "Demande RV",
+      icon: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, "/medecin/demandeRv");
+          },
+          icon: Icon(Icons.group_add)),
+    ),
   ]);
 }

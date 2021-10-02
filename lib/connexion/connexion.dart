@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mygsmp/models/simple_user.dart';
 import 'package:mygsmp/pages/medecin/accueil.dart';
-import 'package:mygsmp/pages/medecin/rv.dart';
 
 import '../main.dart';
 
@@ -12,12 +10,8 @@ class Login extends StatefulWidget {
 
 class _Login extends State<Login> {
 
-
   TextEditingController emailController = TextEditingController();
-
   TextEditingController passwordController = TextEditingController();
-
-  TextEditingController roleController = TextEditingController();
 
   void creerCompte() {
     print("button creer un compte");
@@ -25,14 +19,15 @@ class _Login extends State<Login> {
   }
 
   void login(){
-    SimpleUser users = new SimpleUser(emailController.text, passwordController.text, "role");
-    Navigator.push(context,
-        MaterialPageRoute(
-      builder: (context) => AcceuilMedecin( user : users),
-    ));
-  //  Navigator.pushNamed(context, '/medecin/home', arguments: { users } );
-    print(emailController.text);
-    print(passwordController.text);
+
+    if( emailController.text.isEmpty ){
+      Navigator.pushNamed(context, '/patient/home');
+    }else{
+      Navigator.push(context,
+          MaterialPageRoute(
+            builder: (context) => AcceuilMedecin( email: emailController.text,password: passwordController.text,),
+          ));
+    }
   }
 
   @override

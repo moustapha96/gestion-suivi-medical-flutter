@@ -1,29 +1,33 @@
-import 'dart:js';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mygsmp/models/simple_user.dart';
 import 'package:mygsmp/widget/components/medecin/drawer.dart';
+import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
+import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 
+// ignore: must_be_immutable
 class AcceuilMedecin extends StatelessWidget{
-  final SimpleUser user;
+  String email;
+  String password;
 
-  AcceuilMedecin({ Key? key , required this.user }) : super(key: key);
+  AcceuilMedecin({ Key? key , required this.email,required this.password }) : super(key: key);
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Home Medecin'),
-          backgroundColor: Colors.amberAccent,
-        ),
+      appBar: buildAppBarNavgation(context),
       drawer: buildDrawerNavgation(context),
       backgroundColor: Colors.amberAccent,
-      body : buildCorpsPage(context),
+      body: Container(
+        margin: EdgeInsets.all(5),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            color: Colors.cyan
+        ),
+        child: buildCorpsPage(context),
+      ) ,
       floatingActionButton: buildFloatingActionButton(context),
       bottomNavigationBar: buildBottomNavigationBar(context),
-      //drawer: buildDrawerNavgation(context),
-
     );
   }
 
@@ -41,37 +45,11 @@ class AcceuilMedecin extends StatelessWidget{
   }
 
 
-  BottomNavigationBar buildBottomNavigationBar(BuildContext context) {
-    return BottomNavigationBar(currentIndex: 1, items: [
-      BottomNavigationBarItem(
-        label: "Acceuil",
-        icon: IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/medecin/home");
-            },
-            icon: Icon(Icons.home)),
-      ),
-      BottomNavigationBarItem(
-        label: "RV",
-        icon: IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/medecin/rv");
-            },
-            icon: Icon(Icons.people_alt)),
-      ),
-      BottomNavigationBarItem(
-        label: "Pub",
-        icon: IconButton(
-            onPressed: () {
-              Navigator.pushNamed(context, "/medecin/memos");
-            },
-            icon: Icon(Icons.admin_panel_settings)),
-      )
-    ]);
-  }
-
   Container buildCorpsPage(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+      ),
       child: Center(
         child: Container(
           color: Colors.amber,
@@ -84,12 +62,12 @@ class AcceuilMedecin extends StatelessWidget{
                 margin: EdgeInsets.all(50),
                 width: 300,
                 height: 300,
-                child : Text('email : '+user.email,
+                child : Text('email : '+email,
                 textAlign: TextAlign.center,
                 style: TextStyle( fontSize: 30 ),),
               ),
               Container(
-                 child:  Text("role : "+ user.role)
+                 child:  Text("password : "+ password)
               )
             ],
           ),
@@ -98,49 +76,5 @@ class AcceuilMedecin extends StatelessWidget{
     );
   }
 
-  buildDrawerNavgation(BuildContext context) {
-    return Drawer(
-      elevation: 10,
-      child:  ListView(
-       padding: EdgeInsets.zero,
-       children: <Widget>[
-         DrawerHeader(
-           margin: EdgeInsets. zero ,
-           padding: EdgeInsets. zero ,
-           decoration: BoxDecoration(
-               image: DecorationImage(
-                   fit: BoxFit.fill,
-                   image: AssetImage('images/md.jpg')))  ,
-           child: Text(
-             'Dr. Diop',
-             style: TextStyle(
-               color: Colors.amberAccent,
-               fontSize: 24,
-             ),
-           ),
-         ),
 
-         ListTile(
-           leading: Icon(Icons.message),
-           title: Text('Rendez-vous'),
-           onTap: () {
-             Navigator.pushNamed(context, '/medecin/rv');
-           },
-           subtitle: Text('nouveau'),
-         ),
-         ListTile(
-           leading: Icon(Icons.message),
-           title: Text('Publication'),
-           onTap: () {
-             Navigator.pushNamed(context, '/medecin/memos');
-           },
-         ),
-         ListTile(
-           leading: Icon(Icons.account_circle),
-           title: Text('Profile'),
-         ),
-
-       ],)
-   );
-  }
 }
