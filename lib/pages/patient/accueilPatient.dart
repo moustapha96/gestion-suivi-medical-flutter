@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mygsmp/widget/components/patient/drawerPatient.dart';
 import 'package:mygsmp/widget/components/patient/footer_patient.dart';
 import 'package:mygsmp/widget/components/patient/header_patient.dart';
+import 'package:mygsmp/widget/screen/buildCardSidebox.dart';
 
 class PatientAccueil extends StatelessWidget{
 
@@ -13,26 +14,71 @@ class PatientAccueil extends StatelessWidget{
     return Scaffold(
         appBar: buildAppBarNavgationPatient(context),
         drawer: buildDrawerNavgationPatient(context),
-        backgroundColor: Colors.amberAccent,
 
       body: Container(
-        margin: EdgeInsets.all(5),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: Colors.cyan
-        ),
-        child: buildCorpsPage(context),
-      ) ,
-        floatingActionButton: buildFloatingActionButton(context),
-        bottomNavigationBar: buildBottomNavigationBarPatient(context),
 
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(2),
+            image: DecorationImage(
+                image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
+        child: Column(
+          children: [
+            Center(
+                child : Container(
+                  margin: EdgeInsets.fromLTRB(0, 20 , 0, 0),
+                  child: Text('Menu', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Arial Rounded MT Bold' ),
+                  ),
+                )
+            ),
+            buildCorpsPage(context),
+          ],
+        ),
+      ),
 
     );
   }
 
-  buildCorpsPage(BuildContext context) {
-    return Center(
-      child: Text('bienvenue sur la page du patient'),
+  Container buildCorpsPage(BuildContext context) {
+    return Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+        child: Table(
+          children: [
+            TableRow(
+                children: [
+                  TableCell(child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      buildCard(context, 'Rv','Rendez-vous','/patient/rv' , Icons.connect_without_contact),
+                      buildCard(context , 'memos' ,'publication' ,'/patient/memos',Icons.post_add  ),
+                    ],
+                  )),
+                ]
+            ),
+            TableRow(
+                children: [
+                  TableCell(child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      buildCard(context , 'Demande' , 'Demande-rv' ,'/patient/demanderv', Icons.group_add ),
+                      buildCard(context , 'New Rv' , 'nouveau Demande Rv' ,'/patient/nouveauDemande',Icons.portrait_sharp),
+                    ],
+                  )),
+                ]
+            ),
+            TableRow(
+                children: [
+                  TableCell(child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      buildCard(context , 'Dm' , 'dossier médical', '/patient/dm', Icons.medical_services ),
+                    ],
+                  )),
+                ]
+            ),
+
+          ],
+        )
     );
   }
 

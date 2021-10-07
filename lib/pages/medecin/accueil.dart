@@ -1,9 +1,12 @@
 
+import 'dart:html';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mygsmp/widget/components/medecin/drawer.dart';
 import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
 import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
+import 'package:mygsmp/widget/screen/buildCardSidebox.dart';
 
 // ignore: must_be_immutable
 class AcceuilMedecin extends StatelessWidget{
@@ -17,17 +20,25 @@ class AcceuilMedecin extends StatelessWidget{
     return Scaffold(
       appBar: buildAppBarNavgation(context),
       drawer: buildDrawerNavgation(context),
-      backgroundColor: Colors.amberAccent,
-      body: Container(
-        margin: EdgeInsets.all(5),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: Colors.cyan
-        ),
-        child: buildCorpsPage(context),
-      ) ,
-      floatingActionButton: buildFloatingActionButton(context),
-      bottomNavigationBar: buildBottomNavigationBar(context),
+     body: Container(
+
+       decoration: BoxDecoration(
+           borderRadius: BorderRadius.circular(2),
+           image: DecorationImage(
+               image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
+       child: Column(
+         children: [
+           Center(
+               child : Container(
+                 margin: EdgeInsets.fromLTRB(0, 20 , 0, 0),
+                 child: Text('Menu', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold, fontFamily: 'Arial Rounded MT Bold' ),
+                    ),
+               )
+           ),
+           buildCorpsPage(context),
+         ],
+       ),
+     ),
     );
   }
 
@@ -47,32 +58,46 @@ class AcceuilMedecin extends StatelessWidget{
 
   Container buildCorpsPage(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Center(
-        child: Container(
-          color: Colors.amber,
-          width: MediaQuery.of(context).size.width * 0.7,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: ListView(
-            children: [
-              Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.all(50),
-                width: 300,
-                height: 300,
-                child : Text('email : '+email,
-                textAlign: TextAlign.center,
-                style: TextStyle( fontSize: 30 ),),
-              ),
-              Container(
-                 child:  Text("password : "+ password)
-              )
-            ],
-          ),
-        ),
-      ),
+        alignment: Alignment.center,
+        margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
+        child: Table(
+          children: [
+            TableRow(
+              children: [
+                TableCell(child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    buildCard(context, 'Rv','Rendez-vous','/medecin/rv' , Icons.connect_without_contact),
+                    buildCard(context , 'memos' ,'publication' ,'/medecin/memos',Icons.post_add  ),
+                  ],
+                )),
+              ]
+            ),
+            TableRow(
+                children: [
+                  TableCell(child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      buildCard(context , 'Demande' , 'Demande-rv' ,'/medecin/demanderv', Icons.group_add ),
+                      buildCard(context , 'patient' , 'liste Patient' ,'/medecin/patient',Icons.portrait_sharp),
+                    ],
+                  )),
+                ]
+            ),
+            TableRow(
+                children: [
+                  TableCell(child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      buildCard(context , 'Dm' , 'dossier médical', '/medecin/dm', Icons.medical_services ),
+                      buildCard(context,  'Dm' , 'dossier médical', '/medecin/dm', Icons.medical_services ),
+                    ],
+                  )),
+                ]
+            ),
+
+          ],
+        )
     );
   }
 

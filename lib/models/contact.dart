@@ -1,10 +1,10 @@
 
 class Contact {
-  int id;
-  String nom;
-  String email;
-  String subject;
-  String message;
+  int id= 0;
+  String? nom;
+  String? email;
+  String? subject;
+  String? message;
   // ignore: non_constant_identifier_names
   final DateTime date_contact;
 

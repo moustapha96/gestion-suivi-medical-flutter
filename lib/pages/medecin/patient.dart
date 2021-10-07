@@ -10,24 +10,37 @@ class MedecinPatient extends StatelessWidget{
     return Scaffold(
       appBar: buildAppBarNavgation(context),
       drawer: buildDrawerNavgation(context),
-      backgroundColor: Colors.amberAccent,
       body: Container(
-        margin: EdgeInsets.all(5),
-        alignment: Alignment.center,
+        margin: EdgeInsets.all(2),
         decoration: BoxDecoration(
-            color: Colors.cyan
-        ),
-        child: buildCorpsPage(context),
+            borderRadius: BorderRadius.circular(2),
+            image: DecorationImage(
+                image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
+
+        child : buildCorpsPage(context),
       ) ,
       bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 
   buildCorpsPage(BuildContext context) {
-    return Container(
-      alignment:  Alignment.center,
-        child: Text('liste des patient')
-    );
+    final ScrollController _scrollController = ScrollController();
+  return Center(
+            child: new Scrollbar(
+                isAlwaysShown: true,
+                controller: _scrollController,
+                child: ListView.builder(
+                    controller: _scrollController,
+                    itemCount: 10,
+                    itemBuilder: (context, index){
+                      return Card(
+                        child: ListTile(
+                          title: Text('prenom: ${index + 1} '),
+                          subtitle: Text('nom ${index + 1}'),
+                        ),
+                      );
+                    }
+                )),);
   }
 
 }

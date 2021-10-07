@@ -18,11 +18,10 @@ class Patient {
   String tel;
   int taille;
   int age;
-  DateTime creatAt;
-  List<Notification> notifications;
-  List<Rendezvous> rendezVous;
-  DossierMedical dossierMedical;
-  List<Demanderv> demandeRV;
+  DateTime creatAt = DateTime.now();
+  List<Rendezvous>? rendezVous;
+  DossierMedical? dossierMedical;
+  List<Demanderv>? demandeRV;
   Patient({
     required this.idPatient,
     required this.statut_social,
@@ -35,12 +34,12 @@ class Patient {
     required this.tel,
     required this.taille,
     required this.age,
-    required this.creatAt,
-    required this.notifications,
     required this.rendezVous,
     required this.dossierMedical,
     required this.demandeRV,
   });
+
+
   int get getIdPatient => this.idPatient;
 
   set setIdPatient(int idPatient) => this.idPatient = idPatient;
@@ -89,10 +88,6 @@ class Patient {
 
   set setCreatAt(creatAt) => this.creatAt = creatAt;
 
-  get getNotifications => this.notifications;
-
-  set setNotifications(notifications) => this.notifications = notifications;
-
   get getRendezVous => this.rendezVous;
 
   set setRendezVous(rendezVous) => this.rendezVous = rendezVous;
@@ -119,10 +114,9 @@ class Patient {
       'taille': taille,
       'age': age,
       'creatAt': creatAt.millisecondsSinceEpoch,
-      'notifications': notifications.map((x) => x.toMap()).toList(),
-      'rendezVous': rendezVous.map((x) => x.toMap()).toList(),
-      'dossierMedical': dossierMedical.toMap(),
-      'demandeRV': demandeRV.map((x) => x.toMap()).toList(),
+      'rendezVous': rendezVous!.map((x) => x.toMap()).toList(),
+      'dossierMedical': dossierMedical!.toMap(),
+      'demandeRV': demandeRV!.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -139,9 +133,6 @@ class Patient {
       tel: map['tel'],
       taille: map['taille'],
       age: map['age'],
-      creatAt: DateTime.fromMillisecondsSinceEpoch(map['creatAt']),
-      notifications: List<Notification>.from(
-          map['notifications']?.map((x) => Notification.fromMap(x))),
       rendezVous: List<Rendezvous>.from(
           map['rendezVous']?.map((x) => Rendezvous.fromMap(x))),
       dossierMedical: DossierMedical.fromMap(map['dossierMedical']),
@@ -152,6 +143,12 @@ class Patient {
 
   String toJson() => json.encode(toMap());
 
+
   factory Patient.fromJson(String source) =>
       Patient.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Patient{idPatient: $idPatient, statut_social: $statut_social, prenom: $prenom, profession: $profession, adresse: $adresse, genre: $genre, user: $user, nom: $nom, tel: $tel, taille: $taille, age: $age, creatAt: $creatAt, rendezVous: $rendezVous, dossierMedical: $dossierMedical, demandeRV: $demandeRV}';
+  }
 }

@@ -9,14 +9,25 @@ class PatientDemandeRv extends StatelessWidget{
     return Scaffold(
       appBar: buildAppBarNavgationPatient(context),
       drawer: buildDrawerNavgationPatient(context),
-      backgroundColor: Colors.amberAccent,
       body: Container(
-        margin: EdgeInsets.all(5),
+        margin: EdgeInsets.all(2),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: Colors.cyan
+            borderRadius: BorderRadius.circular(2),
+            image: DecorationImage(
+                image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
+        child: Column(
+          children: [
+            Center(
+                child : Container(
+                  margin: EdgeInsets.fromLTRB(0, 20 , 0, 0),
+                  child: Text('Demande De Rende-Vous', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Arial Rounded MT Bold' ),
+                  ),
+                )
+            ),
+            buildCorpsPage(context),
+          ],
         ),
-        child: buildCorpsPage(context),
       ) ,
       bottomNavigationBar: buildBottomNavigationBarPatient(context),
       floatingActionButton: buildFloatingActionButton(context),

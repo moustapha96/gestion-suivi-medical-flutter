@@ -25,13 +25,13 @@ class _MedecinNewRv extends State<MedecinNewRv> {
     return Scaffold(
       appBar: buildAppBarNavgation(context),
       drawer: buildDrawerNavgation(context),
-      backgroundColor: Colors.amberAccent,
       body: Container(
-        margin: EdgeInsets.all(5),
+        margin: EdgeInsets.all(2),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            color: Colors.cyan
-        ),
+            borderRadius: BorderRadius.circular(2),
+            image: DecorationImage(
+                image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
         child: buildCorpsPage(context),
       ) ,
       bottomNavigationBar: buildBottomNavigationBar(context),
@@ -39,10 +39,6 @@ class _MedecinNewRv extends State<MedecinNewRv> {
   }
 
   Container buildCorpsPage(BuildContext context) {
-    TextSelectionControls idpatient;
-
-    TextEditingController dateController= new TextEditingController();
-    TextEditingController heureController = new TextEditingController();
     return Container(
       child: Center(
         child: Container(
@@ -61,47 +57,7 @@ class _MedecinNewRv extends State<MedecinNewRv> {
                         fontWeight: FontWeight.bold,
                         fontSize: 25),
                   )),
-              Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: Center(
-                  child: Text('liste des patients'),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(10),
-                margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: TextField(
-                  controller: dateController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'date',
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                child: TextField(
-                  controller: heureController,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'heure',
-                  ),
-                ),
-              ),
-              Container(
-                  height: 50,
-                  width: 200,
-                  child: TextButton(
-                    child: Text(
-                      'enregistrer',
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.black),
-                    ),
-                    onPressed: (){},
-                  )),
+
 
             ],
           ),
@@ -110,9 +66,5 @@ class _MedecinNewRv extends State<MedecinNewRv> {
     );
   }
 
-
-  void fixer_rv(int idpatinent,String date,String heure ){
-
-  }
 
 }

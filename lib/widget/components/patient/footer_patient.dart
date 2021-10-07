@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
-  return BottomNavigationBar(currentIndex: 1,items: [
+  return BottomNavigationBar(
 
+      items: [
     BottomNavigationBarItem(
       label: "Acceuil",
       icon: IconButton(
+          color: Colors.amber,
           onPressed: () {
             Navigator.pushNamed(context, "/patient/home");
           },
@@ -15,6 +17,7 @@ BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
     BottomNavigationBarItem(
       label: "RV",
       icon: IconButton(
+          color: Colors.amber,
           onPressed: () {
             Navigator.pushNamed(context, "/patient/rv");
           },
@@ -23,6 +26,7 @@ BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
     BottomNavigationBarItem(
       label: "Pub",
       icon: IconButton(
+          color: Colors.amber,
           onPressed: () {
             Navigator.pushNamed(context, "/patient/memos");
           },
@@ -31,6 +35,7 @@ BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
     BottomNavigationBarItem(
       label: "Demande RV",
       icon: IconButton(
+          color: Colors.amber,
           onPressed: () {
             Navigator.pushNamed(context, "/patient/demandeRv");
           },

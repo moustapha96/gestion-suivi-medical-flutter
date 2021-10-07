@@ -6,20 +6,15 @@ import 'package:mygsmp/models/patient.dart';
 
 class DossierMedical {
   int idDossierMedical;
-
-  Medecin medecin;
-
-  Patient patient;
-
+  Medecin? medecin;
+  Patient? patient;
   List<Consultation> consultations;
-
-  DateTime date_creation;
+  DateTime date_creation = DateTime.now();
   DossierMedical({
     required this.idDossierMedical,
     required this.medecin,
     required this.patient,
     required this.consultations,
-    required this.date_creation,
   });
   int get getIdDossierMedical => this.idDossierMedical;
 
@@ -45,8 +40,8 @@ class DossierMedical {
   Map<String, dynamic> toMap() {
     return {
       'idDossierMedical': idDossierMedical,
-      'medecin': medecin.toMap(),
-      'patient': patient.toMap(),
+      'medecin': medecin!.toMap(),
+      'patient': patient!.toMap(),
       'consultations': consultations.map((x) => x.toMap()).toList(),
       'date_creation': date_creation.millisecondsSinceEpoch,
     };
@@ -59,7 +54,6 @@ class DossierMedical {
       patient: Patient.fromMap(map['patient']),
       consultations: List<Consultation>.from(
           map['consultations']?.map((x) => Consultation.fromMap(x))),
-      date_creation: DateTime.fromMillisecondsSinceEpoch(map['date_creation']),
     );
   }
 

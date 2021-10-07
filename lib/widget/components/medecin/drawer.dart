@@ -26,6 +26,14 @@ Drawer buildDrawerNavgation(BuildContext context){
 
         ListTile(
           leading: Icon(Icons.connect_without_contact),
+          title: Text('Contact'),
+          onTap: () {
+            Navigator.pushNamed(context, '/medecin/contact');
+          },
+        ),
+
+        ListTile(
+          leading: Icon(Icons.connect_without_contact),
           title: Text('Rendez-vous'),
           onTap: () {
             Navigator.pushNamed(context, '/medecin/rv');

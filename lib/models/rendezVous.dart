@@ -8,18 +8,15 @@ class Rendezvous {
   int idRendezVous;
   DateTime date_rv;
   String heure;
-  Medecin medecin;
-  Patient patient;
-  Notification notification;
-  DateTime creatAt;
+  Medecin? medecin;
+  Patient? patient;
+  DateTime creatAt = DateTime.now();
   Rendezvous({
     required this.idRendezVous,
     required this.date_rv,
     required this.heure,
     required this.medecin,
     required this.patient,
-    required this.notification,
-    required this.creatAt,
   });
   get getIdRendezVous => this.idRendezVous;
 
@@ -41,10 +38,6 @@ class Rendezvous {
 
   set setPatient(patient) => this.patient = patient;
 
-  get getNotification => this.notification;
-
-  set setNotification(notification) => this.notification = notification;
-
   get getCreatAt => this.creatAt;
 
   set setCreatAt(creatAt) => this.creatAt = creatAt;
@@ -54,9 +47,8 @@ class Rendezvous {
       'idRendezVous': idRendezVous,
       'date_rv': date_rv.millisecondsSinceEpoch,
       'heure': heure,
-      'medecin': medecin.toMap(),
-      'patient': patient.toMap(),
-      'notification': notification.toMap(),
+      'medecin': medecin!.toMap(),
+      'patient': patient!.toMap(),
       'creatAt': creatAt.millisecondsSinceEpoch,
     };
   }
@@ -68,9 +60,7 @@ class Rendezvous {
       heure: map['heure'],
       medecin: Medecin.fromMap(map['medecin']),
       patient: Patient.fromMap(map['patient']),
-      notification: Notification.fromMap(map['notification']),
-      creatAt: DateTime.fromMillisecondsSinceEpoch(map['creatAt']),
-    );
+      );
   }
 
   String toJson() => json.encode(toMap());

@@ -128,6 +128,7 @@ class Medecin {
     required this.serviceMedical,
   });
 
+
   Map<String, dynamic> toMap() {
     return {
       'idMedecin': idMedecin,
