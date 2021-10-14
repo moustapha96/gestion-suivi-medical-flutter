@@ -6,7 +6,7 @@ class Memos {
   int idMemos;
   String titre;
   String message;
-  Medecin medecin;
+  Medecin? medecin;
   DateTime date_creer;
   Memos({
     required this.idMemos,
@@ -15,6 +15,15 @@ class Memos {
     required this.medecin,
     required this.date_creer,
   });
+
+  Map <String, dynamic> toDatabaseJson() => {
+    "idMemos": this.idMemos,
+    "titre": this.titre,
+    "message": this.message,
+    "medecin": this.medecin,
+    "date_creer": this.date_creer,
+  };
+
   get getIdMemos => this.idMemos;
 
   set setIdMemos(idMemos) => this.idMemos = idMemos;
@@ -40,7 +49,7 @@ class Memos {
       'idMemos': idMemos,
       'titre': titre,
       'message': message,
-      'medecin': medecin.toMap(),
+      'medecin': medecin!.toMap(),
       'date_creer': date_creer.millisecondsSinceEpoch,
     };
   }

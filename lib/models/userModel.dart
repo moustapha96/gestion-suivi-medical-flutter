@@ -32,27 +32,35 @@ class Usermodel {
 
   set setCreatAt(creatAt) => this.creatAt = creatAt;
 
+  String toJson() => json.encode(toMap());
+
+  factory Usermodel.fromJson(String source) =>
+      Usermodel.fromMap(json.decode(source));
+
   Map<String, dynamic> toMap() {
     return {
-      'iduser': iduser,
-      'email': email,
-      'password': password,
-      'role': role,
-      'creatAt': creatAt.millisecondsSinceEpoch,
+      'iduser': this.iduser,
+      'email': this.email,
+      'password': this.password,
+      'role': this.role,
+      'creatAt': this.creatAt,
     };
   }
 
   factory Usermodel.fromMap(Map<String, dynamic> map) {
     return Usermodel(
-      iduser: map['iduser'],
-      email: map['email'],
-      password: map['password'],
-      role: map['role'],
+      iduser: map['iduser'] as int,
+      email: map['email'] as String,
+      password: map['password'] as String,
+      role: map['role'] as String,
     );
   }
+  Map <String, dynamic> toDatabaseJson() => {
+    "email": this.email,
+    "password": this.password,
+    "role": this.role,
+    "iduser":this.iduser,
+    "creatAt": this.creatAt
+  };
 
-  String toJson() => json.encode(toMap());
-
-  factory Usermodel.fromJson(String source) =>
-      Usermodel.fromMap(json.decode(source));
 }

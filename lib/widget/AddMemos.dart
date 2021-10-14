@@ -27,6 +27,10 @@ class _AddMemos  extends State<AddMemos>{
   List<Widget> getFormWidget() {
     List<Widget> formWidget = [];
 
+    formWidget.add( new Container(
+        alignment:  Alignment.center,
+        child: Text('Nouveau mémos')
+    ) );
     formWidget.add(new TextFormField(
       decoration: InputDecoration(labelText: 'titre', hintText: 'titre'),
       validator: (value) {
@@ -60,7 +64,6 @@ class _AddMemos  extends State<AddMemos>{
         _formKey.currentState!.save();
         print("titre " + titre);
         print("message " + message);
-
 
         //Memos memos = new Memos(idMemos: 0, titre: titre, message: message, medecin: null, date_creer: date_creer);
         Scaffold.of(context)

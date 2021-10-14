@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mygsmp/models/userLogin.dart';
+import 'package:mygsmp/models/userModel.dart';
 import 'package:mygsmp/pages/medecin/accueil.dart';
+import 'package:mygsmp/services/contactService.dart';
+import 'package:mygsmp/services/login_service.dart';
 
 import '../main.dart';
 
@@ -14,20 +18,26 @@ class _Login extends State<Login> {
   TextEditingController passwordController = TextEditingController();
 
   void creerCompte() {
-    print("button creer un compte");
     Navigator.pushNamed(context, '/inscription');
   }
 
   void login(){
 
-    if( emailController.text.isEmpty ){
-      Navigator.pushNamed(context, '/patient/home');
-    }else{
+    print("connexion");
+    UserLogin login = new UserLogin(email: emailController.text, password: passwordController.text,);
+    //Usermodel user = getUserByLogin(login)  as Usermodel;
+    Navigator.push(context,
+        MaterialPageRoute(
+          builder: (context) => AcceuilMedecin(),
+        ));
+    /*if( user.getRole == 'patient' ){
+       Navigator.pushNamed(context, '/patient/home');
+    }else if ( user.getRole == 'medecin' ) {
       Navigator.push(context,
           MaterialPageRoute(
-            builder: (context) => AcceuilMedecin( email: emailController.text,password: passwordController.text,),
+            builder: (context) => AcceuilMedecin(  user: user ),
           ));
-    }
+    }*/
   }
 
   @override

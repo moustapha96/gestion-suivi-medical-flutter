@@ -21,18 +21,15 @@ class Medecin {
   String tel;
   int taille;
   int age;
-
   DateTime creatAt;
-
-  List<Notification> notifications;
-
-  List<Rendezvous> rendezVous;
+  Servicemedical? serviceMedical;
+  /*List<Rendezvous> rendezVous;
 
   List<DossierMedical> dossierMedical;
 
   List<Memos> memos;
 
-  List<Demanderv> deamndeRv;
+  List<Demanderv> deamndeRv;*/
   get getIdMedecin => this.idMedecin;
 
   set setIdMedecin(idMedecin) => this.idMedecin = idMedecin;
@@ -85,27 +82,8 @@ class Medecin {
 
   set setCreatAt(creatAt) => this.creatAt = creatAt;
 
-  get getNotifications => this.notifications;
 
-  set setNotifications(notifications) => this.notifications = notifications;
 
-  get getRendezVous => this.rendezVous;
-
-  set setRendezVous(rendezVous) => this.rendezVous = rendezVous;
-
-  get getDossierMedical => this.dossierMedical;
-
-  set setDossierMedical(dossierMedical) => this.dossierMedical = dossierMedical;
-
-  get getMemos => this.memos;
-
-  set setMemos(memos) => this.memos = memos;
-
-  get getDeamndeRv => this.deamndeRv;
-
-  set setDeamndeRv(deamndeRv) => this.deamndeRv = deamndeRv;
-
-  Servicemedical serviceMedical;
   Medecin({
     required this.idMedecin,
     required this.specialisation,
@@ -120,11 +98,6 @@ class Medecin {
     required this.taille,
     required this.age,
     required this.creatAt,
-    required this.notifications,
-    required this.rendezVous,
-    required this.dossierMedical,
-    required this.memos,
-    required this.deamndeRv,
     required this.serviceMedical,
   });
 
@@ -144,12 +117,7 @@ class Medecin {
       'taille': taille,
       'age': age,
       'creatAt': creatAt.millisecondsSinceEpoch,
-      'notifications': notifications.map((x) => x.toMap()).toList(),
-      'rendezVous': rendezVous.map((x) => x.toMap()).toList(),
-      'dossierMedical': dossierMedical.map((x) => x.toMap()).toList(),
-      'memos': memos.map((x) => x.toMap()).toList(),
-      'deamndeRv': deamndeRv.map((x) => x.toMap()).toList(),
-      'serviceMedical': serviceMedical.toMap(),
+      'serviceMedical': serviceMedical!.toMap(),
     };
   }
 
@@ -168,15 +136,6 @@ class Medecin {
       taille: map['taille'],
       age: map['age'],
       creatAt: DateTime.fromMillisecondsSinceEpoch(map['creatAt']),
-      notifications: List<Notification>.from(
-          map['notifications']?.map((x) => Notification.fromMap(x))),
-      rendezVous: List<Rendezvous>.from(
-          map['rendezVous']?.map((x) => Rendezvous.fromMap(x))),
-      dossierMedical: List<DossierMedical>.from(
-          map['dossierMedical']?.map((x) => DossierMedical.fromMap(x))),
-      memos: List<Memos>.from(map['memos']?.map((x) => Memos.fromMap(x))),
-      deamndeRv: List<Demanderv>.from(
-          map['deamndeRv']?.map((x) => Demanderv.fromMap(x))),
       serviceMedical: Servicemedical.fromMap(map['serviceMedical']),
     );
   }
