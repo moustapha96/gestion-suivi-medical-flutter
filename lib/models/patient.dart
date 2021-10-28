@@ -19,9 +19,6 @@ class Patient {
   int taille;
   int age;
   DateTime creatAt = DateTime.now();
-  List<Rendezvous>? rendezVous;
-  DossierMedical? dossierMedical;
-  List<Demanderv>? demandeRV;
   Patient({
     required this.idPatient,
     required this.statut_social,
@@ -34,9 +31,6 @@ class Patient {
     required this.tel,
     required this.taille,
     required this.age,
-    required this.rendezVous,
-    required this.dossierMedical,
-    required this.demandeRV,
   });
 
 
@@ -88,17 +82,6 @@ class Patient {
 
   set setCreatAt(creatAt) => this.creatAt = creatAt;
 
-  get getRendezVous => this.rendezVous;
-
-  set setRendezVous(rendezVous) => this.rendezVous = rendezVous;
-
-  get getDossierMedical => this.dossierMedical;
-
-  set setDossierMedical(dossierMedical) => this.dossierMedical = dossierMedical;
-
-  get getDemandeRV => this.demandeRV;
-
-  set setDemandeRV(demandeRV) => this.demandeRV = demandeRV;
 
   Map<String, dynamic> toMap() {
     return {
@@ -114,9 +97,6 @@ class Patient {
       'taille': taille,
       'age': age,
       'creatAt': creatAt.millisecondsSinceEpoch,
-      'rendezVous': rendezVous!.map((x) => x.toMap()).toList(),
-      'dossierMedical': dossierMedical!.toMap(),
-      'demandeRV': demandeRV!.map((x) => x.toMap()).toList(),
     };
   }
 
@@ -133,11 +113,6 @@ class Patient {
       tel: map['tel'],
       taille: map['taille'],
       age: map['age'],
-      rendezVous: List<Rendezvous>.from(
-          map['rendezVous']?.map((x) => Rendezvous.fromMap(x))),
-      dossierMedical: DossierMedical.fromMap(map['dossierMedical']),
-      demandeRV: List<Demanderv>.from(
-          map['demandeRV']?.map((x) => Demanderv.fromMap(x))),
     );
   }
 
@@ -149,6 +124,6 @@ class Patient {
 
   @override
   String toString() {
-    return 'Patient{idPatient: $idPatient, statut_social: $statut_social, prenom: $prenom, profession: $profession, adresse: $adresse, genre: $genre, user: $user, nom: $nom, tel: $tel, taille: $taille, age: $age, creatAt: $creatAt, rendezVous: $rendezVous, dossierMedical: $dossierMedical, demandeRV: $demandeRV}';
+    return 'Patient{idPatient: $idPatient, statut_social: $statut_social, prenom: $prenom, profession: $profession, adresse: $adresse, genre: $genre, user: $user, nom: $nom, tel: $tel, taille: $taille, age: $age, creatAt: $creatAt}';
   }
 }

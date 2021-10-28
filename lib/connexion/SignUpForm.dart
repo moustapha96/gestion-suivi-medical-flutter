@@ -228,7 +228,7 @@ class _SignUpFormState extends State<SignUpForm> {
         Usermodel user = new Usermodel( email: email, password: password, role: "patient", iduser: 0);
         Patient patient = new Patient(idPatient: 0, statut_social: statutSocial, prenom: prenom,
             profession: profession, adresse: adresse, genre: genre, user: user, nom: nom,
-            tel: tel.toString(), taille: taille, age: age, dossierMedical: null, demandeRV: [], rendezVous: []);
+            tel: tel.toString(), taille: taille, age: age);
 
         print( patient.prenom );
         print( patient.nom );
