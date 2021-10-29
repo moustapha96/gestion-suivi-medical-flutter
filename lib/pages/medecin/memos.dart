@@ -26,7 +26,7 @@ class MedecinMemosState extends State<MedecinMemos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Liste des Mémos'),
       drawer: buildDrawerNavgation(context),
       body: Container(
         margin: EdgeInsets.all(2),

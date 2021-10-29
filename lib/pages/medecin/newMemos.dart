@@ -33,7 +33,7 @@ class MedecinNewMemosState extends State<MedecinNewMemos> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Nouveau Mémos'),
       drawer: buildDrawerNavgation(context),
       body: Container(
         margin: EdgeInsets.all(2),

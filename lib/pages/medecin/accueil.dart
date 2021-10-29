@@ -15,7 +15,7 @@ class AcceuilMedecin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Menu Medecin'),
       drawer: buildDrawerNavgation(context),
       body: Container(
         decoration: BoxDecoration(

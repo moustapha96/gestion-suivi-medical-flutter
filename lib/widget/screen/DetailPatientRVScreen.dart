@@ -4,11 +4,11 @@ import 'package:mygsmp/widget/components/medecin/drawer.dart';
 import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
 import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 
-class DetailPatientScreen extends StatelessWidget {
-  final List data;
+class DetailPatientRVScreen extends StatelessWidget {
+  List data = [];
   final int index;
 
-  DetailPatientScreen({required this.data, required this.index});
+  DetailPatientRVScreen({required this.data, required this.index});
 
   @override
   Widget build(BuildContext context) {

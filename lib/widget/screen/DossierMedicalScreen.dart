@@ -7,7 +7,7 @@ class CounterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Dosssier Médical'),
       drawer: buildDrawerNavgation(context),
       backgroundColor: Colors.amberAccent,
       body: Container(

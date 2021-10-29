@@ -25,7 +25,7 @@ class MedecinPatientState extends State<MedecinPatient> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,"Liste des Patient"),
       drawer: buildDrawerNavgation(context),
       body: Container(
         margin: EdgeInsets.all(2),
@@ -58,7 +58,6 @@ class MedecinPatientState extends State<MedecinPatient> {
                         print(_data[indice]);
                         Navigator.push(
                           context,
-
                           MaterialPageRoute(
                             builder: (context) => DetailPatientScreen(data: _data,index: indice),
                           ),

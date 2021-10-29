@@ -9,6 +9,7 @@ import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
 import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 
 import 'package:http/http.dart' as http;
+import 'package:mygsmp/widget/screen/DetailPatientScreen.dart';
 
 class MedecinRv extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _MedecinRvState extends State<MedecinRv> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Liste des RV'),
       drawer: buildDrawerNavgation(context),
       body: Container(
         margin: EdgeInsets.all(2),
@@ -54,14 +55,18 @@ class _MedecinRvState extends State<MedecinRv> {
          margin: EdgeInsets.all(10),
           elevation: 12,
           child: ListTile(
-            trailing: IconButton(
-              color: Colors.red,
-              icon: Icon(Icons.delete_sweep),
-              onPressed: () {
-                setState(() {
-                  _data.removeAt(index);
-                });
-              },
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton( onPressed : () {
+                  displayDialogPatient(context, index);
+                }, icon: Icon(Icons.remove_red_eye_outlined)),
+                IconButton(onPressed: () {
+                  setState(() {
+                    _data.removeAt(index);
+                  });
+                }, icon: Icon(Icons.delete) ,  color: Colors.red ),
+              ],
             ),
             onTap: () {
               displayDialog(context, index);
@@ -79,7 +84,7 @@ class _MedecinRvState extends State<MedecinRv> {
               maxLines: 2,
             ),
           ),
-          color: Colors.blueAccent,
+          color: Colors.blueGrey,
         );
       },
       separatorBuilder: (BuildContext context, int index) => (const Divider(
@@ -149,5 +154,108 @@ class _MedecinRvState extends State<MedecinRv> {
             ],
           );
         });
+  }
+
+  void displayDialogPatient(BuildContext context, int index){
+    showDialog<void>(
+      context: context,
+      // false = user must tap button, true = tap outside dialog
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text('Détail Patient'),
+          content: SingleChildScrollView(
+           child: Column(
+             children: [
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(
+                     _data[index]['patient']['prenom'] +
+                         ' ' +
+                         _data[index]['patient']['nom'],
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('prenom && nom'),
+               ),
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(_data[index]['patient']['adresse'],
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('adresse'),
+               ),
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(_data[index]['patient']['statut_social'],
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('Statut Social'),
+               ),
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(
+                     _data[index]['patient']['taille'].toString() +
+                         " cm",
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('taille'),
+               ),
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(_data[index]['patient']['genre'],
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('genre'),
+               ),
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(_data[index]['patient']['age'].toString(),
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('age'),
+               ),
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(_data[index]['patient']['profession'],
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('profession'),
+               ),
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(_data[index]['patient']['tel'].toString(),
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('TEL'),
+               ),
+               ListTile(
+                 hoverColor: Colors.lightBlueAccent,
+                 title: Text(_data[index]['patient']['user']['email'],
+                     style: TextStyle(
+                         fontWeight: FontWeight.bold,
+                         fontSize: 15)),
+                 subtitle: Text('email'),
+               ),
+             ],
+           )
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('quittez'),
+              onPressed: () {
+                Navigator.of(dialogContext).pop(); // Dismiss alert dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

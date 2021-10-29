@@ -36,7 +36,7 @@ class _MedecinNewRv extends State<MedecinNewRv> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Nouveau Rendez-Vous'),
       drawer: buildDrawerNavgation(context),
       body: Container(
         margin: EdgeInsets.all(3),

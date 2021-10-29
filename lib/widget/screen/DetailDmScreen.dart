@@ -15,7 +15,7 @@ class DetailDmScreen extends StatelessWidget {
     List cons = data[index]['consultations'];
 
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Détail Dossier Médical'),
       drawer: buildDrawerNavgation(context),
       body: Container(
           margin: EdgeInsets.all(2),

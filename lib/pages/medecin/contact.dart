@@ -20,7 +20,7 @@ class MedecinContact extends StatefulWidget{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Liste des Contacts'),
       drawer: buildDrawerNavgation(context),
 
       body: Container(

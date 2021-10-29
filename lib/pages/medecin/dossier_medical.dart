@@ -30,7 +30,7 @@ class MedecinDmState extends State<MedecinDms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context),
+      appBar: buildAppBarNavgation(context,'Dossier Médical'),
       drawer: buildDrawerNavgation(context),
       body: Container(
           margin: EdgeInsets.all(2),

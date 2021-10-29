@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           '/medecin/memos': (context) => MedecinMemos(),
           '/medecin/newMemos': (context) => MedecinNewMemos(),
           '/medecin/newRv': (context) => MedecinNewRv(),
-          '/medecin/demandeRv': (context) => MedecinDemandeRv(),
+          '/medecin/demanderv': (context) => MedecinDemandeRv(),
           '/medecin/dm': (context) => MedecinDms(),
           '/medecin/contact': (context) => MedecinContact(),
           '/medecin/patient': (context) => MedecinPatient(),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-AppBar buildAppBarNavgation(BuildContext context){
+AppBar buildAppBarNavgation(BuildContext context , String titre){
   return AppBar(
     elevation: 10,
-    title: Text('Page Medecin'),
+    title: Text(titre,
+    textAlign: TextAlign.center,
+    style: TextStyle( fontWeight: FontWeight.bold ),),
     backgroundColor: Colors.amberAccent,
   );
 }
