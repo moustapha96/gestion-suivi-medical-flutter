@@ -15,14 +15,14 @@ class Medecin {
   String prenom;
   String num_licence;
   String adresse;
-  Usermodel user;
+  Usermodel? user;
   String genre;
   String nom;
   String tel;
   int taille;
   int age;
-  DateTime creatAt;
-  Servicemedical? serviceMedical;
+  String creatAt;
+  //Servicemedical? serviceMedical;
   /*List<Rendezvous> rendezVous;
 
   List<DossierMedical> dossierMedical;
@@ -98,7 +98,7 @@ class Medecin {
     required this.taille,
     required this.age,
     required this.creatAt,
-    required this.serviceMedical,
+   // required this.serviceMedical,
   });
 
 
@@ -110,14 +110,14 @@ class Medecin {
       'prenom': prenom,
       'num_licence': num_licence,
       'adresse': adresse,
-      'user': user.toMap(),
+      'user': user!.toMap(),
       'genre': genre,
       'nom': nom,
       'tel': tel,
       'taille': taille,
       'age': age,
-      'creatAt': creatAt.millisecondsSinceEpoch,
-      'serviceMedical': serviceMedical!.toMap(),
+      'creatAt': creatAt,
+     // 'serviceMedical': serviceMedical!.toMap(),
     };
   }
 
@@ -135,8 +135,8 @@ class Medecin {
       tel: map['tel'],
       taille: map['taille'],
       age: map['age'],
-      creatAt: DateTime.fromMillisecondsSinceEpoch(map['creatAt']),
-      serviceMedical: Servicemedical.fromMap(map['serviceMedical']),
+      creatAt: map['creatAt'],
+      //serviceMedical: Servicemedical.fromMap(map['serviceMedical']),
     );
   }
 

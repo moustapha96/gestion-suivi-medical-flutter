@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'package:mygsmp/models/medecin.dart';
+import 'package:mygsmp/models/patient.dart';
+import 'package:mygsmp/models/rendezVous.dart';
+import 'package:mygsmp/services/MedecinService.dart';
+import 'package:mygsmp/services/PatientService.dart';
 import 'DatePickerScreen.dart';
 
 class FixerRendezVous extends StatefulWidget {
@@ -18,6 +25,7 @@ class _FixerRendezVousState extends State<FixerRendezVous> {
   List<DropdownMenuItem<int>> listePatient = [];
 
   void loadPatient() {
+
     listePatient = [];
     listePatient.add(new DropdownMenuItem(
       child: new Text('patient 1'),
@@ -105,6 +113,7 @@ class _FixerRendezVousState extends State<FixerRendezVous> {
     ));
 
     void onPressedSubmit() {
+      addRv();
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         print('date : ' + date);
@@ -122,5 +131,30 @@ class _FixerRendezVousState extends State<FixerRendezVous> {
         onPressed: onPressedSubmit));
 
     return formWidget;
+  }
+
+  Future<String> addRv() async {
+    Medecin medecin = getOneMedecin() as Medecin;
+    Patient patient = getOnePatient()  as Patient;
+
+    final url = Uri.parse("http://localhost:8888/api/RendezVous");
+    final response = await http.post(url, headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+        body: jsonEncode({
+          "date_rv": "2021-10-06",
+          "heure": "12:00",
+           "medecin" : medecin,
+           "patient" : patient
+        })
+
+    );
+    if (response.statusCode == 201) {
+      print(Rendezvous.fromJson(jsonDecode(response.body)));
+      return 'success';
+    } else {
+      print("erreur");
+      throw Exception('Failed to create post');
+    }
   }
 }

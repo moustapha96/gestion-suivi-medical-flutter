@@ -103,7 +103,7 @@ class MedecinNewMemosState extends State<MedecinNewMemos> {
         Medecin medecin = new Medecin(idMedecin: mess!["idMedecin"], specialisation: mess!["specialisation"], initial: mess!["initial"],
             prenom: mess!["prenom"], num_licence: mess!["num_licence"], adresse: mess!["adresse"], user: mess!["user"],
             genre: mess!["genre"], nom: mess!["nom"], tel: mess!["tel"], taille: mess!["taille"], age: mess!["age"], creatAt: mess!["creatAt"]
-            ,serviceMedical: null, );
+             );
         Memos memos = new Memos(idMemos: 0, titre: titre, message: message, medecin: medecin, date_creer: date_creer);
         Future<String> resp = saveMemos(memos);
         print(resp);

@@ -18,6 +18,7 @@ class MedecinDemandeRv extends StatefulWidget {
 
 class _MedecinDemandeRvState extends State<MedecinDemandeRv> {
   List _data = [];
+  DateTime selectedData = DateTime.now();
 
   @override
   void initState() {
@@ -130,6 +131,7 @@ class _MedecinDemandeRvState extends State<MedecinDemandeRv> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text('Détail Patient'),
+          backgroundColor: Colors.blueGrey,
           content: SingleChildScrollView(
               child: Column(
             children: [
@@ -218,6 +220,7 @@ class _MedecinDemandeRvState extends State<MedecinDemandeRv> {
   void displayDialogFixeRv(BuildContext context, int index) {
     TextEditingController date = new TextEditingController();
     TextEditingController heure = new TextEditingController();
+
     showDialog<void>(
       context: context,
       // false = user must tap button, true = tap outside dialog
@@ -233,14 +236,12 @@ class _MedecinDemandeRvState extends State<MedecinDemandeRv> {
               TextFormField(
                 controller: date,
                 decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Date'),
+                    border: UnderlineInputBorder(), labelText: 'Date'),
               ),
               TextFormField(
                 controller: heure,
                 decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Heure'),
+                    border: UnderlineInputBorder(), labelText: 'Heure'),
               ),
             ],
           )),
@@ -248,7 +249,7 @@ class _MedecinDemandeRvState extends State<MedecinDemandeRv> {
             TextButton(
               child: Text('Enregistrer'),
               onPressed: () {
-               print('heure '+ heure.text+ 'date '+ date.text );
+                print('heure ' + heure.text + 'date ' + date.text);
               },
             ),
             TextButton(

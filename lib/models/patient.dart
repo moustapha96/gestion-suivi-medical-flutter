@@ -13,26 +13,26 @@ class Patient {
   String profession;
   String adresse;
   String genre;
-  Usermodel user;
+  Usermodel? user;
   String nom;
   String tel;
   int taille;
   int age;
-  DateTime creatAt = DateTime.now();
-  Patient({
-    required this.idPatient,
-    required this.statut_social,
-    required this.prenom,
-    required this.profession,
-    required this.adresse,
-    required this.genre,
-    required this.user,
-    required this.nom,
-    required this.tel,
-    required this.taille,
-    required this.age,
-  });
+  String creatAt;
 
+  Patient(
+      {required this.idPatient,
+      required this.statut_social,
+      required this.prenom,
+      required this.profession,
+      required this.adresse,
+      required this.genre,
+      required this.user,
+      required this.nom,
+      required this.tel,
+      required this.taille,
+      required this.age,
+      required this.creatAt});
 
   int get getIdPatient => this.idPatient;
 
@@ -82,7 +82,6 @@ class Patient {
 
   set setCreatAt(creatAt) => this.creatAt = creatAt;
 
-
   Map<String, dynamic> toMap() {
     return {
       'idPatient': idPatient,
@@ -91,33 +90,32 @@ class Patient {
       'profession': profession,
       'adresse': adresse,
       'genre': genre,
-      'user': user.toMap(),
+      'user': user!.toMap(),
       'nom': nom,
       'tel': tel,
       'taille': taille,
       'age': age,
-      'creatAt': creatAt.millisecondsSinceEpoch,
+      'creatAt': creatAt,
     };
   }
 
   factory Patient.fromMap(Map<String, dynamic> map) {
     return Patient(
-      idPatient: map['idPatient'],
-      statut_social: map['statut_social'],
-      prenom: map['prenom'],
-      profession: map['profession'],
-      adresse: map['adresse'],
-      genre: map['genre'],
-      user: Usermodel.fromMap(map['user']),
-      nom: map['nom'],
-      tel: map['tel'],
-      taille: map['taille'],
-      age: map['age'],
-    );
+        idPatient: map['idPatient'],
+        statut_social: map['statut_social'],
+        prenom: map['prenom'],
+        profession: map['profession'],
+        adresse: map['adresse'],
+        genre: map['genre'],
+        user: Usermodel.fromMap(map['user']),
+        nom: map['nom'],
+        tel: map['tel'],
+        taille: map['taille'],
+        age: map['age'],
+        creatAt: map['creatAt']);
   }
 
   String toJson() => json.encode(toMap());
-
 
   factory Patient.fromJson(String source) =>
       Patient.fromMap(json.decode(source));

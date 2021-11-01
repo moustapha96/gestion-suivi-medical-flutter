@@ -84,6 +84,7 @@ class MedecinDmState extends State<MedecinDms> {
             Expanded(
               child: Container(
                 alignment: Alignment.topLeft,
+                color: Colors.blueGrey,
                 child: Column(
                   children: [
                     Expanded(
@@ -139,7 +140,7 @@ class MedecinDmState extends State<MedecinDms> {
         builder: (BuildContext context) {
           return SimpleDialog(
             elevation: 5,
-            // backgroundColor: Colors.amberAccent,
+            backgroundColor: Colors.transparent,
             title: Text(
               'Dossier Médical',
               textAlign: TextAlign.center,

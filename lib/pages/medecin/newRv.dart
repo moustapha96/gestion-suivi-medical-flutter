@@ -29,7 +29,6 @@ class _MedecinNewRv extends State<MedecinNewRv> {
   @override
   Future<void> afterFirstLayout(BuildContext context) async {
 
-
   }
 
   @override
