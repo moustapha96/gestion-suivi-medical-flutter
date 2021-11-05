@@ -30,7 +30,7 @@ class MedecinDmState extends State<MedecinDms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context,'Dossier Médical'),
+      appBar: buildAppBarNavgation(context, 'Dossier Médical'),
       drawer: buildDrawerNavgation(context),
       body: Container(
           margin: EdgeInsets.all(2),
@@ -108,10 +108,10 @@ class MedecinDmState extends State<MedecinDms> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => DetailDmScreen(data: _data,index: index),
+                                  builder: (context) =>
+                                      DetailDmScreen(data: _data, index: index),
                                 ),
                               );
-
                             },
                           ),
                           SizedBox(
@@ -130,7 +130,6 @@ class MedecinDmState extends State<MedecinDms> {
       ),
       elevation: 8,
       margin: EdgeInsets.all(10),
-
     );
   }
 

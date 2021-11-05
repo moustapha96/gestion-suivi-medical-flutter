@@ -119,7 +119,6 @@ class _MedecinRvState extends State<MedecinRv> {
     );
     setState(() {
       _data = json.decode(response.body);
-
     });
     print(_data);
     return "succes";

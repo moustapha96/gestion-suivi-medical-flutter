@@ -7,17 +7,22 @@ import 'dart:convert';
 import 'package:mygsmp/models/medecin.dart';
 
 String _base = "http://localhost:8888/api/medecins/1";
+String _base_email = "http://localhost:8888/api/medecins/user";
+
 var client = new http.Client();
 String data = "";
 
-Future<Medecin> getOneMedecin() async {
+Future getOneMedecin() async {
   final http.Response response = await client.get(
     Uri.parse(_base),
     headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     },
   );
-  if (response.statusCode == 200) {
+  print(Medecin.fromJson(response.body));
+  return Medecin.fromJson(response.body);
+
+  /*if (response.statusCode == 200) {
     final responseJson = jsonDecode(response.body);
     Medecin medecin = new Medecin(
         idMedecin: responseJson['idMedecin'],
@@ -36,7 +41,20 @@ Future<Medecin> getOneMedecin() async {
   } else {
     print(json.decode(response.body).toString());
     throw Exception(json.decode(response.body));
-  }
+  }*/
+}
+
+Future<Medecin> getMedecinById(String email, String token) async {
+  final http.Response response = await http
+      .get(Uri.parse(_base_email + "/" + email), headers: <String, String>{
+    'Accept': 'application/json',
+    'Authorization': 'Bearer token $token'
+  });
+
+  print(jsonDecode(response.body));
+  Medecin med =  Medecin.fromMap (jsonDecode(response.body));
+
+  return med;
 }
 
 Future<List<Medecin>> fetchMedecins() async {

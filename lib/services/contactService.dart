@@ -15,7 +15,6 @@ Future<Contact> fetchContact() async {
         'Accept': 'application/json',
         'Authorization': 'Bearer token $token'
       });
-
   if (respo.statusCode == 200) {
     return Contact.fromJson(jsonDecode(respo.body));
   } else {

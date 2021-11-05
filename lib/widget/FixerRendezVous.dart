@@ -134,8 +134,8 @@ class _FixerRendezVousState extends State<FixerRendezVous> {
   }
 
   Future<String> addRv() async {
-    Medecin medecin = getOneMedecin() as Medecin;
-    Patient patient = getOnePatient()  as Patient;
+    Future medecin = getOneMedecin() ;
+    Future patient = getOnePatient() ;
 
     final url = Uri.parse("http://localhost:8888/api/RendezVous");
     final response = await http.post(url, headers: {

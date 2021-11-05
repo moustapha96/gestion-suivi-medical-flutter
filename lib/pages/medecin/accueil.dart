@@ -2,6 +2,7 @@ import 'dart:html';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mygsmp/models/medecin.dart';
 import 'package:mygsmp/models/userModel.dart';
 import 'package:mygsmp/widget/components/medecin/drawer.dart';
 import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
@@ -10,12 +11,12 @@ import 'package:mygsmp/widget/screen/buildCardSidebox.dart';
 
 // ignore: must_be_immutable
 class AcceuilMedecin extends StatelessWidget {
-  AcceuilMedecin({Key? key, Usermodel? user}) : super(key: key);
+  AcceuilMedecin({Key? key, Medecin? medecin}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgation(context,'Menu Medecin'),
+      appBar: buildAppBarNavgation(context, 'Menu Medecin'),
       drawer: buildDrawerNavgation(context),
       body: Container(
         decoration: BoxDecoration(

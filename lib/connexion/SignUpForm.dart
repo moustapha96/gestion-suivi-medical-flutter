@@ -5,9 +5,9 @@ import 'package:mygsmp/models/patient.dart';
 import 'package:mygsmp/models/simple_user.dart';
 import 'package:mygsmp/models/userModel.dart';
 
-class SignUpForm extends StatefulWidget{
+class SignUpForm extends StatefulWidget {
   @override
-  _SignUpFormState  createState() => new _SignUpFormState();
+  _SignUpFormState createState() => new _SignUpFormState();
 }
 
 class _SignUpFormState extends State<SignUpForm> {
@@ -20,7 +20,7 @@ class _SignUpFormState extends State<SignUpForm> {
   int selectSttsocial = 0;
   String statutSocial = '';
   String prenom = '';
-  String  nom = '';
+  String nom = '';
   String profession = '';
   String adresse = '';
   String genre = '';
@@ -38,16 +38,32 @@ class _SignUpFormState extends State<SignUpForm> {
       child: new Text('Masculin'),
       value: 0,
     ));
-    genderList.add(new DropdownMenuItem(child: new Text('Féminin'), value: 1,));
+    genderList.add(new DropdownMenuItem(
+      child: new Text('Féminin'),
+      value: 1,
+    ));
   }
 
-  void loadStatuSocial(){
+  void loadStatuSocial() {
     sttsocial = [];
-    sttsocial.add(new DropdownMenuItem(child: new Text('Célibataire'), value: 0,));
-    sttsocial.add(new DropdownMenuItem(child: new Text('Marié(e)'), value: 1,));
-    sttsocial.add(new DropdownMenuItem(child: new Text('Divorcé(e)'), value: 2,));
-    sttsocial.add(new DropdownMenuItem(child: new Text('Veuf(ve)'), value: 3,));
+    sttsocial.add(new DropdownMenuItem(
+      child: new Text('Célibataire'),
+      value: 0,
+    ));
+    sttsocial.add(new DropdownMenuItem(
+      child: new Text('Marié(e)'),
+      value: 1,
+    ));
+    sttsocial.add(new DropdownMenuItem(
+      child: new Text('Divorcé(e)'),
+      value: 2,
+    ));
+    sttsocial.add(new DropdownMenuItem(
+      child: new Text('Veuf(ve)'),
+      value: 3,
+    ));
   }
+
   @override
   Widget build(BuildContext context) {
     loadGenderList();
@@ -165,7 +181,7 @@ class _SignUpFormState extends State<SignUpForm> {
       value: _selectedGender,
       onChanged: (value) {
         setState(() {
-          _selectedGender = (value) as int ;
+          _selectedGender = (value) as int;
         });
       },
       isExpanded: true,
@@ -176,14 +192,14 @@ class _SignUpFormState extends State<SignUpForm> {
       value: selectSttsocial,
       onChanged: (value) {
         setState(() {
-          selectSttsocial = (value) as int ;
+          selectSttsocial = (value) as int;
         });
       },
       isExpanded: true,
     ));
 
-
-    formWidget.add(new TextFormField(
+    formWidget.add(
+      new TextFormField(
           key: _passKey,
           obscureText: true,
           decoration: InputDecoration(
@@ -198,7 +214,8 @@ class _SignUpFormState extends State<SignUpForm> {
           }),
     );
 
-    formWidget.add(new TextFormField(
+    formWidget.add(
+      new TextFormField(
           obscureText: true,
           decoration: InputDecoration(
               hintText: 'Confirm Password',
@@ -218,21 +235,35 @@ class _SignUpFormState extends State<SignUpForm> {
           }),
     );
 
-
     void onPressedSubmit() {
-      if (_formKey.currentState!.validate() ) {
+      if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
 
-        DossierMedical dm = new DossierMedical(idDossierMedical: 0, medecin: null, patient: null, consultations: []);
+        DossierMedical dm = new DossierMedical(
+            idDossierMedical: 0,
+            medecin: null,
+            patient: null,
+            consultations: []);
         print("Password " + _password);
-        Usermodel user = new Usermodel( email: email, password: password, role: "patient", iduser: 0);
-        Patient patient = new Patient(idPatient: 0, statut_social: statutSocial, prenom: prenom,
-            profession: profession, adresse: adresse, genre: genre, user: user, nom: nom,
-            tel: tel.toString(), taille: taille, age: age, creatAt: DateTime.now().toString() );
+        Usermodel user = new Usermodel(
+            email: email, password: password, role: "patient", iduser: 0);
+        Patient patient = new Patient(
+            id: 0,
+            statut_social: statutSocial,
+            prenom: prenom,
+            profession: profession,
+            adresse: adresse,
+            genre: genre,
+            user: user,
+            nom: nom,
+            tel: tel.toString(),
+            taille: taille,
+            age: age,
+            creatAt: DateTime.now().toString());
 
-        print( patient.prenom );
-        print( patient.nom );
-        print( patient.adresse );
+        print(patient.prenom);
+        print(patient.nom);
+        print(patient.adresse);
 
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text('Form Submitted')));

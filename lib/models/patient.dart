@@ -7,21 +7,21 @@ import 'package:mygsmp/models/rendezVous.dart';
 import 'package:mygsmp/models/userModel.dart';
 
 class Patient {
-  int idPatient;
-  String statut_social;
-  String prenom;
-  String profession;
-  String adresse;
-  String genre;
+  int id = 0;
+  String statut_social = "";
+  String prenom = "";
+  String profession = "";
+  String adresse = "";
+  String genre = "";
   Usermodel? user;
-  String nom;
-  String tel;
-  int taille;
-  int age;
-  String creatAt;
+  String nom = "";
+  String tel = "";
+  int taille = 0;
+  int age = 0;
+  String creatAt = "";
 
   Patient(
-      {required this.idPatient,
+      {required this.id,
       required this.statut_social,
       required this.prenom,
       required this.profession,
@@ -34,9 +34,9 @@ class Patient {
       required this.age,
       required this.creatAt});
 
-  int get getIdPatient => this.idPatient;
+  int get getIdPatient => this.id;
 
-  set setIdPatient(int idPatient) => this.idPatient = idPatient;
+  set setIdPatient(int idPatient) => this.id = idPatient;
 
   get statutsocial => this.statut_social;
 
@@ -84,7 +84,7 @@ class Patient {
 
   Map<String, dynamic> toMap() {
     return {
-      'idPatient': idPatient,
+      'id': id,
       'statut_social': statut_social,
       'prenom': prenom,
       'profession': profession,
@@ -101,7 +101,7 @@ class Patient {
 
   factory Patient.fromMap(Map<String, dynamic> map) {
     return Patient(
-        idPatient: map['idPatient'],
+        id: map['id'],
         statut_social: map['statut_social'],
         prenom: map['prenom'],
         profession: map['profession'],
@@ -122,6 +122,6 @@ class Patient {
 
   @override
   String toString() {
-    return 'Patient{idPatient: $idPatient, statut_social: $statut_social, prenom: $prenom, profession: $profession, adresse: $adresse, genre: $genre, user: $user, nom: $nom, tel: $tel, taille: $taille, age: $age, creatAt: $creatAt}';
+    return 'Patient{id: $id, statut_social: $statut_social, prenom: $prenom, profession: $profession, adresse: $adresse, genre: $genre, user: $user, nom: $nom, tel: $tel, taille: $taille, age: $age, creatAt: $creatAt}';
   }
 }

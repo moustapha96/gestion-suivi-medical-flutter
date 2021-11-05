@@ -16,6 +16,7 @@ class DossierMedical {
     required this.patient,
     required this.consultations,
   });
+
   int get getIdDossierMedical => this.idDossierMedical;
 
   set setIdDossierMedical(int idDossierMedical) =>

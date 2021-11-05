@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:mygsmp/models/medecin.dart';
+import 'package:mygsmp/models/patient.dart';
 import 'package:mygsmp/models/userLogin.dart';
 import 'package:mygsmp/models/userModel.dart';
 import 'package:mygsmp/pages/medecin/accueil.dart';
-import 'package:mygsmp/services/contactService.dart';
-import 'package:mygsmp/services/login_service.dart';
+import 'package:mygsmp/pages/patient/accueilPatient.dart';
+import 'package:mygsmp/services/UserModelService.dart';
+
+import 'package:http/http.dart' as http;
 
 import '../main.dart';
 
@@ -13,31 +19,24 @@ class Login extends StatefulWidget {
 }
 
 class _Login extends State<Login> {
-
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  late Usermodel user;
+  late Medecin medecin;
+  late Patient patient;
+
 
   void creerCompte() {
     Navigator.pushNamed(context, '/inscription');
   }
 
-  void login(){
-
+  void login() {
     print("connexion");
-    UserLogin login = new UserLogin(email: emailController.text, password: passwordController.text,);
-    //Usermodel user = getUserByLogin(login)  as Usermodel;
-    Navigator.push(context,
-        MaterialPageRoute(
-          builder: (context) => AcceuilMedecin(),
-        ));
-    /*if( user.getRole == 'patient' ){
-       Navigator.pushNamed(context, '/patient/home');
-    }else if ( user.getRole == 'medecin' ) {
-      Navigator.push(context,
-          MaterialPageRoute(
-            builder: (context) => AcceuilMedecin(  user: user ),
-          ));
-    }*/
+    UserLogin login = new UserLogin(
+      email: emailController.text,
+      password: passwordController.text,
+    );
+    var data = getUserByLogin(login);
   }
 
   @override
@@ -133,5 +132,70 @@ class _Login extends State<Login> {
                 ),
               ),
             )));
+  }
+
+  Future<String> getUserByLogin(UserLogin userLogin) async {
+    String _base = "http://localhost:8888/api/User/login";
+    final http.Response response = await http.post(
+      Uri.parse(_base),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(userLogin.toDatabaseJson()),
+    );
+    setState(() {
+      var data = json.decode(response.body);
+      print(data);
+      user = new Usermodel(
+          iduser: data['id'],
+          email: data['email'],
+          password: data['password'],
+          role: data['role']);
+
+      if (user.getRole == 'patient') {
+        var rr = getPatientById(user.getEmail, data['token']);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AccueilPatient(),
+            ));
+      } else if (user.getRole == 'medecin') {
+        var rr = getMedecinById(user.getEmail, data['token']);
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AcceuilMedecin(medecin: this.medecin),
+            ));
+      }
+    });
+    return ("success");
+  }
+
+  Future<String> getPatientById(String email, String token) async {
+    String _base_email = "http://localhost:8888/api/patients/user";
+    final http.Response response = await http
+        .get(Uri.parse(_base_email + "/" + email), headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer token $token'
+    });
+    setState(() {
+      Patient patient = new Patient.fromMap(jsonDecode(response.body));
+      this.patient = patient;
+    });
+    return "Success";
+  }
+
+  Future<String> getMedecinById(String email, String token) async {
+    String _base_email_me = "http://localhost:8888/api/medecins/user";
+    final http.Response response = await http
+        .get(Uri.parse(_base_email_me + "/" + email), headers: <String, String>{
+      'Accept': 'application/json',
+      'Authorization': 'Bearer token $token'
+    });
+    setState(() {
+      Medecin medecin = new Medecin.fromMap(jsonDecode(response.body));
+      this.medecin = medecin;
+    });
+    return "Success";
   }
 }

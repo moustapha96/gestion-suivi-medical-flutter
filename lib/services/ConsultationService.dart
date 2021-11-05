@@ -15,7 +15,8 @@ class Consultationservice {
   @override
   Future<void> saveCounterValue(int value) async {
     final url = Uri.parse('https://example.com/counter');
-    Map<String, String> headers = {'Content-type': 'application/json'};
+    Map<String, String>
+    headers = {'Content-type': 'application/json'};
     String json = '{"counter": $value}';
     await post(url, headers: headers, body: json);
   }

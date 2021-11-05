@@ -38,7 +38,6 @@ Drawer buildDrawerNavgation(BuildContext context){
           onTap: () {
             Navigator.pushNamed(context, '/medecin/rv');
           },
-
         ),
         ListTile(
           leading: Icon(Icons.post_add),
@@ -51,7 +50,7 @@ Drawer buildDrawerNavgation(BuildContext context){
           leading: Icon(Icons.group_add),
           title: Text('demande de RV'),
           onTap: () {
-            Navigator.pushNamed(context, '/medecin/demandeRv');
+            Navigator.pushNamed(context, '/medecin/demanderv');
           },
         ),
         ListTile(

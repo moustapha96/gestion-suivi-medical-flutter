@@ -42,7 +42,7 @@ class _HomePageState extends State<HomePage> {
         routes: {
           '/': (context) => Login(),
           '/inscription': (context) => CreateAccount(),
-          '/medecin/home': (context) => AcceuilMedecin( ),
+          '/medecin/home': (context) => AcceuilMedecin(),
           '/medecin/rv': (context) => MedecinRv(),
           '/medecin/memos': (context) => MedecinMemos(),
           '/medecin/newMemos': (context) => MedecinNewMemos(),
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
           '/medecin/contact': (context) => MedecinContact(),
           '/medecin/patient': (context) => MedecinPatient(),
           '/medecin/fixerRv': (context) => MedecinNewRv(),
-          '/patient/home': (context) => PatientAccueil(),
+          '/patient/home': (context) => AccueilPatient(),
           '/patient/dm': (context) => PatientDms(),
           '/patient/rv': (context) => PatientRv(),
           '/patient/demandeRv': (context) => PatientDemandeRv(),

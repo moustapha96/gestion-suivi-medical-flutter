@@ -9,7 +9,7 @@ import 'package:http/http.dart' as http;
 
 String _base = "http://localhost:8888/api/User/login";
 
-Future<Usermodel> getUserByLogin(UserLogin userLogin) async {
+Future<String> getUserByLogin(UserLogin userLogin) async {
 
   final http.Response response = await http.post( Uri.parse(_base) ,
     headers: <String, String>{
@@ -18,13 +18,8 @@ Future<Usermodel> getUserByLogin(UserLogin userLogin) async {
     body: jsonEncode(userLogin.toDatabaseJson()),
   );
   if (response.statusCode == 200) {
-
     var responseJson = json.decode(response.body);
-
-    Usermodel user = Usermodel(iduser: responseJson["id"], email: responseJson["email"], password: responseJson["password"],
-                    role: responseJson['role']);
-    print( responseJson );
-    return (user);
+    return (responseJson);
   } else {
 
     print(json.decode(response.body).toString());
