@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Drawer buildDrawerNavgationPatient(BuildContext context){
+Drawer buildDrawerNavgationPatient(BuildContext context, String email,String token){
   return Drawer(
     elevation: 10,
     child:  ListView(
@@ -28,7 +28,8 @@ Drawer buildDrawerNavgationPatient(BuildContext context){
           leading: Icon(Icons.connect_without_contact),
           title: Text('Rendez-vous'),
           onTap: () {
-            Navigator.pushNamed(context, '/patient/rv');
+            Navigator.pushNamed(context, '/patient/rv',
+                arguments: { email: email, token: token  } );
           },
 
         ),
@@ -36,21 +37,24 @@ Drawer buildDrawerNavgationPatient(BuildContext context){
           leading: Icon(Icons.post_add),
           title: Text('Publication'),
           onTap: () {
-            Navigator.pushNamed(context, '/patient/memos');
+            Navigator.pushNamed(context, '/patient/memos',
+                arguments: { email: email, token: token  });
           },
         ),
         ListTile(
           leading: Icon(Icons.group_add),
           title: Text('demande de RV'),
           onTap: () {
-            Navigator.pushNamed(context, '/patient/demandeRv');
+            Navigator.pushNamed(context, '/patient/demandeRv',
+                arguments: { email: email, token: token  });
           },
         ),
         ListTile(
           leading: Icon(Icons.medical_services),
           title: Text('Dossier Médical'),
           onTap: () {
-            Navigator.pushNamed(context, '/patient/dm');
+            Navigator.pushNamed(context, '/patient/dm',
+                arguments: { email: email, token: token  });
           },
         ),
         ListTile(

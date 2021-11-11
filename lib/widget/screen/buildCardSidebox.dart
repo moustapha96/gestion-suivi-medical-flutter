@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-SizedBox buildCard(BuildContext context, String text, String desc , String route, IconData icon){
+SizedBox buildCard(BuildContext context, String text, String desc , String route, IconData icon,
+     String email, String token ){
   return SizedBox(
     width: MediaQuery.of(context).size.width * 0.4 ,
     height: MediaQuery.of(context).size.height * 0.2 ,
@@ -18,7 +19,10 @@ SizedBox buildCard(BuildContext context, String text, String desc , String route
             ),
             subtitle: Text(desc),
             onTap: (){
-              Navigator.pushNamed( context, route );
+              print( email ); print(token);
+              Navigator.pushNamed( context, route ,arguments: {
+                email: email, token: token
+              });
             },
           ),
           Icon( icon )

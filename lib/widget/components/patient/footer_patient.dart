@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
+BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context, String email, String token) {
   return BottomNavigationBar(
 
       items: [
@@ -10,7 +10,8 @@ BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
       icon: IconButton(
           color: Colors.amber,
           onPressed: () {
-            Navigator.pushNamed(context, "/patient/home");
+            Navigator.pushNamed(context, "/patient/home",
+            arguments: { email: email, token: token  } );
           },
           icon: Icon(Icons.home)),
     ),
@@ -19,7 +20,8 @@ BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
       icon: IconButton(
           color: Colors.amber,
           onPressed: () {
-            Navigator.pushNamed(context, "/patient/rv");
+            Navigator.pushNamed(context, "/patient/rv",
+                arguments: { email: email, token: token  });
           },
           icon: Icon(Icons.people_alt)),
     ),
@@ -28,7 +30,9 @@ BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
       icon: IconButton(
           color: Colors.amber,
           onPressed: () {
-            Navigator.pushNamed(context, "/patient/memos");
+            Navigator.pushNamed(context, "/patient/memos",
+                arguments: { email: email, token: token  }
+                );
           },
           icon: Icon(Icons.admin_panel_settings)),
     ),
@@ -37,7 +41,8 @@ BottomNavigationBar buildBottomNavigationBarPatient(BuildContext context) {
       icon: IconButton(
           color: Colors.amber,
           onPressed: () {
-            Navigator.pushNamed(context, "/patient/demandeRv");
+            Navigator.pushNamed(context, "/patient/demandeRv",
+                arguments: { email: email, token: token  } );
           },
           icon: Icon(Icons.admin_panel_settings)),
     ),

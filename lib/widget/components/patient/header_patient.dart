@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mygsmp/connexion/connexion.dart';
 
-AppBar buildAppBarNavgationPatient(BuildContext context){
+AppBar buildAppBarNavgationPatient(BuildContext context, String titre){
   return AppBar(
     elevation: 10,
-    title: Text('Page Patient'),
+    title: Text(titre),
     backgroundColor: Colors.cyan,
       actions: [
         new IconButton(

@@ -8,17 +8,17 @@ import 'package:mygsmp/models/userModel.dart';
 
 class Patient {
   int id = 0;
-  String statut_social = "";
-  String prenom = "";
-  String profession = "";
-  String adresse = "";
-  String genre = "";
+  String? statut_social = "";
+  String? prenom = "";
+  String? profession = "";
+  String? adresse = "";
+  String? genre = "";
   Usermodel? user;
-  String nom = "";
-  String tel = "";
-  int taille = 0;
-  int age = 0;
-  String creatAt = "";
+  String? nom = "";
+  String? tel = "";
+  int? taille = 0;
+  int? age = 0;
+  DateTime? creatAt = DateTime.now();
 
   Patient(
       {required this.id,
@@ -112,7 +112,7 @@ class Patient {
         tel: map['tel'],
         taille: map['taille'],
         age: map['age'],
-        creatAt: map['creatAt']);
+        creatAt: map['creatAt'] );
   }
 
   String toJson() => json.encode(toMap());

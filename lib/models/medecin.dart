@@ -21,7 +21,8 @@ class Medecin {
   String tel;
   int taille;
   int age;
-  String creatAt;
+  DateTime creatAt ;
+
   //Servicemedical? serviceMedical;
   /*List<Rendezvous> rendezVous;
 
@@ -82,8 +83,6 @@ class Medecin {
 
   set setCreatAt(creatAt) => this.creatAt = creatAt;
 
-
-
   Medecin({
     required this.idMedecin,
     required this.specialisation,
@@ -98,9 +97,8 @@ class Medecin {
     required this.taille,
     required this.age,
     required this.creatAt,
-   // required this.serviceMedical,
+    // required this.serviceMedical,
   });
-
 
   Map<String, dynamic> toMap() {
     return {
@@ -117,7 +115,7 @@ class Medecin {
       'taille': taille,
       'age': age,
       'creatAt': creatAt,
-     // 'serviceMedical': serviceMedical!.toMap(),
+      // 'serviceMedical': serviceMedical!.toMap(),
     };
   }
 

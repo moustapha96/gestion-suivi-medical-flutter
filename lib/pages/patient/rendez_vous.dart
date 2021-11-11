@@ -2,29 +2,54 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mygsmp/models/patient.dart';
+import 'package:mygsmp/models/userModel.dart';
 import 'package:mygsmp/widget/components/patient/drawerPatient.dart';
 import 'package:mygsmp/widget/components/patient/footer_patient.dart';
 import 'package:mygsmp/widget/components/patient/header_patient.dart';
 import 'package:http/http.dart' as http;
 
 class PatientRv extends StatefulWidget {
+  String email;
+  String token;
+  PatientRv({required this.email, required this.token});
+
   @override
-  _PatientRvState createState() => new _PatientRvState();
+  _PatientRvState createState() => new _PatientRvState(token: '', email: '');
 }
 
 class _PatientRvState extends State<PatientRv> {
+  String email;
+  String token;
+  _PatientRvState({required this.email, required this.token});
+
+  Patient patientConnecte = new Patient(
+      id: 0,
+      statut_social: "",
+      prenom: "",
+      profession: "",
+      adresse: "",
+      genre: "",
+      user: null,
+      nom: "",
+      tel: "",
+      taille: 0,
+      age: 0,
+      creatAt: DateTime.now());
   List _data = [];
 
   @override
   void iniState() {
+    super.initState();
     getAllRv();
+    print(this.patientConnecte);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgationPatient(context),
-      drawer: buildDrawerNavgationPatient(context),
+      appBar: buildAppBarNavgationPatient(context, 'Vos RVs'),
+      drawer: buildDrawerNavgationPatient(context, email, token ),
       body: Container(
         margin: EdgeInsets.all(2),
         alignment: Alignment.center,
@@ -37,7 +62,7 @@ class _PatientRvState extends State<PatientRv> {
           child: buildCorpsPage(context),
         ),
       ),
-      bottomNavigationBar: buildBottomNavigationBarPatient(context),
+      bottomNavigationBar: buildBottomNavigationBarPatient(context,email, token),
     );
   }
 
@@ -90,7 +115,7 @@ class _PatientRvState extends State<PatientRv> {
     );
   }
 
-  void displayDialogMedecin(BuildContext context, int index) {
+  void displayDialogMedecin(BuildContext context, int index, ) {
     showDialog<void>(
       context: context,
       // false = user must tap button, true = tap outside dialog
@@ -144,18 +169,49 @@ class _PatientRvState extends State<PatientRv> {
   }
 
   Future<String> getAllRv() async {
+    String _base_email = "http://localhost:8888/api/patients/user";
+    final http.Response resp = await http
+        .get(Uri.parse(_base_email + "/" + email), headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer token $token'
+    });
+    setState(() async {
+      var data = jsonDecode(resp.body);
+      print("prneom "+ data["creatAt"] );
+      this.patientConnecte = new Patient(
+          id: data["id"],
+          statut_social: data["statut_social"],
+          prenom: data["prenom"],
+          profession: data["profession"],
+          adresse: data["adresse"],
+          genre: data["genre"],
+          user: new Usermodel.fromMap( data["user"]),
+          nom: data["nom"],
+          tel: data["tel"],
+          taille: data["taille"],
+          age: data["age"],
+          creatAt: DateTime.parse( data["creatAt"] )) ;
 
+      print("patient apres" );
+      print(this.patientConnecte);
+
+      getAllRvPatient(this.patientConnecte.getIdPatient);
+    });
+    return "succes";
+  }
+  Future<String> getAllRvPatient(int id) async{
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/RendezVous/patient/1"),
+      Uri.parse(
+          "http://localhost:8888/api/RendezVous/patient/" + id.toString()  ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    setState(() {
+    setState(() async {
       _data = json.decode(response.body);
+      print("data");
+      print(_data);
     });
-    print("data");
-    print(_data);
-    return "succes";
+    return 'success';
   }
 }

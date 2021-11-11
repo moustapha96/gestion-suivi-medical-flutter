@@ -9,25 +9,31 @@ import 'package:mygsmp/widget/components/patient/header_patient.dart';
 import 'package:http/http.dart' as http;
 
 class PatientDms extends StatefulWidget {
+  String email;  String token;
+  PatientDms({ required this.email , required this.token });
   @override
-  _PatientDmsState createState() => _PatientDmsState();
+  _PatientDmsState createState() => _PatientDmsState(email: email, token: token);
 }
 
 class _PatientDmsState extends State<PatientDms> {
+  String email; String token;
+  _PatientDmsState({ required this.email, required this.token });
+
   List cons = [];
   DossierMedical? dm;
   var dmm;
 
   @override
   void initState() {
+    print('email'+ this.email);
     getDmPatient();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgationPatient(context),
-      drawer: buildDrawerNavgationPatient(context),
+      appBar: buildAppBarNavgationPatient(context, 'Dossier Médical'),
+      drawer: buildDrawerNavgationPatient(context, email, token),
       body: Container(
           margin: EdgeInsets.all(2),
           alignment: Alignment.center,
@@ -82,25 +88,43 @@ class _PatientDmsState extends State<PatientDms> {
                               return Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 1, horizontal: 4),
-                                child: Card(
-                                  child: ListTile(
-                                    trailing: new Text(
-                                        cons[indice]['date_consultation']),
-                                    title: Text(cons[indice]['diagnostic']),
-                                    subtitle: Text(cons[indice]['traitement']),
-                                  ),
+                                child : Card(
+                                    child: Column(
+                                      children: [
+                                        Text(cons[indice]['traitement']),
+                                        Text(cons[indice]['diagnostic']),
+                                        Row(
+                                          crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                          children: [
+                                            new Text(
+                                                cons[indice]['date_consultation']),
+                                          ],
+                                        )
+                                      ],
+                                    )
                                 ),
+                                /*      child: Card(
+                              child: ListTile(
+                              trailing: new Text(
+                              cons[indice]['date_consultation']),
+                              title: Text(cons[indice]['diagnostic']),
+                              subtitle: Text(cons[indice]['traitement']),
+                              )
+                              ,
+                              )*/
                               );
                             }),
                       )
                     ],
                   )))),
+      bottomNavigationBar: buildBottomNavigationBarPatient(context,email, token),
     );
   }
 
   Future<String> getDmPatient() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/dms/patient/test@test.com"),
+      Uri.parse("http://localhost:8888/api/dms/patient/"+ this.email),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

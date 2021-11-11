@@ -7,17 +7,26 @@ import 'package:mygsmp/widget/components/patient/header_patient.dart';
 
 class PatientNewDemandeRv extends StatefulWidget{
 
+  String email;  String token;
+  PatientNewDemandeRv({ required this.email , required this.token });
   @override
-  _PatientNewDemandeRv  createState() => new _PatientNewDemandeRv();
+  _PatientNewDemandeRv  createState() => new _PatientNewDemandeRv(email: email, token: token);
 }
 
 class _PatientNewDemandeRv extends State<PatientNewDemandeRv> {
+  String email;  String token;
+  _PatientNewDemandeRv({ required this.email , required this.token });
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBarNavgationPatient(context),
-      drawer: buildDrawerNavgationPatient(context),
+      appBar: buildAppBarNavgationPatient(context,'Demande RV'),
+      drawer: buildDrawerNavgationPatient(context,email, token ),
       body: Container(
         margin: EdgeInsets.all(2),
         alignment: Alignment.center,
@@ -39,7 +48,7 @@ class _PatientNewDemandeRv extends State<PatientNewDemandeRv> {
         ),*/
         child: buildCorpsPage(context)
       ) ,
-      bottomNavigationBar: buildBottomNavigationBarPatient(context),
+      bottomNavigationBar: buildBottomNavigationBarPatient(context,email, token),
     );
   }
 

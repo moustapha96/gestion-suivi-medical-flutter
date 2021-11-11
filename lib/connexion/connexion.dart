@@ -13,6 +13,8 @@ import 'package:http/http.dart' as http;
 
 import '../main.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 class Login extends StatefulWidget {
   @override
   _Login createState() => _Login();
@@ -24,7 +26,6 @@ class _Login extends State<Login> {
   late Usermodel user;
   late Medecin medecin;
   late Patient patient;
-
 
   void creerCompte() {
     Navigator.pushNamed(context, '/inscription');
@@ -135,6 +136,7 @@ class _Login extends State<Login> {
   }
 
   Future<String> getUserByLogin(UserLogin userLogin) async {
+    circular();
     String _base = "http://localhost:8888/api/User/login";
     final http.Response response = await http.post(
       Uri.parse(_base),
@@ -152,50 +154,50 @@ class _Login extends State<Login> {
           password: data['password'],
           role: data['role']);
 
-      if (user.getRole == 'patient') {
-        var rr = getPatientById(user.getEmail, data['token']);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AccueilPatient(),
-            ));
-      } else if (user.getRole == 'medecin') {
-        var rr = getMedecinById(user.getEmail, data['token']);
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => AcceuilMedecin(medecin: this.medecin),
-            ));
+      if (response.statusCode == 200) {
+        if (user.getRole == 'patient') {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AccueilPatient(
+                  email: user.getEmail, token: data['token']
+                ),
+              ));
+        } else if (user.getRole == 'medecin') {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    AcceuilMedecin(emailmedecin: user.getEmail,  token: data['token'] ),
+              ));
+        }
+        showToast("connexion réussi : " + user.getEmail);
+      } else {
+        showToast(" erreur :  ${response.body}  ");
       }
     });
     return ("success");
   }
 
-  Future<String> getPatientById(String email, String token) async {
-    String _base_email = "http://localhost:8888/api/patients/user";
-    final http.Response response = await http
-        .get(Uri.parse(_base_email + "/" + email), headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer token $token'
-    });
-    setState(() {
-      Patient patient = new Patient.fromMap(jsonDecode(response.body));
-      this.patient = patient;
-    });
-    return "Success";
+  void showToast(String m) {
+    Fluttertoast.showToast(
+        msg: " " + m,
+        webPosition: "center",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 3);
   }
 
-  Future<String> getMedecinById(String email, String token) async {
-    String _base_email_me = "http://localhost:8888/api/medecins/user";
-    final http.Response response = await http
-        .get(Uri.parse(_base_email_me + "/" + email), headers: <String, String>{
-      'Accept': 'application/json',
-      'Authorization': 'Bearer token $token'
-    });
-    setState(() {
-      Medecin medecin = new Medecin.fromMap(jsonDecode(response.body));
-      this.medecin = medecin;
-    });
-    return "Success";
+  SizedBox circular() {
+    return SizedBox(
+      width: 200,
+      height: 200,
+      child: CircularProgressIndicator(
+        strokeWidth: 10,
+        backgroundColor: Colors.cyanAccent,
+        valueColor: new AlwaysStoppedAnimation<Color>(Colors.red),
+      ),
+    );
   }
+
 }

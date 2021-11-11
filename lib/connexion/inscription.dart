@@ -33,6 +33,7 @@ class _CreateAccountState extends State<CreateAccount> {
           elevation: 5.0,
         ),
         body: new Container(
+          margin: EdgeInsets.all(10),
             padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
           child: new SignUpForm(),
         ),
