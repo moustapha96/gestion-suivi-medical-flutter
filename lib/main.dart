@@ -13,6 +13,7 @@ import 'package:mygsmp/pages/medecin/rv.dart';
 import 'package:mygsmp/pages/patient/accueilPatient.dart';
 import 'package:mygsmp/pages/patient/demandeRv.dart';
 import 'package:mygsmp/pages/patient/new_demande_rv.dart';
+import 'package:mygsmp/pages/splashScreen.dart';
 import 'package:mygsmp/widget/screen/profil.dart';
 
 import 'pages/medecin/newMemos.dart';
@@ -40,25 +41,27 @@ class _HomePageState extends State<HomePage> {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: {
-          '/': (context) => Login(),
+          '/': (conetext) => SplashScreen(),
+          '/login': (context) => Login(),
           '/inscription': (context) => CreateAccount(),
-          '/medecin/home': (context) => AcceuilMedecin(emailmedecin: '',token: ''),
-          '/medecin/rv': (context) => MedecinRv(),
-          '/medecin/memos': (context) => MedecinMemos(),
-          '/medecin/newMemos': (context) => MedecinNewMemos(),
-          '/medecin/newRv': (context) => MedecinNewRv(),
-          '/medecin/demanderv': (context) => MedecinDemandeRv(),
-          '/medecin/dm': (context) => MedecinDms(),
-          '/medecin/contact': (context) => MedecinContact(),
-          '/medecin/patient': (context) => MedecinPatient(),
-          '/medecin/fixerRv': (context) => MedecinNewRv(),
-          '/patient/home': (context) => AccueilPatient(email: '',token: ''),
-          '/patient/dm': (context) => PatientDms(token: '', email: '',),
-          '/patient/rv': (context) => PatientRv(email: '', token: ''),
-          '/patient/demandeRv': (context) => PatientDemandeRv(email: '', token: '',),
-          '/patient/memos': (context) => PatientMemos(email: '', token: '',),
-          '/patient/nouveauDemande': (context) => PatientNewDemandeRv(token: '', email: '',),
-          '/profil': (context) => Profil(),
+          // '/medecin/home': (context) => AcceuilMedecin(emailmedecin: '',token: ''),
+          // '/medecin/rv': (context) => MedecinRv(),
+          // '/medecin/memos': (context) => MedecinMemos(),
+          // '/medecin/newMemos': (context) => MedecinNewMemos(),
+          // '/medecin/newRv': (context) => MedecinNewRv(),
+          // '/medecin/demanderv': (context) => MedecinDemandeRv(),
+          // '/medecin/dm': (context) => MedecinDms(),
+          // '/medecin/contact': (context) => MedecinContact(),
+          // '/medecin/patient': (context) => MedecinPatient(),
+          // '/medecin/fixerRv': (context) => MedecinNewRv(),
+          // '/patient/home': (context) => AccueilPatient(email: '',token: ''),
+          // '/patient/dm': (context) => PatientDms(token: '', email: '',),
+          // '/patient/rv': (context) => PatientRv(email: '', token: ''),
+          // '/patient/demandeRv': (context) => PatientDemandeRv(email: '', token: '',),
+          // '/patient/memos': (context) => PatientMemos(email: '', token: '',),
+          // '/patient/nouveauDemande': (context) => PatientNewDemandeRv(token: '', email: '',),
+          // '/profil': (context) => Profil(),
+
         },
         initialRoute: '/');
   }

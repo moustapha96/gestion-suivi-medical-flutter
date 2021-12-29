@@ -4,32 +4,33 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mygsmp/models/consultation.dart';
+import 'package:mygsmp/models/dossier_medical.dart';
 import 'package:mygsmp/models/medecin.dart';
 import 'package:mygsmp/models/patient.dart';
 import 'package:mygsmp/models/rendezVous.dart';
 import 'package:mygsmp/models/userModel.dart';
-import 'package:mygsmp/widget/DatePickerScreen.dart';
-import 'package:mygsmp/widget/FixerRendezVous.dart';
-import 'package:mygsmp/widget/components/medecin/drawer.dart';
-import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
-import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 import 'package:http/http.dart' as http;
 
-class MedecinNewRv extends StatefulWidget{
+class MedecinAddConsultation extends StatefulWidget{
+
   late Medecin medecin;
-  late Rendezvous rv;
   late Patient patient;
+
   String emailPatient;
   String emailMedecin;
 
-  MedecinNewRv( { Key? key,required this.emailMedecin, required this.emailPatient  }) : super(key: key);
+  MedecinAddConsultation( { Key? key,required this.emailMedecin, required this.emailPatient  }) : super(key: key);
 
-  State createState() =>  _MedecinNewRv(emailMedecin: emailMedecin, emailPatient: emailPatient);
+  State createState() =>  _MedecinAddConsultationState(emailMedecin: emailMedecin, emailPatient: emailPatient);
 }
-class _MedecinNewRv extends State<MedecinNewRv> {
-  String emailMedecin; String emailPatient;
-  _MedecinNewRv({ required this.emailMedecin, required this.emailPatient });
+class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
 
+  String emailMedecin; String emailPatient;
+  _MedecinAddConsultationState({ required this.emailMedecin, required this.emailPatient });
+
+
+  DossierMedical dm = new DossierMedical(idDossierMedical: 0, medecin: null, patient: null, consultations: null);
 
   Medecin medecinC = new Medecin(
       idMedecin: 0,
@@ -59,19 +60,22 @@ class _MedecinNewRv extends State<MedecinNewRv> {
     // creatAt: DateTime.now()
   );
 
-  final _formKeyMemos = GlobalKey<FormState>();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController heureController = TextEditingController();
+  final _formKeyConsultation = GlobalKey<FormState>();
+
+  TextEditingController traitement = TextEditingController();
+  TextEditingController diagnostic = TextEditingController();
 
 
   @override
   void initState() {
     super.initState();
+
     print('patient'+ emailPatient);
     print('medecin'+ emailMedecin);
+
     getMedecinById(emailMedecin);
     getPatientById(emailPatient);
-
+    getDmPatient(emailPatient);
 
   }
 
@@ -80,47 +84,48 @@ class _MedecinNewRv extends State<MedecinNewRv> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nouveau RV'),
+        title: Text('Consultation pour '+ this.patientC.getPrenom ),
       ),
       body: Container(
-        margin: EdgeInsets.all(3),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(2),
-            image: DecorationImage(
-                image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
-        child: Container(
-          margin: EdgeInsets.all(15),
-          child: formnewRV(context),
-        )
+          margin: EdgeInsets.all(3),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
+              image: DecorationImage(
+                  image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
+          child: Container(
+            margin: EdgeInsets.all(15),
+            child: formnewRV(context),
+          )
       ) ,
-     // bottomNavigationBar: buildBottomNavigationBar(context),
+      // bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 
   Center formnewRV(BuildContext context){
     return Center(
       child: Form(
-        key: _formKeyMemos,
+        key: _formKeyConsultation,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TextFormField(
-              controller: heureController,
+              controller: diagnostic,
               keyboardType: TextInputType.datetime,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.text_fields_outlined),
-                hintText: 'heure...',
-                labelText: 'heure',
+                hintText: 'diagnostic...',
+                labelText: 'diagnostic',
               ),
             ),
             TextFormField(
-              controller: dateController,
-              keyboardType: TextInputType.datetime,
+              controller: traitement,
+              maxLines: 6,
+              keyboardType: TextInputType.multiline,
               decoration: const InputDecoration(
                 icon: const Icon(Icons.local_post_office),
-                hintText: 'date...',
-                labelText: 'date',
+                hintText: 'traitement...',
+                labelText: 'traitement',
               ),
             ),
 
@@ -134,8 +139,8 @@ class _MedecinNewRv extends State<MedecinNewRv> {
                     onPressed: (){
 
                       setState(() {
-                        print( heureController.text+ "- "+dateController.text  );
-                        savenewRv(heureController.text, dateController.text );
+                        print( traitement.text+ "- "+traitement.text  );
+                        saveConsultation(diagnostic.text, diagnostic.text );
                       });
                     },
                     child: Text('enregistrer', style: TextStyle( fontSize: 20 , fontWeight:  FontWeight.bold),   ),
@@ -158,6 +163,7 @@ class _MedecinNewRv extends State<MedecinNewRv> {
     });
     setState(() {
       var data = jsonDecode(response.body);
+
       this.patientC = new Patient(
         idPatient: data["id"],
         statut_social: data["statut_social"],
@@ -174,6 +180,28 @@ class _MedecinNewRv extends State<MedecinNewRv> {
       );
     });
     print(this.patientC);
+    return "Success";
+  }
+
+  Future<String> getDmPatient(String email) async { 
+    String _base_email = "http://localhost:8888/api/dms/patient";
+    final http.Response response = await http
+        .get(Uri.parse(_base_email + "/" + email), headers: {
+      'Accept': 'application/json',
+    });
+    setState(() {
+      var data = jsonDecode(response.body);
+
+      List<Consultation> liste_consultation = convertiListConsultation(data['consultations']);
+
+      this.dm = new DossierMedical(
+          idDossierMedical: data['idDossierMedical'],
+          medecin: this.medecinC,
+          patient: this.patientC,
+          consultations: liste_consultation
+      );
+    });
+    print(this.dm);
     return "Success";
   }
 
@@ -205,28 +233,42 @@ class _MedecinNewRv extends State<MedecinNewRv> {
     return "Success";
   }
 
-  Future<String> savenewRv(String heure, String date) async{
+  Future<String> saveConsultation(String traitement, String diagnostic) async{
 
     DateTime datee = DateTime.now();
-    Rendezvous rv= new Rendezvous(idRendezVous: 0, date_rv: datee, heure: heure, medecin: medecinC, patient: patientC);
+    Consultation rv = new Consultation(idConsultation: 0, diagnostic: diagnostic, traitement: traitement,
+        dossierMedical: dm);
 
-    final http.Response response = await http.post(
-        Uri.parse("http://localhost:8888/api/RendezVous"),
+    this.dm.consultations?.add(rv);
+    int id = this.dm.getIdDossierMedical;
+    final http.Response responseC = await http.put(
+        Uri.parse("http://localhost:8888/api/dms/${id}"),
         headers: <String, String>{
           "Accept": "application/json",
           'Content-Type': 'application/json; charset=UTF-8',
-        }, body: rv.toJson());
+        }, body: jsonEncode( {
+                "diagnostic": diagnostic,
+                "traitement": traitement,
+                "dossierMedical": dm.toMap()
+        }));
 
-    if ( response.statusCode == 200 ){
+    // final http.Response response = await http.post(
+    //     Uri.parse("http://localhost:8888/api/Consultation"),
+    //     headers: <String, String>{
+    //       "Accept": "application/json",
+    //       'Content-Type': 'application/json; charset=UTF-8',
+    //     }, body: rv.toJson());
+
+    if ( responseC.statusCode == 200 ){
       Fluttertoast.showToast(
-          msg: "RV enregistrer avec succés",
+          msg: "consultation ajouté avec succés",
           webPosition: "center",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
     }else{
       Fluttertoast.showToast(
-          msg: "RV non enregistrer",
+          msg: "consultation non enregistrer",
           webPosition: "center",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
@@ -235,4 +277,18 @@ class _MedecinNewRv extends State<MedecinNewRv> {
     return "suceess";
   }
 
+  List<Consultation> convertiListConsultation(List data ){
+    List<Consultation> liste = [];
+    for( int i=0; i<data.length; i++ ){
+      Consultation cons = new Consultation(
+                idConsultation: data[i]['idConsultation'],
+                diagnostic: data[i]['diagnostic'],
+                traitement: data[i]['traitement'],
+                 dossierMedical: null,
+      );
+      liste.add(cons);
+    }
+    print(liste);
+    return liste;
+  }
 }

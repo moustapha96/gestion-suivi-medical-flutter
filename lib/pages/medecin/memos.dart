@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mygsmp/models/memos.dart';
 import 'package:mygsmp/services/MemosService.dart';
 import 'package:mygsmp/widget/components/medecin/drawer.dart';
 import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
@@ -21,6 +23,7 @@ class MedecinMemosState extends State<MedecinMemos> {
   @override
   void initState() {
     getAllMemos();
+    getAllMemos2();
   }
 
   @override
@@ -97,11 +100,27 @@ class MedecinMemosState extends State<MedecinMemos> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
     setState(() {
       _data = json.decode(response.body);
     });
     return "succes";
+  }
+
+  Future<List<Memos>> getAllMemos2() async {
+    final http.Response response = await client.get(
+      Uri.parse("http://localhost:8888/api/Memos"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    print(compute(parseMemos, response.body));
+    return compute(parseMemos, response.body);
+  }
+
+  List<Memos> parseMemos(String responseBody) {
+    final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+    return parsed.map<Memos>((json) => Memos.fromJson(json)).toList();
   }
 
 

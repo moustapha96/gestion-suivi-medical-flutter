@@ -8,9 +8,9 @@ class Consultation {
   String diagnostic;
   String traitement;
 
-  DossierMedical dossierMedical;
+  DossierMedical? dossierMedical;
 
-  DateTime date_consultation;
+  DateTime date_consultation = DateTime.now();
 
   int get getIdConsultation => this.idConsultation;
 
@@ -21,7 +21,8 @@ class Consultation {
       required this.diagnostic,
       required this.traitement,
       required this.dossierMedical,
-      required this.date_consultation});
+      //required this.date_consultation
+      });
 
   get getDiagnostic => this.diagnostic;
 
@@ -44,7 +45,7 @@ class Consultation {
       'idConsultation': idConsultation,
       'diagnostic': diagnostic,
       'traitement': traitement,
-      'dossierMedical': dossierMedical.toMap(),
+      'dossierMedical': dossierMedical!.toMap(),
       'date_consultation': date_consultation.millisecondsSinceEpoch
     };
   }
@@ -55,12 +56,19 @@ class Consultation {
         diagnostic: map['diagnostic'],
         traitement: map['traitement'],
         dossierMedical: DossierMedical.fromMap(map['dossierMedical']),
-        date_consultation:
-            DateTime.fromMillisecondsSinceEpoch(map['date_consultation']));
+        // date_consultation:
+        //     DateTime.fromMillisecondsSinceEpoch(map['date_consultation'])
+    );
   }
+
 
   String toJson() => json.encode(toMap());
 
   factory Consultation.fromJson(String source) =>
       Consultation.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Consultation{idConsultation: $idConsultation, diagnostic: $diagnostic, traitement: $traitement, dossierMedical: $dossierMedical, date_consultation: $date_consultation}';
+  }
 }

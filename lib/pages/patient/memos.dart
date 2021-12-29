@@ -87,7 +87,6 @@ class PatientMemosState extends State<PatientMemos> {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-
     setState(() {
       _data = json.decode(response.body);
     });

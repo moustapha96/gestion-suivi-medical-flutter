@@ -24,7 +24,7 @@ class _PatientRvState extends State<PatientRv> {
   _PatientRvState({required this.email, required this.token});
 
   Patient patientConnecte = new Patient(
-      id: 0,
+      idPatient: 0,
       statut_social: "",
       prenom: "",
       profession: "",
@@ -35,7 +35,8 @@ class _PatientRvState extends State<PatientRv> {
       tel: "",
       taille: 0,
       age: 0,
-      creatAt: DateTime.now());
+  //    creatAt: DateTime.now()
+  );
   List _data = [];
 
   @override
@@ -179,7 +180,7 @@ class _PatientRvState extends State<PatientRv> {
       var data = jsonDecode(resp.body);
       print("prneom "+ data["creatAt"] );
       this.patientConnecte = new Patient(
-          id: data["id"],
+          idPatient: data["id"],
           statut_social: data["statut_social"],
           prenom: data["prenom"],
           profession: data["profession"],
@@ -190,7 +191,8 @@ class _PatientRvState extends State<PatientRv> {
           tel: data["tel"],
           taille: data["taille"],
           age: data["age"],
-          creatAt: DateTime.parse( data["creatAt"] )) ;
+          //creatAt: DateTime.parse( data["creatAt"] )
+      ) ;
 
       print("patient apres" );
       print(this.patientConnecte);

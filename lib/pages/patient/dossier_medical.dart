@@ -104,15 +104,6 @@ class _PatientDmsState extends State<PatientDms> {
                                       ],
                                     )
                                 ),
-                                /*      child: Card(
-                              child: ListTile(
-                              trailing: new Text(
-                              cons[indice]['date_consultation']),
-                              title: Text(cons[indice]['diagnostic']),
-                              subtitle: Text(cons[indice]['traitement']),
-                              )
-                              ,
-                              )*/
                               );
                             }),
                       )

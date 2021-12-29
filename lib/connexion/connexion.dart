@@ -15,6 +15,8 @@ import '../main.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'inscription.dart';
+
 class Login extends StatefulWidget {
   @override
   _Login createState() => _Login();
@@ -28,7 +30,11 @@ class _Login extends State<Login> {
   late Patient patient;
 
   void creerCompte() {
-    Navigator.pushNamed(context, '/inscription');
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => CreateAccount()),
+    );
   }
 
   void login() {
@@ -45,12 +51,7 @@ class _Login extends State<Login> {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         home: Scaffold(
-            appBar: AppBar(
-              title: Text("GSMP"),
-              backgroundColor: Colors.amber,
-              elevation: 10.0,
-              automaticallyImplyLeading: true,
-            ),
+
             body: Center(
               child: Container(
                 padding: EdgeInsets.all(10),
@@ -152,17 +153,17 @@ class _Login extends State<Login> {
           iduser: data['id'],
           email: data['email'],
           password: data['password'],
-          role: data['role']);
+          role: data['role'],
+      //    creatAt: data['creatAt']
+      );
 
       if (response.statusCode == 200) {
         if (user.getRole == 'patient') {
           Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => AccueilPatient(
-                  email: user.getEmail, token: data['token']
-                ),
-              ));
+          MaterialPageRoute(
+              builder: (context) => AccueilPatient(email: user.getEmail, token: data['token'])));
+          
         } else if (user.getRole == 'medecin') {
           Navigator.push(
               context,
@@ -173,7 +174,7 @@ class _Login extends State<Login> {
         }
         showToast("connexion réussi : " + user.getEmail);
       } else {
-        showToast(" erreur :  ${response.body}  ");
+        showToast(" erreur :  "+response.statusCode.toString()  );
       }
     });
     return ("success");

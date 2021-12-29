@@ -23,7 +23,7 @@ class _CreateAccountState extends State<CreateAccount> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text("GSMP", ),
+          title: Text("Suivi Médical", textAlign: TextAlign.center,  ),
           leading: IconButton(
               icon: Icon(Icons.arrow_back),
               onPressed: () {
@@ -34,7 +34,7 @@ class _CreateAccountState extends State<CreateAccount> {
         ),
         body: new Container(
           margin: EdgeInsets.all(10),
-            padding: new EdgeInsets.fromLTRB(20, 0, 20, 0),
+            padding: new EdgeInsets.fromLTRB(20, 5, 20, 5),
           child: new SignUpForm(),
         ),
       )

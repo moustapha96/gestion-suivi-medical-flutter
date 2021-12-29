@@ -8,7 +8,7 @@ class DossierMedical {
   int idDossierMedical;
   Medecin? medecin;
   Patient? patient;
-  List<Consultation> consultations;
+  List<Consultation>? consultations;
   DateTime date_creation = DateTime.now();
   DossierMedical({
     required this.idDossierMedical,
@@ -43,7 +43,7 @@ class DossierMedical {
       'idDossierMedical': idDossierMedical,
       'medecin': medecin!.toMap(),
       'patient': patient!.toMap(),
-      'consultations': consultations.map((x) => x.toMap()).toList(),
+      'consultations': consultations?.map((x) => x.toMap()).toList(),
       'date_creation': date_creation.millisecondsSinceEpoch,
     };
   }
@@ -62,4 +62,9 @@ class DossierMedical {
 
   factory DossierMedical.fromJson(String source) =>
       DossierMedical.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'DossierMedical{idDossierMedical: $idDossierMedical, medecin: $medecin, patient: $patient, consultations: $consultations, date_creation: $date_creation}';
+  }
 }

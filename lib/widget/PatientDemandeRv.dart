@@ -59,8 +59,8 @@ class _DemandeRVForm extends State<DemandeRVForm> {
 
     void onPressedSubmit() {
         DateTime date_demande = DateTime.now();
-        Demanderv demanderv = new Demanderv(id: 0, date_demnande: date_demande,
-            patient: patient, medecin: medecin);
+        Demanderv demanderv = new Demanderv(id: 0,
+            patient: patient, medecin: medecin, date_demnande: DateTime.now());
         Scaffold.of(context)
             .showSnackBar(SnackBar(content: Text('demande enovoyé !!')));
 

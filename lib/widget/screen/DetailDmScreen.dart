@@ -15,8 +15,9 @@ class DetailDmScreen extends StatelessWidget {
     List cons = data[index]['consultations'];
 
     return Scaffold(
-      appBar: buildAppBarNavgation(context,'Détail Dossier Médical'),
-      drawer: buildDrawerNavgation(context),
+      appBar: AppBar(
+        backgroundColor: Colors.cyan,
+      ),
       body: Container(
           margin: EdgeInsets.all(2),
           alignment: Alignment.center,
@@ -86,8 +87,6 @@ class DetailDmScreen extends StatelessWidget {
                       )
                     ],
                   )))),
-      //body : buildCorpsPage(context),
-      bottomNavigationBar: buildBottomNavigationBar(context),
     );
   }
 }

@@ -102,9 +102,10 @@ class MedecinNewMemosState extends State<MedecinNewMemos> {
         print(mess!["specialisation"]  );
         Medecin medecin = new Medecin(idMedecin: mess!["idMedecin"], specialisation: mess!["specialisation"], initial: mess!["initial"],
             prenom: mess!["prenom"], num_licence: mess!["num_licence"], adresse: mess!["adresse"], user: mess!["user"],
-            genre: mess!["genre"], nom: mess!["nom"], tel: mess!["tel"], taille: mess!["taille"], age: mess!["age"], creatAt: mess!["creatAt"]
+            genre: mess!["genre"], nom: mess!["nom"], tel: mess!["tel"], taille: mess!["taille"],
+            age: mess!["age"]
              );
-        Memos memos = new Memos(idMemos: 0, titre: titre, message: message, medecin: medecin, date_creer: date_creer);
+        Memos memos = new Memos(idMemos: 0, titre: titre, message: message, medecin: medecin);
         Future<String> resp = saveMemos(memos);
         print(resp);
         Scaffold.of(context)

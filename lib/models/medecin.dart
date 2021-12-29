@@ -10,27 +10,20 @@ import 'package:mygsmp/models/userModel.dart';
 
 class Medecin {
   int idMedecin;
-  String specialisation;
-  String initial;
-  String prenom;
-  String num_licence;
-  String adresse;
+  String? specialisation;
+  String? initial;
+  String? prenom;
+  String? num_licence;
+  String? adresse;
   Usermodel? user;
-  String genre;
-  String nom;
-  String tel;
-  int taille;
-  int age;
-  DateTime creatAt ;
+  String? genre;
+  String? nom;
+  String? tel;
+  int? taille;
+  int? age;
+  DateTime? created_at = DateTime.now();
 
-  //Servicemedical? serviceMedical;
-  /*List<Rendezvous> rendezVous;
 
-  List<DossierMedical> dossierMedical;
-
-  List<Memos> memos;
-
-  List<Demanderv> deamndeRv;*/
   get getIdMedecin => this.idMedecin;
 
   set setIdMedecin(idMedecin) => this.idMedecin = idMedecin;
@@ -79,9 +72,9 @@ class Medecin {
 
   set setAge(age) => this.age = age;
 
-  get getCreatAt => this.creatAt;
+  get getCreatAt => this.created_at;
 
-  set setCreatAt(creatAt) => this.creatAt = creatAt;
+  set setCreatAt(creatAt) => this.created_at = created_at;
 
   Medecin({
     required this.idMedecin,
@@ -96,7 +89,6 @@ class Medecin {
     required this.tel,
     required this.taille,
     required this.age,
-    required this.creatAt,
     // required this.serviceMedical,
   });
 
@@ -114,7 +106,7 @@ class Medecin {
       'tel': tel,
       'taille': taille,
       'age': age,
-      'creatAt': creatAt,
+      // 'created_at': created_at,
       // 'serviceMedical': serviceMedical!.toMap(),
     };
   }
@@ -133,7 +125,7 @@ class Medecin {
       tel: map['tel'],
       taille: map['taille'],
       age: map['age'],
-      creatAt: map['creatAt'],
+      //created_at: map['creatAt'],
       //serviceMedical: Servicemedical.fromMap(map['serviceMedical']),
     );
   }
@@ -142,4 +134,30 @@ class Medecin {
 
   factory Medecin.fromJson(String source) =>
       Medecin.fromMap(json.decode(source));
+
+  @override
+  String toString() {
+    return 'Medecin{ idMedecin: $idMedecin, specialisation: $specialisation,'
+        ' initial: $initial, prenom: $prenom, num_licence: $num_licence,'
+        ' adresse: $adresse, user: $user, genre: $genre, nom: $nom, tel: $tel, '
+        'taille: $taille, age: $age, created_at: $created_at}';
+  }
+
+  Map<String, dynamic> toDatabaseJson() =>
+      {
+        "idMedecin": this.idMedecin,
+        "specialisation": this.specialisation,
+        "initial": this.initial,
+        "prenom": this.prenom,
+        "num_licence": this.num_licence,
+        "adresse": this.adresse,
+        "user": this.user,
+        "genre": this.genre,
+        "nom": this.nom,
+        "tel": this.tel,
+        "taille": this.taille,
+        "age": this.age,
+        "created_at": this.created_at
+      };
+
 }

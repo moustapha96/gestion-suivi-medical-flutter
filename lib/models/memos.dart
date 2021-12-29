@@ -7,13 +7,13 @@ class Memos {
   String titre;
   String message;
   Medecin? medecin;
-  DateTime date_creer;
+  DateTime? date_creer = DateTime.now();
   Memos({
     required this.idMemos,
     required this.titre,
     required this.message,
     required this.medecin,
-    required this.date_creer,
+    //required this.date_creer,
   });
 
   Map <String, dynamic> toDatabaseJson() => {
@@ -21,7 +21,7 @@ class Memos {
     "titre": this.titre,
     "message": this.message,
     "medecin": this.medecin,
-    "date_creer": this.date_creer,
+   // "date_creer": this.date_creer,
   };
 
   get getIdMemos => this.idMemos;
@@ -50,7 +50,7 @@ class Memos {
       'titre': titre,
       'message': message,
       'medecin': medecin!.toMap(),
-      'date_creer': date_creer.millisecondsSinceEpoch,
+  //    'date_creer': date_creer,
     };
   }
 
@@ -60,7 +60,7 @@ class Memos {
       titre: map['titre'],
       message: map['message'],
       medecin: Medecin.fromMap(map['medecin']),
-      date_creer: DateTime.fromMillisecondsSinceEpoch(map['date_creer']),
+     // date_creer: map['date_creer'],
     );
   }
 

@@ -6,8 +6,8 @@ import 'package:mygsmp/models/patient.dart';
 class Demanderv {
   int id;
   DateTime date_demnande;
-  Patient patient;
-  Medecin medecin;
+  Patient? patient;
+  Medecin? medecin;
 
   Demanderv({
     required this.id,
@@ -41,8 +41,8 @@ class Demanderv {
     return {
       'id': id,
       'date_demnande': date_demnande.millisecondsSinceEpoch,
-      'patient': patient.toMap(),
-      'medecin': medecin.toMap(),
+      'patient': patient?.toMap(),
+      'medecin': medecin?.toMap(),
     };
   }
 
@@ -59,4 +59,11 @@ class Demanderv {
 
   factory Demanderv.fromJson(String source) =>
       Demanderv.fromMap(json.decode(source));
+
+  Map<String, dynamic> toDatabaseJson() => {
+    "id": this.id,
+    "date_demnande": this.date_demnande,
+    "patient": this.patient,
+    "medecin": this.medecin,
+  };
 }

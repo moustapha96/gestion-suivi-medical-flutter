@@ -5,12 +5,13 @@ class Usermodel {
   String email;
   String password;
   String role;
-  DateTime creatAt = DateTime.now();
+  String creatAt = DateTime.now().toString();
   Usermodel({
     required this.iduser,
     required this.email,
     required this.password,
-    required this.role
+    required this.role,
+  //  required this.creatAt
   });
   int get getIduser => this.iduser;
 
@@ -43,7 +44,7 @@ class Usermodel {
       'email': this.email,
       'password': this.password,
       'role': this.role,
-      'creatAt': this.creatAt,
+  //    'creatAt': this.creatAt,
     };
   }
 
@@ -53,6 +54,7 @@ class Usermodel {
       email: map['email'] as String,
       password: map['password'] as String,
       role: map['role'] as String,
+//      creatAt: map['creatAt'] as String
     );
   }
   Map <String, dynamic> toDatabaseJson() => {
@@ -60,7 +62,11 @@ class Usermodel {
     "password": this.password,
     "role": this.role,
     "iduser":this.iduser,
-    "creatAt": this.creatAt
+  //  "creatAt": this.creatAt
   };
 
+  @override
+  String toString() {
+    return 'Usermodel{iduser: $iduser, email: $email, password: $password, role: $role, creatAt: $creatAt}';
+  }
 }
