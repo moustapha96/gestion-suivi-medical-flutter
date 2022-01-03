@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mygsmp/styles/theme.dart';
 import 'package:mygsmp/widget/screen/data_patient.dart';
 
 import 'SignUpForm.dart';

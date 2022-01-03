@@ -95,7 +95,7 @@ class MedecinMemosState extends State<MedecinMemos> {
 
   Future<String> getAllMemos() async {
     final http.Response response = await client.get(
-      Uri.parse("http://localhost:8888/api/Memos"),
+      Uri.parse("http://localhost:8008/api/Memos"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -108,7 +108,7 @@ class MedecinMemosState extends State<MedecinMemos> {
 
   Future<List<Memos>> getAllMemos2() async {
     final http.Response response = await client.get(
-      Uri.parse("http://localhost:8888/api/Memos"),
+      Uri.parse("http://localhost:8008/api/Memos"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

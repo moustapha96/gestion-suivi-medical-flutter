@@ -112,7 +112,7 @@ class _MedecinRvState extends State<MedecinRv> {
 
   Future<String> getAllRv() async {
     final http.Response response = await client.get(
-      Uri.parse("http://localhost:8888/api/RendezVous/medecin/1"),
+      Uri.parse("http://localhost:8008/api/RendezVous/medecin/1"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

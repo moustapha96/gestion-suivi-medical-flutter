@@ -15,7 +15,7 @@ class MedecinContact extends StatefulWidget{
 }
  class MedecinContactState extends State<MedecinContact> {
   List _data = [];
-  String _base = "http://localhost:8888/api/memos";
+  String _base = "http://localhost:8008/api/memos";
   var client = new http.Client();
   @override
   Widget build(BuildContext context) {
@@ -73,7 +73,7 @@ class MedecinContact extends StatefulWidget{
 
   Future<String> getAllMemos() async {
     final http.Response response = await client.get(
-      Uri.parse("http://localhost:8888/api/Memos"),
+      Uri.parse("http://localhost:8008/api/Memos"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

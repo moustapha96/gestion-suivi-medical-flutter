@@ -107,7 +107,6 @@ class Medecin {
       'taille': taille,
       'age': age,
       // 'created_at': created_at,
-      // 'serviceMedical': serviceMedical!.toMap(),
     };
   }
 

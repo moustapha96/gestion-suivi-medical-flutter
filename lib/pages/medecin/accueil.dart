@@ -160,7 +160,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
 
   Future<String> getMedecinById(String email, String token) async {
-    String _base_email_me = "http://localhost:8888/api/medecins/user";
+    String _base_email_me = "http://localhost:8008/api/medecins/user";
     final http.Response response = await http
         .get(Uri.parse(_base_email_me + "/" + email), headers: <String, String>{
       'Accept': 'application/json',
@@ -251,7 +251,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> getAllMemos() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/Memos"),
+      Uri.parse("http://localhost:8008/api/Memos"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -389,6 +389,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                         context,
                         new MaterialPageRoute(builder: (context) =>
                         new MedecinNewRv(
+                          token: token,
                             emailPatient: _dataDemandeRv[index]["patient"]['user']['email'],
                             emailMedecin: _dataDemandeRv[index]['medecin']['user']['email'])),
                       );
@@ -473,9 +474,9 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> getAllDemandeRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/demandeRVs"),
+      Uri.parse("http://localhost:8008/api/demandeRVs"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -540,7 +541,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> getAllRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/RendezVous"),
+      Uri.parse("http://localhost:8008/api/RendezVous"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer token $token'
@@ -667,7 +668,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> getAllPatients() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/patients"),
+      Uri.parse("http://localhost:8008/api/patients"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer token $token'
@@ -808,7 +809,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
         idMemos: 0, titre: titre, message: message, medecin: medecin);
 
     final http.Response response = await http.post(
-        Uri.parse("http://localhost:8888/api/Memos"),
+        Uri.parse("http://localhost:8008/api/Memos"),
         headers: <String, String>{
           "Accept": "application/json",
           'Content-Type': 'application/json; charset=UTF-8',
@@ -836,7 +837,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> DeleteMemosDB(int idMemos) async {
     final http.Response response = await http.delete(
-        Uri.parse("http://localhost:8888/api/Memos/${idMemos}"),
+        Uri.parse("http://localhost:8008/api/Memos/${idMemos}"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer token $token',
@@ -927,9 +928,9 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> getAllDms() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/dms"),
+      Uri.parse("http://localhost:8008/api/dms"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
       },
     );
     setState(() {

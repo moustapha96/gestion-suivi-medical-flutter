@@ -153,7 +153,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
 // recuperer l'utilisateur connecté
   Future<String> getPatientById(String email, String token) async {
-    String _base_email = "http://localhost:8888/api/patients/user";
+    String _base_email = "http://localhost:8008/api/patients/user";
     final http.Response response = await http
         .get(Uri.parse(_base_email + "/" + email), headers: {
       'Accept': 'application/json',
@@ -222,9 +222,9 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
   Future<String> getAllMemos() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/Memos"),
+      Uri.parse("http://localhost:8008/api/Memos"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -273,9 +273,9 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
   Future<String> getDmPatient() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/dms/patient/" + this.email),
+      Uri.parse("http://localhost:8008/api/dms/patient/" + this.email),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -405,9 +405,9 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
   Future<String> getAllDemandeRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/demandeRVs"),
+      Uri.parse("http://localhost:8008/api/demandeRVs"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -558,7 +558,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
   Future<String> getAllRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/RendezVous"),
+      Uri.parse("http://localhost:8008/api/RendezVous"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer token $token'
@@ -592,10 +592,10 @@ class _AccueilPatientState extends State<AccueilPatient> {
         taille: 0,
         age: 0);
 
-    String _base_email_me = "http://localhost:8888/api/medecins/user";
+    String _base_email_me = "http://localhost:8008/api/medecins/user";
     final http.Response response = await http
         .get(Uri.parse(_base_email_me + "/" + email), headers: <String, String>{
-      'Accept': 'application/json',
+      'Accept': 'application/json','Authorization': 'Bearer token $token'
     });
     setState(() {
       var data = jsonDecode(response.body);
@@ -614,22 +614,22 @@ class _AccueilPatientState extends State<AccueilPatient> {
         age: data['age'],
       );
     });
+    print(medecinC);
     Demanderv dmrv = new Demanderv(id: 0, patient: patientC, medecin: medecinC, date_demnande: DateTime.now());
     print(dmrv);
 
+    print(dmrv);
+    Map<String,String> headers = {'Content-Type':'application/json'};
+    final msg = jsonEncode({"patient":patientC,"medecin":medecinC,
+      "date_demande":DateTime.now().toString()
+    });
+    final msgg = dmrv.toJson();
     final http.Response responseR2 =
-        await http.post(Uri.parse("http://localhost:8888/api/demandeRVs"),
+        await http.post(Uri.parse("http://localhost:8008/api/demandeRVs"),
             headers: <String, String>{
-              "Accept": "application/json",
               'Content-Type': 'application/json; charset=UTF-8',
             },
-            body:
-            // jsonEncode(<String, dynamic>{
-            //   'patient': patientC.toDatabaseJson(),
-            //   'medecin': medecinC.toDatabaseJson(),
-            //   'date_demande': DateTime.now().toString()
-            // }));
-               dmrv.toDatabaseJson()   );
+            body: msgg);
 
     if (responseR2.statusCode == 200) {
       Fluttertoast.showToast(
@@ -653,9 +653,9 @@ class _AccueilPatientState extends State<AccueilPatient> {
   //************** get all medecins***************//////////:
   Future<String> getALLMedecins() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/medecins"),
+      Uri.parse("http://localhost:8008/api/medecins"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
       },
     );
     setState(() {

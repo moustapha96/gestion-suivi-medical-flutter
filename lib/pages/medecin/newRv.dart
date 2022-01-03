@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mygsmp/models/medecin.dart';
 import 'package:mygsmp/models/patient.dart';
 import 'package:mygsmp/models/rendezVous.dart';
@@ -22,13 +23,15 @@ class MedecinNewRv extends StatefulWidget{
   String emailPatient;
   String emailMedecin;
 
-  MedecinNewRv( { Key? key,required this.emailMedecin, required this.emailPatient  }) : super(key: key);
+  String token;
+  MedecinNewRv( { Key? key,required this.emailMedecin, required this.emailPatient, required this.token  }) : super(key: key);
 
-  State createState() =>  _MedecinNewRv(emailMedecin: emailMedecin, emailPatient: emailPatient);
+  State createState() =>  _MedecinNewRv(emailMedecin: emailMedecin, emailPatient: emailPatient, token: token);
 }
 class _MedecinNewRv extends State<MedecinNewRv> {
   String emailMedecin; String emailPatient;
-  _MedecinNewRv({ required this.emailMedecin, required this.emailPatient });
+  String token;
+  _MedecinNewRv({ required this.emailMedecin, required this.emailPatient, required this.token });
 
 
   Medecin medecinC = new Medecin(
@@ -62,17 +65,16 @@ class _MedecinNewRv extends State<MedecinNewRv> {
   final _formKeyMemos = GlobalKey<FormState>();
   TextEditingController dateController = TextEditingController();
   TextEditingController heureController = TextEditingController();
-
+  TextEditingController dateinput = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    dateinput.text = "";
     print('patient'+ emailPatient);
     print('medecin'+ emailMedecin);
     getMedecinById(emailMedecin);
     getPatientById(emailPatient);
-
-
   }
 
   @override
@@ -114,16 +116,34 @@ class _MedecinNewRv extends State<MedecinNewRv> {
                 labelText: 'heure',
               ),
             ),
-            TextFormField(
-              controller: dateController,
-              keyboardType: TextInputType.datetime,
-              decoration: const InputDecoration(
-                icon: const Icon(Icons.local_post_office),
-                hintText: 'date...',
-                labelText: 'date',
+            new Center(
+              child: TextField(
+                controller: dateinput,
+                decoration: InputDecoration(
+                  icon:Icon(Icons.calendar_today),
+                  labelText: "date"
+                ),
+                readOnly: true,
+                onTap: () async {
+                  DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime.now(),
+                      firstDate: DateTime(2000),
+                      lastDate: DateTime(2030));
+                  if(pickedDate != null ){
+                    print(pickedDate);
+                    String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                    print(formattedDate);
+
+                    setState(() {
+                      dateinput.text = formattedDate;
+                    });
+                  }else{
+                    print("Date is not selected");
+                  }
+                },
               ),
             ),
-
             new Container(
               margin: EdgeInsets.only(top: 15),
               child : Center(
@@ -134,8 +154,9 @@ class _MedecinNewRv extends State<MedecinNewRv> {
                     onPressed: (){
 
                       setState(() {
-                        print( heureController.text+ "- "+dateController.text  );
-                        savenewRv(heureController.text, dateController.text );
+                        print(dateinput.text);
+                        print( heureController.text);
+                        savenewRv(heureController.text, dateinput.text );
                       });
                     },
                     child: Text('enregistrer', style: TextStyle( fontSize: 20 , fontWeight:  FontWeight.bold),   ),
@@ -151,7 +172,7 @@ class _MedecinNewRv extends State<MedecinNewRv> {
 
 
   Future<String> getPatientById(String email) async {
-    String _base_email = "http://localhost:8888/api/patients/user";
+    String _base_email = "http://localhost:8008/api/patients/user";
     final http.Response response = await http
         .get(Uri.parse(_base_email + "/" + email), headers: {
       'Accept': 'application/json',
@@ -178,10 +199,10 @@ class _MedecinNewRv extends State<MedecinNewRv> {
   }
 
   Future<String> getMedecinById(String email) async {
-    String _base_email_me = "http://localhost:8888/api/medecins/user";
+    String _base_email_me = "http://localhost:8008/api/medecins/user";
     final http.Response response = await http
         .get(Uri.parse(_base_email_me + "/" + email), headers: <String, String>{
-      'Accept': 'application/json',
+      'Accept': 'application/json','Authorization': 'Bearer token $token'
     });
     setState(() {
       var data = jsonDecode(response.body);
@@ -207,17 +228,53 @@ class _MedecinNewRv extends State<MedecinNewRv> {
 
   Future<String> savenewRv(String heure, String date) async{
 
-    DateTime datee = DateTime.now();
-    Rendezvous rv= new Rendezvous(idRendezVous: 0, date_rv: datee, heure: heure, medecin: medecinC, patient: patientC);
-
+    Rendezvous rv = new Rendezvous(idRendezVous: 0, date_rv: DateTime.parse( date), heure: heure, medecin: medecinC, patient: patientC);
+    final msg = jsonEncode({"patient":patientC.toJson(),"medecin":medecinC, "date_rv": date , "heure": heure});
+    int? idPatient = patientC.user?.getIduser;
+    print(patientC.getIdPatient);
     final http.Response response = await http.post(
-        Uri.parse("http://localhost:8888/api/RendezVous"),
+        Uri.parse("http://localhost:8008/api/RendezVous"),
+        // Uri.parse("http://localhost:8008/api/ajouterRendezVousV2"),
         headers: <String, String>{
           "Accept": "application/json",
+          'Authorization': 'Bearer token $token',
           'Content-Type': 'application/json; charset=UTF-8',
-        }, body: rv.toJson());
+        }, body: rv.toJson()
+    // json.encode(
+
+        // {
+        //     "date_rv": date,
+        //     "heure": heure,
+        //     "idMedecin": medecinC.getIdMedecin,
+        //     "email":  emailPatient
+        //   }
+        // )
+
+    );
+
+    var data = jsonDecode(response.body);
+    print(data["idRendezVous"]);
+    int idrv = data["idRendewVous"];
 
     if ( response.statusCode == 200 ){
+
+      // final http.Response response2 = await http.put(
+      //     Uri.parse("http://localhost:8008/api/RendezVous/${idrv}"),
+      //     headers: <String, String>{
+      //       "Accept": "application/json",'Authorization': 'Bearer token $token',
+      //       'Content-Type': 'application/json; charset=UTF-8',
+      //     }, body:{
+      //       "patient": patientC
+      // });
+      //
+      //    if(response2.statusCode == 200){
+      //      Fluttertoast.showToast(
+      //          msg: "RV enregistrer avec succés",
+      //          webPosition: "center",
+      //          toastLength: Toast.LENGTH_LONG,
+      //          gravity: ToastGravity.BOTTOM,
+      //          timeInSecForIosWeb: 2);
+      //    }
       Fluttertoast.showToast(
           msg: "RV enregistrer avec succés",
           webPosition: "center",

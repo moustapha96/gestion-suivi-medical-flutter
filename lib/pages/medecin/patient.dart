@@ -70,7 +70,7 @@ class MedecinPatientState extends State<MedecinPatient> {
 
   Future<String> getAllPatient() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/patients"),
+      Uri.parse("http://localhost:8008/api/patients"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

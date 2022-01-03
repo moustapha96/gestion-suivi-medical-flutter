@@ -67,4 +67,12 @@ class Rendezvous {
 
   factory Rendezvous.fromJson(String source) =>
       Rendezvous.fromMap(json.decode(source));
+
+  Map<String, dynamic> toDatabaseJson() => {
+    "idRendzVous": this.idRendezVous,
+    "date_rv": this.date_rv,
+    "heure": this.heure,
+    "medecin": this.medecin,
+    "patient": this.patient,
+  };
 }

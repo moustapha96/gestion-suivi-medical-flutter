@@ -170,7 +170,7 @@ class _PatientRvState extends State<PatientRv> {
   }
 
   Future<String> getAllRv() async {
-    String _base_email = "http://localhost:8888/api/patients/user";
+    String _base_email = "http://localhost:8008/api/patients/user";
     final http.Response resp = await http
         .get(Uri.parse(_base_email + "/" + email), headers: {
       'Accept': 'application/json',
@@ -204,7 +204,7 @@ class _PatientRvState extends State<PatientRv> {
   Future<String> getAllRvPatient(int id) async{
     final http.Response response = await http.get(
       Uri.parse(
-          "http://localhost:8888/api/RendezVous/patient/" + id.toString()  ),
+          "http://localhost:8008/api/RendezVous/patient/" + id.toString()  ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

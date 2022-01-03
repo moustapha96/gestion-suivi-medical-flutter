@@ -156,7 +156,7 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
 
 
   Future<String> getPatientById(String email) async {
-    String _base_email = "http://localhost:8888/api/patients/user";
+    String _base_email = "http://localhost:8008/api/patients/user";
     final http.Response response = await http
         .get(Uri.parse(_base_email + "/" + email), headers: {
       'Accept': 'application/json',
@@ -184,7 +184,7 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
   }
 
   Future<String> getDmPatient(String email) async { 
-    String _base_email = "http://localhost:8888/api/dms/patient";
+    String _base_email = "http://localhost:8008/api/dms/patient";
     final http.Response response = await http
         .get(Uri.parse(_base_email + "/" + email), headers: {
       'Accept': 'application/json',
@@ -206,7 +206,7 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
   }
 
   Future<String> getMedecinById(String email) async {
-    String _base_email_me = "http://localhost:8888/api/medecins/user";
+    String _base_email_me = "http://localhost:8008/api/medecins/user";
     final http.Response response = await http
         .get(Uri.parse(_base_email_me + "/" + email), headers: <String, String>{
       'Accept': 'application/json',
@@ -242,7 +242,7 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
     this.dm.consultations?.add(rv);
     int id = this.dm.getIdDossierMedical;
     final http.Response responseC = await http.put(
-        Uri.parse("http://localhost:8888/api/dms/${id}"),
+        Uri.parse("http://localhost:8008/api/dms/${id}"),
         headers: <String, String>{
           "Accept": "application/json",
           'Content-Type': 'application/json; charset=UTF-8',

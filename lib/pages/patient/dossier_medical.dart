@@ -115,7 +115,7 @@ class _PatientDmsState extends State<PatientDms> {
 
   Future<String> getDmPatient() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8888/api/dms/patient/"+ this.email),
+      Uri.parse("http://localhost:8008/api/dms/patient/"+ this.email),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
