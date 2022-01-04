@@ -62,8 +62,9 @@ class Demanderv {
 
   Map<String, dynamic> toDatabaseJson() => {
     "id": this.id,
-    "date_demnande": this.date_demnande,
-    "patient": this.patient,
-    "medecin": this.medecin,
+    "date_demande": this.date_demnande,
+    "patient": this.patient?.toDatabaseJson(),
+    "medecin": this.medecin?.toDatabaseJson(),
   };
+
 }

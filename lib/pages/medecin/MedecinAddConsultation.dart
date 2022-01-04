@@ -139,8 +139,8 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
                     onPressed: (){
 
                       setState(() {
-                        print( traitement.text+ "- "+traitement.text  );
-                        saveConsultation(diagnostic.text, diagnostic.text );
+                        print( diagnostic.text+ "- "+ traitement.text  );
+                        saveConsultation(traitement.text, diagnostic.text );
                       });
                     },
                     child: Text('enregistrer', style: TextStyle( fontSize: 20 , fontWeight:  FontWeight.bold),   ),
@@ -235,29 +235,80 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
 
   Future<String> saveConsultation(String traitement, String diagnostic) async{
 
+    print("traitement "+ traitement);
+    print("diagnostic "+ diagnostic);
+
     DateTime datee = DateTime.now();
+
     Consultation rv = new Consultation(idConsultation: 0, diagnostic: diagnostic, traitement: traitement,
         dossierMedical: dm);
 
+
+    print(dm);
+
     this.dm.consultations?.add(rv);
     int id = this.dm.getIdDossierMedical;
-    final http.Response responseC = await http.put(
-        Uri.parse("http://localhost:8008/api/dms/${id}"),
+
+    final http.Response responseC = await http.post(
+        Uri.parse("http://localhost:8008/api/dms/consultation/${id}"),
         headers: <String, String>{
           "Accept": "application/json",
           'Content-Type': 'application/json; charset=UTF-8',
-        }, body: jsonEncode( {
-                "diagnostic": diagnostic,
-                "traitement": traitement,
-                "dossierMedical": dm.toMap()
-        }));
+        }, body:
+    jsonEncode({
+                    "idConsultation": 0,
+                    "medecin": {
+                      "idMedecin": medecinC.getIdMedecin,
+                      "specialisation": medecinC.getSpecialisation,
+                      "initial": medecinC.getInitial,
+                      "prenom": medecinC.getPrenom,
+                      "num_licence": medecinC.getNumlicence,
+                      "adresse": medecinC.getAdresse,
+                      "user": {
+                        "iduser": 4,
+                        "email": medecinC.user?.getEmail,
+                        "password": medecinC.user?.getPassword,
+                        "role": medecinC.user?.getRole,
+                        "creatAt": ""
+                      },
+                      "genre": medecinC.getGenre,
+                      "nom": medecinC.getNom,
+                      "tel": medecinC.getTel,
+                      "taille": medecinC.getTaille,
+                      "age": medecinC.getAge,
+                      "creatAt": "2021-03-03"
+                    },
+                    "patient": {
+                      "statut_social": patientC,
+                      "prenom": patientC.getPrenom,
+                      "profession": patientC.getProfession,
+                      "adresse": patientC.getAdresse,
+                      "genre": patientC.getGenre,
+                      "user": {
+                        "iduser":patientC.user?.getIduser,
+                        "email": patientC.user?.getEmail,
+                        "password": patientC.user?.getPassword,
+                        "role": patientC.user?.getRole,
+                        "creatAt": ""
+                      },
+                      "nom": patientC.getNom,
+                      "tel": patientC.getTel,
+                      "taille": patientC.getTaille,
+                      "age": patientC.getAge,
+                      "creatAt": "",
+                      "id": patientC.getIdPatient
+                    },
+                    "consultations": [
+                      {
+                        "idConsultation": 0,
+                        "diagnostic": diagnostic,
+                        "traitement": traitement,
+                      }
+                    ],
+                    "date_creation": ""
+               })
 
-    // final http.Response response = await http.post(
-    //     Uri.parse("http://localhost:8888/api/Consultation"),
-    //     headers: <String, String>{
-    //       "Accept": "application/json",
-    //       'Content-Type': 'application/json; charset=UTF-8',
-    //     }, body: rv.toJson());
+    );
 
     if ( responseC.statusCode == 200 ){
       Fluttertoast.showToast(

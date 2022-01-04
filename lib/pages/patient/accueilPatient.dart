@@ -614,35 +614,80 @@ class _AccueilPatientState extends State<AccueilPatient> {
         age: data['age'],
       );
     });
-    print(medecinC);
-    Demanderv dmrv = new Demanderv(id: 0, patient: patientC, medecin: medecinC, date_demnande: DateTime.now());
-    print(dmrv);
 
-    print(dmrv);
-    Map<String,String> headers = {'Content-Type':'application/json'};
-    final msg = jsonEncode({"patient":patientC,"medecin":medecinC,
-      "date_demande":DateTime.now().toString()
-    });
-    final msgg = dmrv.toJson();
+
     final http.Response responseR2 =
         await http.post(Uri.parse("http://localhost:8008/api/demandeRVs"),
             headers: <String, String>{
               'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer token $token'
             },
-            body: msgg);
+            body: jsonEncode(
+                {
+                  "id": 0,
+                  "medecin": {
+                    "idMedecin": medecinC.getIdMedecin,
+                    "specialisation": medecinC.getSpecialisation,
+                    "initial": medecinC.getInitial,
+                    "prenom": medecinC.getPrenom,
+                    "num_licence": medecinC.getNumlicence,
+                    "adresse": medecinC.getAdresse,
+                    "user": {
+                      "iduser": 4,
+                      "email": medecinC.user?.getEmail,
+                      "password": medecinC.user?.getPassword,
+                      "role": medecinC.user?.getRole,
+                      "creatAt": ""
+                    },
+                    "genre": medecinC.getGenre,
+                    "nom": medecinC.getNom,
+                    "tel": medecinC.getTel,
+                    "taille": medecinC.getTaille,
+                    "age": medecinC.getAge,
+                    "creatAt": "2021-03-03"
+                  },
+                  "patient": {
+                    "statut_social": patientC,
+                    "prenom": patientC.getPrenom,
+                    "profession": patientC.getProfession,
+                    "adresse": patientC.getAdresse,
+                    "genre": patientC.getGenre,
+                    "user": {
+                      "iduser":patientC.user?.getIduser,
+                      "email": patientC.user?.getEmail,
+                      "password": patientC.user?.getPassword,
+                      "role": patientC.user?.getRole,
+                      "creatAt": ""
+                    },
+                    "nom": patientC.getNom,
+                    "tel": patientC.getTel,
+                    "taille": patientC.getTaille,
+                    "age": patientC.getAge,
+                    "creatAt": "",
+                    "id": patientC.getIdPatient
+                  },
+                }
+            )
+           );
 
     if (responseR2.statusCode == 200) {
       Fluttertoast.showToast(
-          msg: "message posté avec succés",
+          msg: "demande envoye avec succés",
           webPosition: "center",
+          backgroundColor: Colors.green,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AccueilPatient(email: email, token: token)));
     } else {
       print( responseR2.body );
       Fluttertoast.showToast(
-          msg: "message non posté",
+          msg: "demande non envoye",
           webPosition: "center",
+          backgroundColor: Colors.red,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);

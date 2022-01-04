@@ -16,6 +16,8 @@ import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
 import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 import 'package:http/http.dart' as http;
 
+import 'accueil.dart';
+
 class MedecinNewRv extends StatefulWidget{
   late Medecin medecin;
   late Rendezvous rv;
@@ -228,63 +230,84 @@ class _MedecinNewRv extends State<MedecinNewRv> {
 
   Future<String> savenewRv(String heure, String date) async{
 
-    Rendezvous rv = new Rendezvous(idRendezVous: 0, date_rv: DateTime.parse( date), heure: heure, medecin: medecinC, patient: patientC);
-    final msg = jsonEncode({"patient":patientC.toJson(),"medecin":medecinC, "date_rv": date , "heure": heure});
-    int? idPatient = patientC.user?.getIduser;
-    print(patientC.getIdPatient);
+   print("heure"+ heure);
+   print("date"+ date );
+
     final http.Response response = await http.post(
         Uri.parse("http://localhost:8008/api/RendezVous"),
-        // Uri.parse("http://localhost:8008/api/ajouterRendezVousV2"),
         headers: <String, String>{
           "Accept": "application/json",
           'Authorization': 'Bearer token $token',
           'Content-Type': 'application/json; charset=UTF-8',
-        }, body: rv.toJson()
-    // json.encode(
-
-        // {
-        //     "date_rv": date,
-        //     "heure": heure,
-        //     "idMedecin": medecinC.getIdMedecin,
-        //     "email":  emailPatient
-        //   }
-        // )
-
+        }, body: jsonEncode(
+              {
+                "idRendezVous": 0,
+                "date_rv": date,
+                "heure": heure,
+                "medecin": {
+                  "idMedecin": medecinC.getIdMedecin,
+                  "specialisation": medecinC.getSpecialisation,
+                  "initial": medecinC.getInitial,
+                  "prenom": medecinC.getPrenom,
+                  "num_licence": medecinC.getNumlicence,
+                  "adresse": medecinC.getAdresse,
+                  "user": {
+                    "iduser": 4,
+                    "email": medecinC.user?.getEmail,
+                    "password": medecinC.user?.getPassword,
+                    "role": medecinC.user?.getRole,
+                    "creatAt": ""
+                  },
+                  "genre": medecinC.getGenre,
+                  "nom": medecinC.getNom,
+                  "tel": medecinC.getTel,
+                  "taille": medecinC.getTaille,
+                  "age": medecinC.getAge,
+                  "creatAt": "2021-03-03"
+                },
+                "patient": {
+                  "statut_social": patientC,
+                  "prenom": patientC.getPrenom,
+                  "profession": patientC.getProfession,
+                  "adresse": patientC.getAdresse,
+                  "genre": patientC.getGenre,
+                  "user": {
+                    "iduser":patientC.user?.getIduser,
+                    "email": patientC.user?.getEmail,
+                    "password": patientC.user?.getPassword,
+                    "role": patientC.user?.getRole,
+                    "creatAt": ""
+                  },
+                  "nom": patientC.getNom,
+                  "tel": patientC.getTel,
+                  "taille": patientC.getTaille,
+                  "age": patientC.getAge,
+                  "creatAt": "",
+                  "id": patientC.getIdPatient
+                },
+              }
+          )
     );
-
-    var data = jsonDecode(response.body);
-    print(data["idRendezVous"]);
-    int idrv = data["idRendewVous"];
-
     if ( response.statusCode == 200 ){
-
-      // final http.Response response2 = await http.put(
-      //     Uri.parse("http://localhost:8008/api/RendezVous/${idrv}"),
-      //     headers: <String, String>{
-      //       "Accept": "application/json",'Authorization': 'Bearer token $token',
-      //       'Content-Type': 'application/json; charset=UTF-8',
-      //     }, body:{
-      //       "patient": patientC
-      // });
-      //
-      //    if(response2.statusCode == 200){
-      //      Fluttertoast.showToast(
-      //          msg: "RV enregistrer avec succés",
-      //          webPosition: "center",
-      //          toastLength: Toast.LENGTH_LONG,
-      //          gravity: ToastGravity.BOTTOM,
-      //          timeInSecForIosWeb: 2);
-      //    }
       Fluttertoast.showToast(
           msg: "RV enregistrer avec succés",
           webPosition: "center",
+          backgroundColor: Colors.green,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                AcceuilMedecin(emailmedecin: emailMedecin,  token: token ),
+          ));
+
     }else{
       Fluttertoast.showToast(
           msg: "RV non enregistrer",
           webPosition: "center",
+          backgroundColor: Colors.red,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);

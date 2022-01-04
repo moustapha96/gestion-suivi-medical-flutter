@@ -40,7 +40,7 @@ class Medecin {
 
   set setPrenom(prenom) => this.prenom = prenom;
 
-  get numlicence => this.num_licence;
+  get getNumlicence => this.num_licence;
 
   set numlicence(value) => this.num_licence = value;
 

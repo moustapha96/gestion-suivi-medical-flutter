@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:mygsmp/connexion/connexion.dart';
 import 'package:mygsmp/models/dossier_medical.dart';
 import 'package:mygsmp/models/patient.dart';
 import 'package:mygsmp/models/simple_user.dart';
@@ -273,25 +275,11 @@ class _SignUpFormState extends State<SignUpForm> {
     void onPressedSubmit() {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        //
-        // print("email : " + email);
-        // print("age " + age.toString());
-        // print("profession " + profession);
-        // print('N° '+ statutSocial + ' statut social : ');
-        // print("prenom"+ prenom);
-        // print("npm" + nom);
-        // print( "adresse" + adresse);
-        // print('genre' + genre );
-        // print("tel "+ tel.toString() );
-        // print("tille" + taille.toString() );
-        //
-        // print("Password " + _password);
         Usermodel user = new Usermodel(
             email: email,
             password: _password,
             role: "patient",
             iduser: 0,
-           // creatAt: DateTime.now().toString()
         );
         print(user.toMap());
 
@@ -335,10 +323,34 @@ class _SignUpFormState extends State<SignUpForm> {
       },
       body: jsonEncode(patient.toDatabaseJson()),
     );
+    if ( response.statusCode == 200 ){
+      Fluttertoast.showToast(
+          msg: "enregistrement reussie !!",
+          webPosition: "center",
+          textColor: Colors.green,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => Login()),
+      );
+
+    }else{
+      Fluttertoast.showToast(
+          msg: "enregistrement non reussie ",
+          webPosition: "center",
+          textColor: Colors.red,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+    }
     return ("success");
   }
 
   Future<String> saveUser(Usermodel user, Patient patient) async {
+
     String _base = "http://localhost:8008/api/User";
     final http.Response response = await http.post(
       Uri.parse(_base),
@@ -349,15 +361,14 @@ class _SignUpFormState extends State<SignUpForm> {
     );
     var data = json.decode(response.body);
 
+    print(data);
     Usermodel usr = new Usermodel(
         iduser: data['iduser'],
         email: data['email'],
         password: data['password'],
         role: data['role'],
-       // creatAt: data['creatAt']
     );
 
-    print(usr.toJson());
     Patient patient = new Patient(
         idPatient: 0,
         statut_social: statutSocial,
@@ -365,7 +376,7 @@ class _SignUpFormState extends State<SignUpForm> {
         profession: profession,
         adresse: adresse,
         genre: genre,
-        user : user,
+        user : usr,
         nom: nom,
         tel: tel.toString(),
         taille: taille,

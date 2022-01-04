@@ -131,7 +131,7 @@ class Patient {
         "profession": this.profession,
         "adresse": this.adresse,
         "genre": this.genre,
-        "user": this.user,
+        "user": this.user?.toDatabaseJson(),
         "nom": this.nom,
         "tel": this.tel,
         "taille": this.taille,

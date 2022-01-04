@@ -69,10 +69,10 @@ class Rendezvous {
       Rendezvous.fromMap(json.decode(source));
 
   Map<String, dynamic> toDatabaseJson() => {
-    "idRendzVous": this.idRendezVous,
+    "idRendezVous": this.idRendezVous,
     "date_rv": this.date_rv,
     "heure": this.heure,
-    "medecin": this.medecin,
-    "patient": this.patient,
+    "medecin": this.medecin?.toJson(),
+    "patient": this.patient?.toJson(),
   };
 }
