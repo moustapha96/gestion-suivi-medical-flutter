@@ -33,7 +33,7 @@ class Usermodel {
 
   set setCreatAt(creatAt) => this.creatAt = creatAt;
 
-  String toJson() => json.encode(toMap());
+  // String toJson() => json.encode(toMap());
 
   factory Usermodel.fromJson(String source) =>
       Usermodel.fromMap(json.decode(source));
@@ -68,5 +68,14 @@ class Usermodel {
   @override
   String toString() {
     return 'Usermodel{iduser: $iduser, email: $email, password: $password, role: $role, creatAt: $creatAt}';
+  }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['iduser'] = this.iduser;
+    data['email'] = this.email;
+    data['password'] = this.password;
+    data['role'] = this.role;
+    data['creatAt'] = this.creatAt;
+    return data;
   }
 }

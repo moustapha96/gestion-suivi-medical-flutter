@@ -66,19 +66,21 @@ class _AccueilPatientState extends State<AccueilPatient> {
     super.initState();
 
     getPatientById(email, token);
-    Timer(Duration(seconds: 1), () {
+    Timer(Duration(seconds: 2), () {
       Fluttertoast.showToast(
           msg: "Bienvenue  " + this.patientC.user!.getEmail,
           webPosition: "center",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+
+      getDmPatient();
+      getAllDemandeRv();
+      getAllRv();
+      getALLMedecins();
+      getAllMemos();
     });
-    getDmPatient();
-    getAllDemandeRv();
-    getAllRv();
-    getALLMedecins();
-    getAllMemos();
+
   }
 
   @override
@@ -153,12 +155,13 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
 // recuperer l'utilisateur connecté
   Future<String> getPatientById(String email, String token) async {
-    String _base_email = "http://localhost:8008/api/patients/user";
-    final http.Response response = await http
-        .get(Uri.parse(_base_email + "/" + email), headers: {
-      'Accept': 'application/json',
-      'Authorization': 'Bearer token $token'
-    });
+
+    final http.Response response = await http.get(
+      Uri.parse("http://localhost:8008/api/patients/user/${email}"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
+      },
+    );
     setState(() {
       var data = jsonDecode(response.body);
       this.patientC = new Patient(
@@ -364,7 +367,6 @@ class _AccueilPatientState extends State<AccueilPatient> {
           child: ListView.separated(
         itemCount: _dataDemandeRv == null ? 0 : _dataDemandeRv.length,
         itemBuilder: (BuildContext context, int index) {
-          if (_dataDemandeRv[index]['patient']['user']['email'] == this.email) {
             return Card(
               margin: EdgeInsets.all(10),
               elevation: 12,
@@ -388,9 +390,6 @@ class _AccueilPatientState extends State<AccueilPatient> {
               ),
               color: Colors.blueGrey,
             );
-          } else {
-            return Center();
-          }
         },
         separatorBuilder: (BuildContext context, int index) => (const Divider(
           thickness: 10,
@@ -404,8 +403,11 @@ class _AccueilPatientState extends State<AccueilPatient> {
   }
 
   Future<String> getAllDemandeRv() async {
+
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8008/api/demandeRVs"),
+
+      Uri.parse("http://localhost:8008/api/demandeRVs/patient/${patientC.getIdPatient}"),
+      // Uri.parse("http://localhost:8008/api/demandeRVs"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
       },
@@ -413,6 +415,8 @@ class _AccueilPatientState extends State<AccueilPatient> {
     setState(() {
       _dataDemandeRv = json.decode(response.body);
     });
+    print("all demandes rvs patient");
+    print(_dataDemandeRv);
     return "succes";
   }
 
@@ -514,7 +518,6 @@ class _AccueilPatientState extends State<AccueilPatient> {
         child: ListView.separated(
       itemCount: _dataRV == null ? 0 : _dataRV.length,
       itemBuilder: (BuildContext context, int index) {
-        if (_dataRV[index]['patient']['user']['email'] == this.email) {
           return Card(
             margin: EdgeInsets.all(10),
             elevation: 12,
@@ -546,9 +549,6 @@ class _AccueilPatientState extends State<AccueilPatient> {
             ),
             color: Colors.blueGrey,
           );
-        } else {
-          return Center();
-        }
       },
       separatorBuilder: (BuildContext context, int index) => (const Divider(
         thickness: 10,
@@ -558,7 +558,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
   Future<String> getAllRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8008/api/RendezVous"),
+      Uri.parse("http://localhost:8008/api/RendezVous/patient/${patientC.getIdPatient}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer token $token'
@@ -567,7 +567,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
     setState(() {
       _dataRV = json.decode(response.body);
     });
-    print(_dataRV);
+
     return "succes";
   }
 
@@ -614,7 +614,6 @@ class _AccueilPatientState extends State<AccueilPatient> {
         age: data['age'],
       );
     });
-
 
     final http.Response responseR2 =
         await http.post(Uri.parse("http://localhost:8008/api/demandeRVs"),
@@ -684,6 +683,10 @@ class _AccueilPatientState extends State<AccueilPatient> {
               builder: (context) => AccueilPatient(email: email, token: token)));
     } else {
       print( responseR2.body );
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => AccueilPatient(email: email, token: token)));
       Fluttertoast.showToast(
           msg: "demande non envoye",
           webPosition: "center",

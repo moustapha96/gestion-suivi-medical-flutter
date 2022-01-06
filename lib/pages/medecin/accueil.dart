@@ -78,13 +78,15 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+
+      getAllMemos();
+      getAllDemandeRv();
+      getAllRv();
+      getAllPatients();
+      getAllDms();
     });
 
-    getAllMemos();
-    getAllDemandeRv();
-    getAllRv();
-    getAllPatients();
-    getAllDms();
+
   }
 
   @override
@@ -367,8 +369,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           child: ListView.separated(
             itemCount: _dataDemandeRv == null ? 0 : _dataDemandeRv.length,
             itemBuilder: (BuildContext context, int index) {
-              if (_dataDemandeRv[index]['medecin']['user']['email'] ==
-                  this.emailmedecin) {
+
                 return Card(
                   margin: EdgeInsets.all(10),
                   elevation: 12,
@@ -406,9 +407,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                   ),
                   color: Colors.blueGrey,
                 );
-              } else {
-                return Center();
-              }
+
             },
             separatorBuilder: (BuildContext context, int index) =>
             (const Divider(
@@ -474,7 +473,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> getAllDemandeRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8008/api/demandeRVs"),
+      Uri.parse("http://localhost:8008/api/demandeRVs/medecin/${medecinC.getIdMedecin}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
       },
@@ -493,8 +492,6 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
         child: ListView.separated(
           itemCount: _dataRV == null ? 0 : _dataRV.length,
           itemBuilder: (BuildContext context, int index) {
-            if (_dataRV[index]['medecin']['user']['email'] ==
-                this.emailmedecin) {
               return Card(
                 margin: EdgeInsets.all(10),
                 elevation: 12,
@@ -527,9 +524,6 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                 ),
                 color: Colors.blueGrey,
               );
-            } else {
-              return Center();
-            }
           },
           separatorBuilder: (BuildContext context, int index) =>
           (const Divider(
@@ -541,7 +535,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> getAllRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8008/api/RendezVous"),
+      Uri.parse("http://localhost:8008/api/RendezVous/medecin/${medecinC.getIdMedecin}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer token $token'
@@ -550,6 +544,8 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
     setState(() {
       _dataRV = json.decode(response.body);
     });
+    print("rv medecin");
+    print(_dataRV);
     return "succes";
   }
 
@@ -624,7 +620,6 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
         DateTime.parse(date));
     return datef;
   }
-
 
   //************** liste des patients***********************///
 
@@ -823,6 +818,12 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                AcceuilMedecin(emailmedecin: emailmedecin,  token: token ),
+          ));
     } else {
       Fluttertoast.showToast(
           msg: "message non posté",
@@ -850,6 +851,12 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                AcceuilMedecin(emailmedecin: emailmedecin,  token: token ),
+          ));
     } else {
       Fluttertoast.showToast(
           msg: "message non supprimé",
@@ -901,7 +908,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                         MaterialPageRoute(
                           builder: (context) =>
                               MedecinAddConsultation( emailPatient : _dataDm[index]["patient"]['user']['email'],
-                                  emailMedecin:  this.medecinC.user?.getEmail  ),
+                                  emailMedecin:  this.medecinC.user?.getEmail  , token: token,),
                         ),
                       );
                     }

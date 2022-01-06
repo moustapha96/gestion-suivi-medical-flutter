@@ -35,7 +35,6 @@ class _MedecinNewRv extends State<MedecinNewRv> {
   String token;
   _MedecinNewRv({ required this.emailMedecin, required this.emailPatient, required this.token });
 
-
   Medecin medecinC = new Medecin(
       idMedecin: 0,
       specialisation: "",

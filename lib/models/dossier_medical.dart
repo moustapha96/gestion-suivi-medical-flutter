@@ -58,7 +58,23 @@ class DossierMedical {
     );
   }
 
-  String toJson() => json.encode(toMap());
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['idDossierMedical'] = this.idDossierMedical;
+    if (this.medecin != null) {
+      data['medecin'] = this.medecin?.toJson();
+    }
+    if (this.patient != null) {
+      data['patient'] = this.patient?.toJson();
+    }
+    if (this.consultations != null) {
+      data['consultations'] =
+          this.consultations?.map((v) => v.toJson()).toList();
+    }
+    data['date_creation'] = this.datecreation;
+    return data;
+  }
+
 
   factory DossierMedical.fromJson(String source) =>
       DossierMedical.fromMap(json.decode(source));
@@ -67,4 +83,8 @@ class DossierMedical {
   String toString() {
     return 'DossierMedical{idDossierMedical: $idDossierMedical, medecin: $medecin, patient: $patient, consultations: $consultations, date_creation: $date_creation}';
   }
+
+
+
+
 }

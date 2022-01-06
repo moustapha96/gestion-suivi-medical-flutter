@@ -12,22 +12,23 @@ import 'package:mygsmp/models/rendezVous.dart';
 import 'package:mygsmp/models/userModel.dart';
 import 'package:http/http.dart' as http;
 
+import 'accueil.dart';
+
 class MedecinAddConsultation extends StatefulWidget{
 
-  late Medecin medecin;
-  late Patient patient;
 
+  String token;
   String emailPatient;
   String emailMedecin;
 
-  MedecinAddConsultation( { Key? key,required this.emailMedecin, required this.emailPatient  }) : super(key: key);
+  MedecinAddConsultation( { Key? key,required this.emailMedecin, required this.emailPatient , required this.token }) : super(key: key);
 
-  State createState() =>  _MedecinAddConsultationState(emailMedecin: emailMedecin, emailPatient: emailPatient);
+  State createState() =>  _MedecinAddConsultationState(token: token, emailMedecin: emailMedecin, emailPatient: emailPatient);
 }
 class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
 
-  String emailMedecin; String emailPatient;
-  _MedecinAddConsultationState({ required this.emailMedecin, required this.emailPatient });
+  String emailMedecin; String emailPatient;String token;
+  _MedecinAddConsultationState({ required this.emailMedecin, required this.emailPatient, required this.token });
 
 
   DossierMedical dm = new DossierMedical(idDossierMedical: 0, medecin: null, patient: null, consultations: null);
@@ -234,82 +235,24 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
   }
 
   Future<String> saveConsultation(String traitement, String diagnostic) async{
-
-    print("traitement "+ traitement);
-    print("diagnostic "+ diagnostic);
-
-    DateTime datee = DateTime.now();
-
-    Consultation rv = new Consultation(idConsultation: 0, diagnostic: diagnostic, traitement: traitement,
-        dossierMedical: dm);
-
-
-    print(dm);
-
-    this.dm.consultations?.add(rv);
+    int? nbr = dm.consultations?.last.getIdConsultation;
+    Consultation consultation = new Consultation(idConsultation: nbr!+1 , diagnostic: diagnostic, traitement: traitement);
+    print(consultation);
+    this.dm.consultations?.add(consultation);
     int id = this.dm.getIdDossierMedical;
+    print(dm);
 
     final http.Response responseC = await http.post(
         Uri.parse("http://localhost:8008/api/dms/consultation/${id}"),
         headers: <String, String>{
-          "Accept": "application/json",
+          "Accept": "application/json", 'Authorization': 'Bearer token $token',
           'Content-Type': 'application/json; charset=UTF-8',
         }, body:
-    jsonEncode({
-                    "idConsultation": 0,
-                    "medecin": {
-                      "idMedecin": medecinC.getIdMedecin,
-                      "specialisation": medecinC.getSpecialisation,
-                      "initial": medecinC.getInitial,
-                      "prenom": medecinC.getPrenom,
-                      "num_licence": medecinC.getNumlicence,
-                      "adresse": medecinC.getAdresse,
-                      "user": {
-                        "iduser": 4,
-                        "email": medecinC.user?.getEmail,
-                        "password": medecinC.user?.getPassword,
-                        "role": medecinC.user?.getRole,
-                        "creatAt": ""
-                      },
-                      "genre": medecinC.getGenre,
-                      "nom": medecinC.getNom,
-                      "tel": medecinC.getTel,
-                      "taille": medecinC.getTaille,
-                      "age": medecinC.getAge,
-                      "creatAt": "2021-03-03"
-                    },
-                    "patient": {
-                      "statut_social": patientC,
-                      "prenom": patientC.getPrenom,
-                      "profession": patientC.getProfession,
-                      "adresse": patientC.getAdresse,
-                      "genre": patientC.getGenre,
-                      "user": {
-                        "iduser":patientC.user?.getIduser,
-                        "email": patientC.user?.getEmail,
-                        "password": patientC.user?.getPassword,
-                        "role": patientC.user?.getRole,
-                        "creatAt": ""
-                      },
-                      "nom": patientC.getNom,
-                      "tel": patientC.getTel,
-                      "taille": patientC.getTaille,
-                      "age": patientC.getAge,
-                      "creatAt": "",
-                      "id": patientC.getIdPatient
-                    },
-                    "consultations": [
-                      {
-                        "idConsultation": 0,
-                        "diagnostic": diagnostic,
-                        "traitement": traitement,
-                      }
-                    ],
-                    "date_creation": ""
-               })
-
+                    jsonEncode({
+                              "diagnostic": diagnostic,
+                              "traitement": traitement,
+                        })
     );
-
     if ( responseC.statusCode == 200 ){
       Fluttertoast.showToast(
           msg: "consultation ajouté avec succés",
@@ -317,6 +260,12 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                AcceuilMedecin(emailmedecin: emailMedecin,  token: token ),
+          ));
     }else{
       Fluttertoast.showToast(
           msg: "consultation non enregistrer",
@@ -331,12 +280,18 @@ class _MedecinAddConsultationState extends State<MedecinAddConsultation> {
   List<Consultation> convertiListConsultation(List data ){
     List<Consultation> liste = [];
     for( int i=0; i<data.length; i++ ){
+      var js = jsonEncode({
+        "idConsultation": data[i]['idConsultation'],
+        "diagnostic": data[i]['diagnostic'],
+        "traitement": data[i]['traitement'],
+      }
+      );
       Consultation cons = new Consultation(
                 idConsultation: data[i]['idConsultation'],
                 diagnostic: data[i]['diagnostic'],
                 traitement: data[i]['traitement'],
-                 dossierMedical: null,
       );
+
       liste.add(cons);
     }
     print(liste);

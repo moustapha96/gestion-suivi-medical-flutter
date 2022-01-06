@@ -173,8 +173,8 @@ class _Login extends State<Login> {
               ));
         }
         showToast("connexion réussi : " + user.getEmail);
-      } else {
-        showToast(" erreur :  "+response.statusCode.toString()  );
+      } else if(response.statusCode != 200) {
+        showToast(" erreur :  "+response.body  );
       }
     });
     return ("success");
