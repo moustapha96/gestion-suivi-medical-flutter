@@ -63,9 +63,10 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
   @override
   void initState() {
+    print(email);
     super.initState();
 
-    getPatientById(email, token);
+    getPatientById();
     Timer(Duration(seconds: 2), () {
       Fluttertoast.showToast(
           msg: "Bienvenue  " + this.patientC.user!.getEmail,
@@ -154,7 +155,8 @@ class _AccueilPatientState extends State<AccueilPatient> {
   }
 
 // recuperer l'utilisateur connecté
-  Future<String> getPatientById(String email, String token) async {
+  Future<String> getPatientById() async {
+
 
     final http.Response response = await http.get(
       Uri.parse("http://localhost:8008/api/patients/user/${email}"),
@@ -487,7 +489,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
                     backgroundColor: Colors.purple,
                   ),
                   title: Text(_dataListeMedecins[indice]["prenom"] +
-                      " " +
+                      " _ " +
                       _dataListeMedecins[indice]["nom"]),
                   subtitle: Text(_dataListeMedecins[indice]["specialisation"]),
                   trailing: new TextButton(
@@ -577,7 +579,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
     return datef;
   }
 
-  Future<String> SendDemandeToMedecin(String email) async {
+  Future<String> SendDemandeToMedecin(String emailMedecin) async {
     Medecin medecinC = new Medecin(
         idMedecin: 0,
         specialisation: "",
@@ -594,7 +596,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
     String _base_email_me = "http://localhost:8008/api/medecins/user";
     final http.Response response = await http
-        .get(Uri.parse(_base_email_me + "/" + email), headers: <String, String>{
+        .get(Uri.parse(_base_email_me + "/" + emailMedecin), headers: <String, String>{
       'Accept': 'application/json','Authorization': 'Bearer token $token'
     });
     setState(() {
