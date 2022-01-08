@@ -1,8 +1,5 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:mygsmp/widget/components/medecin/drawer.dart';
-import 'package:mygsmp/widget/components/medecin/footer_medecin.dart';
-import 'package:mygsmp/widget/components/medecin/header_medecin.dart';
 
 class DetailDmScreen extends StatelessWidget {
   List data = [];

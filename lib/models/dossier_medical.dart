@@ -83,8 +83,4 @@ class DossierMedical {
   String toString() {
     return 'DossierMedical{idDossierMedical: $idDossierMedical, medecin: $medecin, patient: $patient, consultations: $consultations, date_creation: $date_creation}';
   }
-
-
-
-
 }

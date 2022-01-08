@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:mygsmp/models/contact.dart';
-import 'package:mygsmp/services/contactService.dart';
 
 class AllContact extends StatefulWidget{
   @override

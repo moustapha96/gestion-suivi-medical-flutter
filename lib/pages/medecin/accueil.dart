@@ -5,10 +5,12 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mygsmp/connexion/connexion.dart';
 import 'package:mygsmp/models/medecin.dart';
 import 'package:mygsmp/models/memos.dart';
+import 'package:mygsmp/models/patient.dart';
 import 'package:mygsmp/models/userModel.dart';
 import 'package:mygsmp/pages/medecin/newRv.dart';
 import 'package:mygsmp/widget/components/medecin/drawer.dart';
@@ -35,6 +37,7 @@ class AcceuilMedecin extends StatefulWidget {
 class _AcceuilMedecinState extends State<AcceuilMedecin> {
   String emailmedecin;
   String token;
+
 
   _AcceuilMedecinState({required this.emailmedecin, required this.token});
 
@@ -85,8 +88,6 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
       getAllPatients();
       getAllDms();
     });
-
-
   }
 
   @override
@@ -96,40 +97,55 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
       home: DefaultTabController(
         length: 5,
         child: Scaffold(
-          appBar: AppBar(
-              elevation: 10,
-              title: Text("Médecin : " + this.medecinC.getInitial),
-              backgroundColor: Colors.cyan,
-              actions: [
-                new IconButton(
-                  tooltip: 'logout',
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Login(),
-                        ));
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text('LogOut')));
-                  },
-                  icon: Icon(Icons.logout),
-                )
-              ],
-              bottom: const TabBar(tabs: [
-                Tab(text: 'RV', icon: Icon(Icons.connect_without_contact)),
-                Tab(text: 'demande', icon: Icon(Icons.portrait_sharp)),
-                Tab(text: 'Patients', icon: Icon(Icons.supervised_user_circle)),
-                Tab(text: 'DM', icon: Icon(Icons.medical_services)),
-                Tab(text: 'Pub', icon: Icon(Icons.post_add)),
-              ])),
-          body: TabBarView(
-            children: <Widget>[
-              CenterListeRV(context),
-              CenterDemandeRv(context),
-              CenterListePatient(context),
-              CenterDossierMedical(context),
-              Container(
-                  child: DefaultTabController(
+            appBar: AppBar(
+                elevation: 10,
+                title: Text("Médecin : " + this.medecinC.getInitial),
+                backgroundColor: Colors.cyan,
+                actions: [
+                  new IconButton(
+                    tooltip: 'logout',
+                    onPressed: () {
+                      Timer(Duration(seconds: 2), () {
+                        CircularProgressIndicator(
+                          valueColor:AlwaysStoppedAnimation<Color>(Colors.red),
+                        );
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Login(),
+                            ));
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('LogOut')));
+                    },
+                    icon: Icon(Icons.logout),
+                  )
+                ],
+                bottom: const TabBar(tabs: [
+                  Tab(text: 'RV', icon: Icon(Icons.connect_without_contact)),
+                  Tab(text: 'demande', icon: Icon(Icons.portrait_sharp)),
+                  Tab(
+                      text: 'Patients',
+                      icon: Icon(Icons.supervised_user_circle)),
+                  Tab(text: 'DM', icon: Icon(Icons.medical_services)),
+                  Tab(text: 'Pub', icon: Icon(Icons.post_add)),
+                ])),
+            body: Container(
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  image: DecorationImage(
+                      image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
+              child: TabBarView(
+                children: <Widget>[
+                  CenterListeRV(context),
+                  CenterDemandeRv(context),
+                  CenterListePatient(context),
+                  CenterDossierMedical(context),
+                  Container(
+                      child: DefaultTabController(
                     length: 2,
                     child: Scaffold(
                       appBar: AppBar(
@@ -151,15 +167,13 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                         ],
                       ),
                     ),
-                  )
-              )
-            ],
-          ),
-        ),
+                  ))
+                ],
+              ),
+            )),
       ),
     );
   }
-
 
   Future<String> getMedecinById(String email, String token) async {
     String _base_email_me = "http://localhost:8008/api/medecins/user";
@@ -193,62 +207,69 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
   Center CenterMemos(BuildContext context) {
     return Center(
         child: ListView.separated(
-          itemCount: _dataMemos == null ? 0 : _dataMemos.length,
-          itemBuilder: (BuildContext context, int index) {
-            String key = _dataMemos[index]['titre'][0];
-            return Dismissible(
-                key: new Key(key),
-                background: new Container(
-                  padding: EdgeInsets.only(right: 20.0),
-                  color: Colors.red,
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      new Text(
-                        "supprimer", style: TextStyle(color: Colors.white),),
-                      new Icon(Icons.delete, color: Colors.white,)
-                    ],
+      itemCount: _dataMemos == null ? 0 : _dataMemos.length,
+      itemBuilder: (BuildContext context, int index) {
+        String key = _dataMemos[index]['titre'][0];
+        return Dismissible(
+            key: UniqueKey(),
+            background: new Container(
+              padding: EdgeInsets.only(right: 20.0),
+              color: Colors.red,
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  new Text(
+                    "supprimer",
+                    style: TextStyle(color: Colors.white),
                   ),
-                ),
-                onDismissed: (direction) {
+                  new Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  )
+                ],
+              ),
+            ),
+            onDismissed: (DismissDirection direction) {
+              setState(() {
+
+                int id = _dataMemos[index]['idMemos'];
+                if (direction == DismissDirection.startToEnd) {
+                  print("Add to favorite");
+                } else {
+                  DeleteMemosDB(id);
+                }
+
+              });
+            },
+            child: ListTile(
+              trailing: IconButton(
+                color: Colors.lightBlue,
+                icon: Icon(Icons.remove_red_eye),
+                onPressed: () {
                   setState(() {
-                    print(_dataMemos[index]['titre']);
-                    int id = _dataMemos[index]['idMemos'];
-                    print(id);
-                    DeleteMemosDB(id);
+                    displayDialog(context, index);
                   });
                 },
-                child: ListTile(
-                  trailing: IconButton(
-                    color: Colors.lightBlue,
-                    icon: Icon(Icons.remove_red_eye),
-                    onPressed: () {
-                      setState(() {
-                        displayDialog(context, index);
-                      });
-                    },
-                  ),
-                  onTap: () {
-                    displayDialog(context, index);
-                  },
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.amber,
-                    radius: 30,
-                    child: Text((_dataMemos[index]['titre'][0]).toUpperCase()),
-                  ),
-                  title: Text(_dataMemos[index]['titre']),
-                  subtitle: Text(
-                    _dataMemos[index]['message'],
-                    maxLines: 2,
-                  ),
-                )
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) =>
-          (const Divider(
-            thickness: 10,
-          )),
-        ));
+              ),
+              onTap: () {
+                displayDialog(context, index);
+              },
+              leading: CircleAvatar(
+                backgroundColor: Colors.amber,
+                radius: 30,
+                child: Text((_dataMemos[index]['titre'][0]).toUpperCase()),
+              ),
+              title: Text(_dataMemos[index]['titre']),
+              subtitle: Text(
+                _dataMemos[index]['message'],
+                maxLines: 2,
+              ),
+            ));
+      },
+      separatorBuilder: (BuildContext context, int index) => (const Divider(
+        thickness: 10,
+      )),
+    ));
   }
 
   Future<String> getAllMemos() async {
@@ -274,8 +295,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
             title: Text(
               _dataMemos[index]['titre'],
               textAlign: TextAlign.center,
-              style:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.cyan),
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.cyan),
             ),
             children: [
               Card(
@@ -334,28 +354,26 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
               labelText: 'message',
             ),
           ),
-
           new Container(
             margin: EdgeInsets.only(top: 15),
             child: Center(
                 child: TextButton(
-                  style: ButtonStyle(
-                    foregroundColor: MaterialStateProperty.all<Color>(
-                        Colors.blue),
-                  ),
-                  onPressed: () {
-                    getMedecinById(emailmedecin, token);
-                    setState(() {
-                      saveMemosDB(titrecontroller.text, messagecontroller.text,
-                          medecinC);
-                    });
-                  },
-                  child: Text('enregistrer', style: TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),),
-                )
-            ),
+              style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+              ),
+              onPressed: () {
+                getMedecinById(emailmedecin, token);
+                setState(() {
+                  saveMemosDB(
+                      titrecontroller.text, messagecontroller.text, medecinC);
+                });
+              },
+              child: Text(
+                'enregistrer',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            )),
           ),
-
         ],
       ),
     );
@@ -367,10 +385,38 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
     if (_dataDemandeRv != null) {
       return Center(
           child: ListView.separated(
-            itemCount: _dataDemandeRv == null ? 0 : _dataDemandeRv.length,
-            itemBuilder: (BuildContext context, int index) {
-
-                return Card(
+        itemCount: _dataDemandeRv == null ? 0 : _dataDemandeRv.length,
+        itemBuilder: (BuildContext context, int index) {
+          String key = _dataDemandeRv[index]["patient"]['user']['email'];
+          return Dismissible(
+              key: UniqueKey(),
+              onDismissed: (direction) {
+                setState(() {
+                  print(_dataDemandeRv[index]["id"]);
+                  int id = _dataMemos[index]['id'];
+                  print('delete');
+                  DeleteDemandeRv(id);
+                });
+              },
+              background: new Container(
+                padding: EdgeInsets.only(right: 20.0),
+                color: Colors.red,
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    new Text(
+                      "supprimer",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    new Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    )
+                  ],
+                ),
+              ),
+              child: Container(
+                child: Card(
                   margin: EdgeInsets.all(10),
                   elevation: 12,
                   child: ListTile(
@@ -383,19 +429,24 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                       child: Text(
                           "N°: " + (_dataDemandeRv[index]['id']).toString()),
                     ),
-                    trailing: new TextButton(onPressed: () {
-                      print(_dataDemandeRv[index]["patient"]['user']['email']);
-                      print(_dataDemandeRv[index]["medecin"]['user']['email']);
-                      Navigator.push(
-                        context,
-                        new MaterialPageRoute(builder: (context) =>
-                        new MedecinNewRv(
-                          token: token,
-                            emailPatient: _dataDemandeRv[index]["patient"]['user']['email'],
-                            emailMedecin: _dataDemandeRv[index]['medecin']['user']['email'])),
-                      );
-                    }, child: new Icon(Icons.lock_clock)),
-
+                    trailing: new TextButton(
+                        onPressed: () {
+                          print(_dataDemandeRv[index]["patient"]['user']
+                              ['email']);
+                          print(_dataDemandeRv[index]["medecin"]['user']
+                              ['email']);
+                          Navigator.push(
+                            context,
+                            new MaterialPageRoute(
+                                builder: (context) => new MedecinNewRv(
+                                    token: token,
+                                    emailPatient: _dataDemandeRv[index]
+                                        ["patient"]['user']['email'],
+                                    emailMedecin: _dataDemandeRv[index]
+                                        ['medecin']['user']['email'])),
+                          );
+                        },
+                        child: new Icon(Icons.lock_clock)),
                     title: Text(
                         convertDate(_dataDemandeRv[index]['date_demande'])),
                     subtitle: Text(
@@ -405,17 +456,19 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                       maxLines: 2,
                     ),
                   ),
-                  color: Colors.blueGrey,
-                );
+                  color: Colors.transparent,
+                ),
+              ));
 
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-            (const Divider(
-              thickness: 10,
-            )),
-          ));
+        },
+        separatorBuilder: (BuildContext context, int index) => (const Divider(
+          thickness: 10,
+        )),
+      ));
     } else {
-      return Center(child: Text('pas de demande de RV '),);
+      return Center(
+        child: Text('pas de demande de RV '),
+      );
     }
   }
 
@@ -429,35 +482,34 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           backgroundColor: Colors.blueGrey,
           content: SingleChildScrollView(
               child: Column(
-                children: [
-                  ListTile(
-                    hoverColor: Colors.lightBlueAccent,
-                    title: Text(
-                        _dataDemandeRv[index]['patient']['prenom'] +
-                            ' ' +
-                            _dataDemandeRv[index]['patient']['nom'],
-                        style:
+            children: [
+              ListTile(
+                hoverColor: Colors.lightBlueAccent,
+                title: Text(
+                    _dataDemandeRv[index]['patient']['prenom'] +
+                        ' ' +
+                        _dataDemandeRv[index]['patient']['nom'],
+                    style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('prenom && nom'),
-                  ),
-                  ListTile(
-                    hoverColor: Colors.lightBlueAccent,
-                    title: Text(_dataDemandeRv[index]['patient']['adresse'],
-                        style:
+                subtitle: Text('prenom && nom'),
+              ),
+              ListTile(
+                hoverColor: Colors.lightBlueAccent,
+                title: Text(_dataDemandeRv[index]['patient']['adresse'],
+                    style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('Initial'),
-                  ),
-                  ListTile(
-                    hoverColor: Colors.lightBlueAccent,
-                    title: Text(
-                        _dataDemandeRv[index]['patient']['age'].toString() +
-                            "ans",
-                        style:
+                subtitle: Text('Initial'),
+              ),
+              ListTile(
+                hoverColor: Colors.lightBlueAccent,
+                title: Text(
+                    _dataDemandeRv[index]['patient']['age'].toString() + "ans",
+                    style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('age'),
-                  ),
-                ],
-              )),
+                subtitle: Text('age'),
+              ),
+            ],
+          )),
           actions: <Widget>[
             TextButton(
               child: Text('quittez'),
@@ -473,9 +525,11 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   Future<String> getAllDemandeRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8008/api/demandeRVs/medecin/${medecinC.getIdMedecin}"),
+      Uri.parse(
+          "http://localhost:8008/api/demandeRVs/medecin/${medecinC.getIdMedecin}"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -484,58 +538,84 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
     return "succes";
   }
 
-
   //******************* liste des Rv***************************/////
 
   Center CenterListeRV(BuildContext context) {
     return Center(
         child: ListView.separated(
-          itemCount: _dataRV == null ? 0 : _dataRV.length,
-          itemBuilder: (BuildContext context, int index) {
-              return Card(
-                margin: EdgeInsets.all(10),
-                elevation: 12,
-                child: ListTile(
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IconButton(
-                          onPressed: () {
-                            displayDialogPatientRV(context, index);
-                          },
-                          icon: Icon(Icons.remove_red_eye_outlined)),
-                    ],
+      itemCount: _dataRV == null ? 0 : _dataRV.length,
+      itemBuilder: (BuildContext context, int index) {
+        String i = _dataRV[index]["idrendezVous"].toString();
+
+        return Dismissible(
+            key: Key(i),
+            background: new Container(
+              padding: EdgeInsets.only(right: 20.0),
+              color: Colors.red,
+              child: new Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  new Text(
+                    "supprimer",
+                    style: TextStyle(color: Colors.white),
                   ),
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.amber,
-                    radius: 30,
-                    child: Text(
-                        "N°: " + (_dataRV[index]['idRendezVous']).toString()),
-                  ),
-                  title:
-                  Text(_dataRV[index]['date_rv'] + " at " +
-                      _dataRV[index]['heure']),
-                  subtitle: Text(
-                    _dataRV[index]['patient']['prenom'] +
-                        ' ' +
-                        _dataRV[index]['patient']['nom'],
-                    maxLines: 2,
-                  ),
+                  new Icon(
+                    Icons.delete,
+                    color: Colors.white,
+                  )
+                ],
+              ),
+            ),
+            onDismissed: (direction) {
+              setState(() {
+                print(_dataDemandeRv[index]["id"]);
+                int id = _dataMemos[index]['id'];
+                Deleterv(id);
+              });
+            },
+            child: Card(
+              margin: EdgeInsets.all(10),
+              elevation: 12,
+              child: ListTile(
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          displayDialogPatientRV(context, index);
+                        },
+                        icon: Icon(Icons.remove_red_eye_outlined)),
+                  ],
                 ),
-                color: Colors.blueGrey,
-              );
-          },
-          separatorBuilder: (BuildContext context, int index) =>
-          (const Divider(
-            thickness: 10,
-          )),
-        )
-    );
+                leading: CircleAvatar(
+                  backgroundColor: Colors.amber,
+                  radius: 30,
+                  child: Text(
+                      "N°: " + (_dataRV[index]['idRendezVous']).toString()),
+                ),
+                title: Text(_dataRV[index]['date_rv'] +
+                    " at " +
+                    _dataRV[index]['heure']),
+                subtitle: Text(
+                  _dataRV[index]['patient']['prenom'] +
+                      ' ' +
+                      _dataRV[index]['patient']['nom'],
+                  maxLines: 2,
+                ),
+              ),
+              color: Colors.transparent,
+            ));
+      },
+      separatorBuilder: (BuildContext context, int index) => (const Divider(
+        thickness: 10,
+      )),
+    ));
   }
 
   Future<String> getAllRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8008/api/RendezVous/medecin/${medecinC.getIdMedecin}"),
+      Uri.parse(
+          "http://localhost:8008/api/RendezVous/medecin/${medecinC.getIdMedecin}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer token $token'
@@ -559,48 +639,47 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           backgroundColor: Colors.blueGrey,
           content: SingleChildScrollView(
               child: Column(
-                children: [
-                  ListTile(
-                    hoverColor: Colors.lightBlueAccent,
-                    title: Text(
-                        _dataRV[index]['patient']['prenom'] +
-                            ' ' +
-                            _dataRV[index]['patient']['nom'],
-                        style:
+            children: [
+              ListTile(
+                hoverColor: Colors.lightBlueAccent,
+                title: Text(
+                    _dataRV[index]['patient']['prenom'] +
+                        ' ' +
+                        _dataRV[index]['patient']['nom'],
+                    style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('prenom && nom'),
-                  ),
-                  ListTile(
-                    hoverColor: Colors.lightBlueAccent,
-                    title: Text(_dataRV[index]['patient']['adresse'],
-                        style:
+                subtitle: Text('prenom && nom'),
+              ),
+              ListTile(
+                hoverColor: Colors.lightBlueAccent,
+                title: Text(_dataRV[index]['patient']['adresse'],
+                    style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('Initial'),
-                  ),
-                  ListTile(
-                    hoverColor: Colors.lightBlueAccent,
-                    title: Text(
-                        _dataRV[index]['patient']['age'].toString() + "ans",
-                        style:
+                subtitle: Text('Initial'),
+              ),
+              ListTile(
+                hoverColor: Colors.lightBlueAccent,
+                title: Text(_dataRV[index]['patient']['age'].toString() + "ans",
+                    style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('age'),
-                  ),
-                  ListTile(
-                    hoverColor: Colors.lightBlueAccent,
-                    title: Text(_dataRV[index]['patient']['adresse'],
-                        style:
+                subtitle: Text('age'),
+              ),
+              ListTile(
+                hoverColor: Colors.lightBlueAccent,
+                title: Text(_dataRV[index]['patient']['adresse'],
+                    style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('adresse'),
-                  ),
-                  ListTile(
-                    hoverColor: Colors.lightBlueAccent,
-                    title: Text(_dataRV[index]['patient']['tel'],
-                        style:
+                subtitle: Text('adresse'),
+              ),
+              ListTile(
+                hoverColor: Colors.lightBlueAccent,
+                title: Text(_dataRV[index]['patient']['tel'],
+                    style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                    subtitle: Text('tel'),
-                  ),
-                ],
-              )),
+                subtitle: Text('tel'),
+              ),
+            ],
+          )),
           actions: <Widget>[
             TextButton(
               child: Text('quittez'),
@@ -616,8 +695,8 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
 
   // fonction formatter une date
   String convertDate(String date) {
-    String datef = new DateFormat("dd-MM-yyyy -- HH:mm").format(
-        DateTime.parse(date));
+    String datef =
+        new DateFormat("dd-MM-yyyy -- HH:mm").format(DateTime.parse(date));
     return datef;
   }
 
@@ -626,39 +705,47 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
   Center CenterListePatient(BuildContext context) {
     return Center(
         child: SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height * 0.5,
-          child: ListView.builder(
-              itemCount: _dataPatients.length,
-              itemBuilder: (context, indice) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 1, horizontal: 4),
-                  child: Card(
-                    color: Colors.blueGrey,
-                    elevation: 20,
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        child: Text(_dataPatients[indice]["prenom"][0]),
-                        backgroundColor: Colors.purple,
-                      ),
-                      title: Text(_dataPatients[indice]["prenom"] + " " +
-                          _dataPatients[indice]["nom"]),
-                      subtitle: Text(_dataPatients[indice]["profession"]),
-                      trailing:
-                            new TextButton(
-                                onPressed: () {
-                                  print("pressé ajout consultation");
-                                }
-                                , child: new Icon (Icons.medical_services)
-                            ),
-                    ),
+      height: MediaQuery.of(context).size.height * 0.5,
+      child: ListView.builder(
+          itemCount: _dataPatients.length,
+          itemBuilder: (context, indice) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
+              child: Card(
+                color: Colors.blueGrey,
+                elevation: 20,
+                child: ListTile(
+                  leading: CircleAvatar(
+                    child: Text(_dataPatients[indice]["prenom"][0]),
+                    backgroundColor: Colors.purple,
                   ),
-                );
-              }),
-        ));
+                  title: Text(_dataPatients[indice]["prenom"] +
+                      " " +
+                      _dataPatients[indice]["nom"]),
+                  subtitle: Text(_dataPatients[indice]["profession"]),
+                  trailing: new TextButton(
+                      onPressed: () {
+                        bool exits = verifiedExistingDMPatient(
+                            _dataPatients[indice]["user"]["email"]);
+                        if (exits == false) {
+                          createDMPatient(
+                              _dataPatients[indice]["user"]["email"]);
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "dossier medical deja creer",
+                              webPosition: "center",
+                              backgroundColor: Colors.green,
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 2);
+                        }
+                      },
+                      child: new Icon(Icons.medical_services)),
+                ),
+              ),
+            );
+          }),
+    ));
   }
 
   Future<String> getAllPatients() async {
@@ -798,18 +885,20 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
   }
 
   // save memos in database
-  Future<String> saveMemosDB(String titre, String message, Medecin medecin) async {
+  Future<String> saveMemosDB(
+      String titre, String message, Medecin medecin) async {
     print(medecin);
-    Memos memos = new Memos(
-        idMemos: 0, titre: titre, message: message, medecin: medecin);
+    Memos memos =
+        new Memos(idMemos: 0, titre: titre, message: message, medecin: medecin);
 
-    final http.Response response = await http.post(
-        Uri.parse("http://localhost:8008/api/Memos"),
-        headers: <String, String>{
-          "Accept": "application/json",
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer token $token',
-        }, body: memos.toJson());
+    final http.Response response =
+        await http.post(Uri.parse("http://localhost:8008/api/Memos"),
+            headers: <String, String>{
+              "Accept": "application/json",
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer token $token',
+            },
+            body: memos.toJson());
 
     if (response.statusCode == 200) {
       Fluttertoast.showToast(
@@ -822,7 +911,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           context,
           MaterialPageRoute(
             builder: (context) =>
-                AcceuilMedecin(emailmedecin: emailmedecin,  token: token ),
+                AcceuilMedecin(emailmedecin: emailmedecin, token: token),
           ));
     } else {
       Fluttertoast.showToast(
@@ -834,6 +923,31 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
     }
 
     return "suceess";
+  }
+
+  Future<String> DeleteDemandeRv(int index) async {
+    final http.Response response = await http.delete(
+        Uri.parse("http://localhost:8008/api/demandeRVs/${index}"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer token $token',
+        });
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "message supprimé avec succés",
+          webPosition: "center",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+    } else {
+      Fluttertoast.showToast(
+          msg: "message non supprimé",
+          webPosition: "center",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+    }
+    return "success";
   }
 
   Future<String> DeleteMemosDB(int idMemos) async {
@@ -851,12 +965,6 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) =>
-                AcceuilMedecin(emailmedecin: emailmedecin,  token: token ),
-          ));
     } else {
       Fluttertoast.showToast(
           msg: "message non supprimé",
@@ -877,8 +985,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
       itemBuilder: (BuildContext context, int index) {
         return BuildCardDossierMedical(context, index);
       },
-      separatorBuilder: (BuildContext context, int index) =>
-      (const Divider(
+      separatorBuilder: (BuildContext context, int index) => (const Divider(
         thickness: 10,
       )),
     );
@@ -894,25 +1001,28 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
             child: Text(_dataDm[index]["patient"]["prenom"][0]),
             backgroundColor: Colors.cyan,
           ),
-          title: Text(_dataDm[index]["patient"]["prenom"] + " " +
+          title: Text(_dataDm[index]["patient"]["prenom"] +
+              " " +
               _dataDm[index]["patient"]["nom"]),
           subtitle: Text(_dataDm[index]["patient"]["profession"]),
-
           trailing: Wrap(
             spacing: 6,
             children: <Widget>[
-            new TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              MedecinAddConsultation( emailPatient : _dataDm[index]["patient"]['user']['email'],
-                                  emailMedecin:  this.medecinC.user?.getEmail  , token: token,),
+              new TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MedecinAddConsultation(
+                          emailPatient: _dataDm[index]["patient"]['user']
+                              ['email'],
+                          emailMedecin: this.medecinC.user?.getEmail,
+                          token: token,
                         ),
-                      );
-                    }
-                    , child: new Icon (Icons.add)),
+                      ),
+                    );
+                  },
+                  child: new Icon(Icons.add)),
               new TextButton(
                   onPressed: () {
                     Navigator.push(
@@ -922,8 +1032,8 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                             DetailDmScreen(data: _dataDm, index: index),
                       ),
                     );
-                  }
-                  , child: new Icon (Icons.medical_services)),
+                  },
+                  child: new Icon(Icons.medical_services)),
             ],
           ),
         ),
@@ -937,7 +1047,8 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
     final http.Response response = await http.get(
       Uri.parse("http://localhost:8008/api/dms"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -945,5 +1056,133 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
     });
     print(_dataDm);
     return "succes";
+  }
+
+  bool verifiedExistingDMPatient(String email) {
+    bool exist = false;
+    _dataDm.forEach((element) {
+      if (element["patient"]["user"]["email"] == email) {
+        exist = true;
+      }
+    });
+    return exist;
+  }
+
+  Future<String> createDMPatient(String emailPatient) async {
+    Patient patientC = new Patient(
+      idPatient: 0,
+      statut_social: "",
+      prenom: "",
+      profession: "",
+      adresse: "",
+      genre: "",
+      user: null,
+      nom: "",
+      tel: "",
+      taille: 0,
+      age: 0,
+      // creatAt: DateTime.now()
+    );
+    final http.Response response = await http.get(
+      Uri.parse("http://localhost:8008/api/patients/user/${emailPatient}"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
+      },
+    );
+    setState(() {
+      var data = jsonDecode(response.body);
+      patientC = new Patient(
+        idPatient: data["id"],
+        statut_social: data["statut_social"],
+        prenom: data["prenom"],
+        profession: data["profession"],
+        adresse: data["adresse"],
+        genre: data["genre"],
+        user: new Usermodel.fromMap(data["user"]),
+        nom: data["nom"],
+        tel: data["tel"],
+        taille: data["taille"],
+        age: data["age"],
+        //creatAt: DateTime.parse( data["creatAt"] )
+      );
+      savedm(patientC);
+    });
+    return "success";
+  }
+
+  Future<String> savedm(Patient patientC) async {
+    final http.Response response2 =
+        await http.post(Uri.parse("http://localhost:8008/api/dms"),
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Authorization': 'Bearer token $token'
+            },
+            body: jsonEncode({
+              "medecin": {
+                "idMedecin": medecinC.getIdMedecin,
+                "specialisation": medecinC.getSpecialisation,
+                "initial": medecinC.getInitial,
+                "prenom": medecinC.getPrenom,
+                "num_licence": medecinC.getNumlicence,
+                "adresse": medecinC.getAdresse,
+                "user": {
+                  "iduser": medecinC.user?.iduser,
+                  "email": medecinC.user?.getEmail,
+                  "password": medecinC.user?.getPassword,
+                  "role": medecinC.user?.getRole,
+                  "creatAt": ""
+                },
+                "genre": medecinC.getGenre,
+                "nom": medecinC.getNom,
+                "tel": medecinC.getTel,
+                "taille": medecinC.getTaille,
+                "age": medecinC.getAge,
+                "creatAt": "2021-03-03"
+              },
+              "patient": {
+                "statut_social": patientC,
+                "prenom": patientC.getPrenom,
+                "profession": patientC.getProfession,
+                "adresse": patientC.getAdresse,
+                "genre": patientC.getGenre,
+                "user": {
+                  "iduser": patientC.user?.getIduser,
+                  "email": patientC.user?.getEmail,
+                  "password": patientC.user?.getPassword,
+                  "role": patientC.user?.getRole,
+                  "creatAt": ""
+                },
+                "nom": patientC.getNom,
+                "tel": patientC.getTel,
+                "taille": patientC.getTaille,
+                "age": patientC.getAge,
+                "creatAt": "",
+                "id": patientC.getIdPatient
+              },
+            }));
+    if (response2.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Dossier medical creer",
+          webPosition: "center",
+          backgroundColor: Colors.green,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+    }
+    return "success";
+  }
+
+  Future<String> Deleterv(int id) async {
+
+    final http.Response response = await http.delete(
+      Uri.parse("http://localhost:8008/api/RendezVous/${id}"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
+      },
+    );
+
+    return "success";
   }
 }

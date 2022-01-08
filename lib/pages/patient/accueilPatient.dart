@@ -105,7 +105,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
                           builder: (context) => Login(),
                         ));
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text('LogOut')));
+                        .showSnackBar(const SnackBar(content: Text('déconnecte...')));
                   },
                   icon: Icon(Icons.logout),
                 )
@@ -117,38 +117,48 @@ class _AccueilPatientState extends State<AccueilPatient> {
                 Tab(text: 'Pub', icon: Icon(Icons.post_add)),
               ])),
           drawer: buildDrawerNavgationPatient(context, email, token),
-          body: TabBarView(
-            children: <Widget>[
-              CenterRv(context),
-              //CenterDemandeRv(context),
-              Container(
-                  child: DefaultTabController(
-                length: 2,
-                child: Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: Colors.cyan,
-                    bottom: TabBar(
-                      tabs: [
-                        Tab(text: 'Liste', icon: Icon(Icons.list)),
-                        Tab(text: 'Nouveau', icon: Icon(Icons.add)),
-                      ],
-                    ),
-                    title: Text('Demande de RV'),
-                  ),
-                  body: TabBarView(
-                    children: [
-                      CenterDemandeRv(context),
-                      new Container(
-                          margin: EdgeInsets.all(20),
-                          child: CenterSendDemandeRv(context))
-                    ],
-                  ),
-                ),
-              )),
-              CenterDossierMedical(context),
-              CenterMemos(context),
-            ],
-          ),
+          body: Container(
+              padding: EdgeInsets.all(10),
+              margin: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(2),
+                  image: DecorationImage(
+                      image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
+              child:  TabBarView(
+                children: <Widget>[
+                  CenterRv(context),
+                  //CenterDemandeRv(context),
+                  Container(
+                      child: DefaultTabController(
+                        length: 2,
+                        child: Scaffold(
+                          appBar: AppBar(
+                            backgroundColor: Colors.cyan,
+                            bottom: TabBar(
+                              tabs: [
+                                Tab(text: 'Liste', icon: Icon(Icons.list)),
+                                Tab(text: 'Nouveau', icon: Icon(Icons.add)),
+                              ],
+                            ),
+                            title: Text('Demande de RV'),
+                          ),
+                          body: TabBarView(
+                            children: [
+                              CenterDemandeRv(context),
+                              new Container(
+                                  margin: EdgeInsets.all(20),
+                                  child: CenterSendDemandeRv(context))
+                            ],
+                          ),
+                        ),
+                      )),
+                  CenterDossierMedical(context),
+                  CenterMemos(context),
+                ],
+              ),
+          )
+
+
         ),
       ),
     );
@@ -362,36 +372,64 @@ class _AccueilPatientState extends State<AccueilPatient> {
   }
 
   // parti demande de rv
-
   Center CenterDemandeRv(BuildContext context) {
     if (_dataDemandeRv != null) {
       return Center(
           child: ListView.separated(
         itemCount: _dataDemandeRv == null ? 0 : _dataDemandeRv.length,
         itemBuilder: (BuildContext context, int index) {
-            return Card(
-              margin: EdgeInsets.all(10),
-              elevation: 12,
-              child: ListTile(
-                onTap: () {
-                  displayDialogMedecin(context, index);
-                },
-                leading: CircleAvatar(
-                  backgroundColor: Colors.amber,
-                  radius: 30,
-                  child:
-                      Text("N°: " + (_dataDemandeRv[index]['id']).toString()),
-                ),
-                title: Text(convertDate(_dataDemandeRv[index]['date_demande'])),
-                subtitle: Text(
-                  _dataDemandeRv[index]['medecin']['initial'] +
-                      ' ' +
-                      _dataDemandeRv[index]['medecin']['specialisation'],
-                  maxLines: 2,
+          String i = _dataDemandeRv[index]["id"].toString();
+          final item = i;
+          return Dismissible(key: Key(item),
+              background: new Container(
+                padding: EdgeInsets.only(right: 20.0),
+                color: Colors.red,
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    new Text(
+                      "supprimer",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    new Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    )
+                  ],
                 ),
               ),
-              color: Colors.blueGrey,
-            );
+              child: Card(
+                color: Colors.transparent,
+                margin: EdgeInsets.all(10),
+                elevation: 12,
+                child: ListTile(
+                  onTap: () {
+                    displayDialogMedecin(context, index);
+                  },
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.amber,
+                    radius: 30,
+                    child:
+                    Text("N°: " + (_dataDemandeRv[index]['id']).toString()),
+                  ),
+                  title: Text(convertDate(_dataDemandeRv[index]['date_demande'])),
+                  subtitle: Text(
+                    _dataDemandeRv[index]['medecin']['initial'] +
+                        ' ' +
+                        _dataDemandeRv[index]['medecin']['specialisation'],
+                    maxLines: 2,
+                  ),
+                ),
+
+              ),
+            onDismissed: (direction) {
+              setState(() {
+                print(_dataDemandeRv[index]["id"]);
+                int id = _dataMemos[index]['id'];
+                DeleteDemandeRv(id);
+              });
+            },
+          );
         },
         separatorBuilder: (BuildContext context, int index) => (const Divider(
           thickness: 10,
@@ -712,5 +750,34 @@ class _AccueilPatientState extends State<AccueilPatient> {
       _dataListeMedecins = json.decode(response.body);
     });
     return "succes";
+  }
+
+
+
+  // delete demande rendez-vous
+
+  Future<String> DeleteDemandeRv(int index) async{
+    final http.Response response = await http.delete(
+        Uri.parse("http://localhost:8008/api/demandeRVs/${index}"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer token $token',
+        });
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "message supprimé avec succés",
+          webPosition: "center",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+    } else {
+      Fluttertoast.showToast(
+          msg: "message non supprimé",
+          webPosition: "center",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+    }
+    return "success";
   }
 }
