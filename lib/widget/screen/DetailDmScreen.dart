@@ -14,6 +14,7 @@ class DetailDmScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.cyan,
+        title: Text("dossier médical"),
       ),
       body: Container(
           margin: EdgeInsets.all(2),

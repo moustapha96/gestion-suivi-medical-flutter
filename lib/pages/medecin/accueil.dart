@@ -994,7 +994,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
   Card BuildCardDossierMedical(BuildContext context, int index) {
     return Card(
       child: Card(
-        color: Colors.blueGrey,
+        color: Colors.white70,
         elevation: 10,
         child: ListTile(
           leading: CircleAvatar(

@@ -81,7 +81,6 @@ class _AccueilPatientState extends State<AccueilPatient> {
       getALLMedecins();
       getAllMemos();
     });
-
   }
 
   @override
@@ -91,44 +90,46 @@ class _AccueilPatientState extends State<AccueilPatient> {
       home: DefaultTabController(
         length: 4,
         child: Scaffold(
-          appBar: AppBar(
-              elevation: 10,
-              title: Text("Patient : " + this.patientC.user!.getEmail),
-              backgroundColor: Colors.cyan,
-              actions: [
-                new IconButton(
-                  tooltip: 'logout',
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Login(),
-                        ));
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text('déconnecte...')));
-                  },
-                  icon: Icon(Icons.logout),
-                )
-              ],
-              bottom: const TabBar(tabs: [
-                Tab(text: 'RV', icon: Icon(Icons.connect_without_contact)),
-                Tab(text: 'demande', icon: Icon(Icons.portrait_sharp)),
-                Tab(text: 'Dm', icon: Icon(Icons.medical_services)),
-                Tab(text: 'Pub', icon: Icon(Icons.post_add)),
-              ])),
-          drawer: buildDrawerNavgationPatient(context, email, token),
-          body: Container(
+            appBar: AppBar(
+                elevation: 10,
+                title: Text("Patient : " + this.patientC.user!.getEmail),
+                backgroundColor: Colors.cyan,
+                actions: [
+                  new IconButton(
+                    tooltip: 'logout',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Login(),
+                          ));
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(
+                          const SnackBar(content: Text('déconnecte...')));
+                    },
+                    icon: Icon(Icons.logout),
+                  )
+                ],
+                bottom: const TabBar(tabs: [
+                  Tab(text: 'RV', icon: Icon(Icons.connect_without_contact)),
+                  Tab(text: 'demande', icon: Icon(Icons.portrait_sharp)),
+                  Tab(text: 'Dm', icon: Icon(Icons.medical_services)),
+                  Tab(text: 'Pub', icon: Icon(Icons.post_add)),
+                ])),
+            drawer: buildDrawerNavgationPatient(context, email, token),
+            body: Container(
               padding: EdgeInsets.all(10),
               margin: EdgeInsets.all(2),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(2),
                   image: DecorationImage(
                       image: AssetImage("images/md.jpg"), fit: BoxFit.cover)),
-              child:  TabBarView(
+              child: TabBarView(
                 children: <Widget>[
                   CenterRv(context),
                   //CenterDemandeRv(context),
                   Container(
+                    color: Colors.transparent,
                       child: DefaultTabController(
                         length: 2,
                         child: Scaffold(
@@ -156,7 +157,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
                   CenterMemos(context),
                 ],
               ),
-          )
+            )
 
 
         ),
@@ -166,12 +167,11 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
 // recuperer l'utilisateur connecté
   Future<String> getPatientById() async {
-
-
     final http.Response response = await http.get(
       Uri.parse("http://localhost:8008/api/patients/user/${email}"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -201,12 +201,12 @@ class _AccueilPatientState extends State<AccueilPatient> {
         builder: (BuildContext context) {
           return SimpleDialog(
             elevation: 5,
-            backgroundColor: Colors.blueGrey,
+            backgroundColor: Colors.white70,
             title: Text(
               _dataMemos[index]['titre'],
               textAlign: TextAlign.center,
               style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
             ),
             children: [
               Card(
@@ -239,7 +239,8 @@ class _AccueilPatientState extends State<AccueilPatient> {
     final http.Response response = await http.get(
       Uri.parse("http://localhost:8008/api/Memos"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -251,37 +252,38 @@ class _AccueilPatientState extends State<AccueilPatient> {
   Center CenterMemos(BuildContext context) {
     return Center(
         child: ListView.separated(
-      itemCount: _dataMemos == null ? 0 : _dataMemos.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          trailing: IconButton(
-            color: Colors.lightBlue,
-            icon: Icon(Icons.remove_red_eye),
-            onPressed: () {
-              setState(() {
+          itemCount: _dataMemos == null ? 0 : _dataMemos.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ListTile(
+              trailing: IconButton(
+                color: Colors.lightBlue,
+                icon: Icon(Icons.remove_red_eye),
+                onPressed: () {
+                  setState(() {
+                    displayDialog(context, index);
+                  });
+                },
+              ),
+              onTap: () {
                 displayDialog(context, index);
-              });
-            },
-          ),
-          onTap: () {
-            displayDialog(context, index);
+              },
+              leading: CircleAvatar(
+                backgroundColor: Colors.amber,
+                radius: 30,
+                child: Text((_dataMemos[index]['titre'][0]).toUpperCase()),
+              ),
+              title: Text(_dataMemos[index]['titre']),
+              subtitle: Text(
+                _dataMemos[index]['message'],
+                maxLines: 2,
+              ),
+            );
           },
-          leading: CircleAvatar(
-            backgroundColor: Colors.amber,
-            radius: 30,
-            child: Text((_dataMemos[index]['titre'][0]).toUpperCase()),
-          ),
-          title: Text(_dataMemos[index]['titre']),
-          subtitle: Text(
-            _dataMemos[index]['message'],
-            maxLines: 2,
-          ),
-        );
-      },
-      separatorBuilder: (BuildContext context, int index) => (const Divider(
-        thickness: 10,
-      )),
-    ));
+          separatorBuilder: (BuildContext context, int index) =>
+          (const Divider(
+            thickness: 10,
+          )),
+        ));
   }
 
 // parti dossier medical
@@ -290,7 +292,8 @@ class _AccueilPatientState extends State<AccueilPatient> {
     final http.Response response = await http.get(
       Uri.parse("http://localhost:8008/api/dms/patient/" + this.email),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -306,68 +309,77 @@ class _AccueilPatientState extends State<AccueilPatient> {
   Center CenterDossierMedical(BuildContext context) {
     if (dmm != null) {
       return Center(
-          child: Card(
-              margin: EdgeInsets.fromLTRB(15, 15, 15, 15),
-              elevation: 10,
-              shadowColor: Colors.lightBlueAccent,
-              color: Colors.black12,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    dmm['patient']['prenom'] + ' ' + dmm['patient']['nom'],
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  Text(
-                    'adresse :' + dmm['patient']['adresse'],
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  Text(
-                    'taille :' + dmm['patient']['taille'].toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  Text(
-                    'genre :' + dmm['patient']['genre'],
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  Text(
-                    'Age :' + dmm['patient']['age'].toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  Text(
-                    'Consultations  : ',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.5,
-                    child: ListView.builder(
-                        itemCount: cons.length,
-                        itemBuilder: (context, indice) {
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 1, horizontal: 4),
-                            child: Card(
-                                child: Column(
-                              children: [
-                                Text(cons[indice]['traitement']),
-                                Text(cons[indice]['diagnostic']),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    new Text(cons[indice]['date_consultation']),
-                                  ],
-                                )
-                              ],
-                            )),
-                          );
-                        }),
-                  )
-                ],
-              )));
+        child: Card(
+            margin: EdgeInsets.fromLTRB(15, 15, 15, 15),
+            elevation: 10,
+            shadowColor: Colors.white70,
+            color: Colors.white70,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+            Text(
+            dmm['patient']['prenom'] + ' ' + dmm['patient']['nom'],
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+            Text(
+              'adresse :' + dmm['patient']['adresse'],
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            Text(
+              'taille :' + dmm['patient']['taille'].toString(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            Text(
+              'genre :' + dmm['patient']['genre'],
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            Text(
+              'Age :' + dmm['patient']['age'].toString(),
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            Text(
+              'Consultations  : ',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+            ),
+            SizedBox(
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.5,
+              child: ListView.separated(
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+
+                      trailing: Text(
+                          convertDate(cons[index]["date_consultation"])
+                      ),
+                      leading: CircleAvatar(
+                        backgroundColor: Colors.cyan,
+                        radius: 30,
+                        child: Text((cons[index]["idConsultation"].toString() )
+                            .toUpperCase()),
+                      ),
+                      title: Text(cons[index]['traitement']),
+                      subtitle: Text(
+                        cons[index]['diagnostic'],
+                        maxLines: 3,
+                      ),
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) =>
+              (const Divider(
+              thickness: 10,
+            )),
+        itemCount: cons == null ? 0 : cons.length,)
+
+
+    )
+    ],
+    )));
     } else {
-      return Center(
-        child: Text('Dossier médical vide'),
-      );
+    return Center(
+    child: Text('Dossier médical vide'),
+    );
     }
   }
 
@@ -376,65 +388,67 @@ class _AccueilPatientState extends State<AccueilPatient> {
     if (_dataDemandeRv != null) {
       return Center(
           child: ListView.separated(
-        itemCount: _dataDemandeRv == null ? 0 : _dataDemandeRv.length,
-        itemBuilder: (BuildContext context, int index) {
-          String i = _dataDemandeRv[index]["id"].toString();
-          final item = i;
-          return Dismissible(key: Key(item),
-              background: new Container(
-                padding: EdgeInsets.only(right: 20.0),
-                color: Colors.red,
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    new Text(
-                      "supprimer",
-                      style: TextStyle(color: Colors.white),
+            itemCount: _dataDemandeRv == null ? 0 : _dataDemandeRv.length,
+            itemBuilder: (BuildContext context, int index) {
+              String i = _dataDemandeRv[index]["id"].toString();
+              final item = i;
+              return Dismissible(key: Key(item),
+                background: new Container(
+                  padding: EdgeInsets.only(right: 20.0),
+                  color: Colors.red,
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      new Text(
+                        "supprimer",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      new Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                ),
+                child: Card(
+                  color: Colors.transparent,
+                  margin: EdgeInsets.all(10),
+                  elevation: 12,
+                  child: ListTile(
+                    onTap: () {
+                      displayDialogMedecin(context, index);
+                    },
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.amber,
+                      radius: 30,
+                      child:
+                      Text("N°: " + (_dataDemandeRv[index]['id']).toString()),
                     ),
-                    new Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                    )
-                  ],
-                ),
-              ),
-              child: Card(
-                color: Colors.transparent,
-                margin: EdgeInsets.all(10),
-                elevation: 12,
-                child: ListTile(
-                  onTap: () {
-                    displayDialogMedecin(context, index);
-                  },
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.amber,
-                    radius: 30,
-                    child:
-                    Text("N°: " + (_dataDemandeRv[index]['id']).toString()),
+                    title: Text(
+                        convertDate(_dataDemandeRv[index]['date_demande'])),
+                    subtitle: Text(
+                      _dataDemandeRv[index]['medecin']['initial'] +
+                          ' ' +
+                          _dataDemandeRv[index]['medecin']['specialisation'],
+                      maxLines: 2,
+                    ),
                   ),
-                  title: Text(convertDate(_dataDemandeRv[index]['date_demande'])),
-                  subtitle: Text(
-                    _dataDemandeRv[index]['medecin']['initial'] +
-                        ' ' +
-                        _dataDemandeRv[index]['medecin']['specialisation'],
-                    maxLines: 2,
-                  ),
-                ),
 
-              ),
-            onDismissed: (direction) {
-              setState(() {
-                print(_dataDemandeRv[index]["id"]);
-                int id = _dataMemos[index]['id'];
-                DeleteDemandeRv(id);
-              });
+                ),
+                onDismissed: (direction) {
+                  setState(() {
+                    print(_dataDemandeRv[index]["id"]);
+                    int id = _dataMemos[index]['id'];
+                    DeleteDemandeRv(id);
+                  });
+                },
+              );
             },
-          );
-        },
-        separatorBuilder: (BuildContext context, int index) => (const Divider(
-          thickness: 10,
-        )),
-      ));
+            separatorBuilder: (BuildContext context, int index) =>
+            (const Divider(
+              thickness: 10,
+            )),
+          ));
     } else {
       return Center(
         child: Text('pas de demande de RV '),
@@ -443,13 +457,14 @@ class _AccueilPatientState extends State<AccueilPatient> {
   }
 
   Future<String> getAllDemandeRv() async {
-
     final http.Response response = await http.get(
 
-      Uri.parse("http://localhost:8008/api/demandeRVs/patient/${patientC.getIdPatient}"),
+      Uri.parse("http://localhost:8008/api/demandeRVs/patient/${patientC
+          .getIdPatient}"),
       // Uri.parse("http://localhost:8008/api/demandeRVs"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -466,36 +481,37 @@ class _AccueilPatientState extends State<AccueilPatient> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text('Détail Médecin'),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.white70,
           content: SingleChildScrollView(
               child: Column(
-            children: [
-              ListTile(
-                hoverColor: Colors.lightBlueAccent,
-                title: Text(
-                    _dataDemandeRv[index]['medecin']['prenom'] +
-                        ' ' +
-                        _dataDemandeRv[index]['patient']['nom'],
-                    style:
+                children: [
+                  ListTile(
+                    hoverColor: Colors.lightBlueAccent,
+                    title: Text(
+                        _dataDemandeRv[index]['medecin']['prenom'] +
+                            ' ' +
+                            _dataDemandeRv[index]['patient']['nom'],
+                        style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                subtitle: Text('prenom && nom'),
-              ),
-              ListTile(
-                hoverColor: Colors.lightBlueAccent,
-                title: Text(_dataDemandeRv[index]['medecin']['initial'],
-                    style:
+                    subtitle: Text('prenom && nom'),
+                  ),
+                  ListTile(
+                    hoverColor: Colors.lightBlueAccent,
+                    title: Text(_dataDemandeRv[index]['medecin']['initial'],
+                        style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                subtitle: Text('Initial'),
-              ),
-              ListTile(
-                hoverColor: Colors.lightBlueAccent,
-                title: Text(_dataDemandeRv[index]['medecin']['specialisation'],
-                    style:
+                    subtitle: Text('Initial'),
+                  ),
+                  ListTile(
+                    hoverColor: Colors.lightBlueAccent,
+                    title: Text(
+                        _dataDemandeRv[index]['medecin']['specialisation'],
+                        style:
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
-                subtitle: Text('Spécialité'),
-              ),
-            ],
-          )),
+                    subtitle: Text('Spécialité'),
+                  ),
+                ],
+              )),
           actions: <Widget>[
             TextButton(
               child: Text('quittez'),
@@ -512,93 +528,110 @@ class _AccueilPatientState extends State<AccueilPatient> {
   Center CenterSendDemandeRv(BuildContext context) {
     return Center(
         child: SizedBox(
-      height: MediaQuery.of(context).size.height * 0.5,
-      child: ListView.builder(
-          itemCount: _dataListeMedecins == null ? 0 : _dataListeMedecins.length,
-          itemBuilder: (context, indice) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
-              child: Card(
-                color: Colors.blueGrey,
-                elevation: 20,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    child: Text(_dataListeMedecins[indice]["initial"][0]),
-                    backgroundColor: Colors.purple,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.5,
+          child: ListView.builder(
+              itemCount: _dataListeMedecins == null ? 0 : _dataListeMedecins
+                  .length,
+              itemBuilder: (context, indice) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 1, horizontal: 4),
+                  child: Card(
+                    color: Colors.white70,
+                    elevation: 20,
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        child: Text(_dataListeMedecins[indice]["initial"][0]),
+                        backgroundColor: Colors.purple,
+                      ),
+                      title: Text(_dataListeMedecins[indice]["prenom"] +
+                          " _ " +
+                          _dataListeMedecins[indice]["nom"]),
+                      subtitle: Text(
+                          _dataListeMedecins[indice]["specialisation"]),
+                      trailing: new TextButton(
+                          onPressed: () {
+                            SendDemandeToMedecin(
+                                _dataListeMedecins[indice]["user"]['email']);
+                          },
+                          child: RichText(
+                            text: TextSpan(children: [
+                              TextSpan(text: 'envoyer '),
+                              WidgetSpan(
+                                  child: Icon(
+                                    Icons.send,
+                                    size: 16,
+                                  ))
+                            ]),
+                          )),
+                    ),
                   ),
-                  title: Text(_dataListeMedecins[indice]["prenom"] +
-                      " _ " +
-                      _dataListeMedecins[indice]["nom"]),
-                  subtitle: Text(_dataListeMedecins[indice]["specialisation"]),
-                  trailing: new TextButton(
-                      onPressed: () {
-                        SendDemandeToMedecin(
-                            _dataListeMedecins[indice]["user"]['email']);
-                      },
-                      child: RichText(
-                        text: TextSpan(children: [
-                          TextSpan(text: 'envoyer'),
-                          WidgetSpan(
-                              child: Icon(
-                            Icons.send,
-                            size: 14,
-                          ))
-                        ]),
-                      )),
-                ),
-              ),
-            );
-          }),
-    ));
+                );
+              }),
+        ));
   }
 
   //partie les RV
   Center CenterRv(BuildContext context) {
     return Center(
         child: ListView.separated(
-      itemCount: _dataRV == null ? 0 : _dataRV.length,
-      itemBuilder: (BuildContext context, int index) {
-          return Card(
-            margin: EdgeInsets.all(10),
-            elevation: 12,
-            child: ListTile(
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                      onPressed: () {
-                        displayDialogMedecin(context, index);
-                      },
-                      icon: Icon(Icons.remove_red_eye_outlined)),
-                ],
+          itemCount: _dataRV == null ? 0 : _dataRV.length,
+          itemBuilder: (BuildContext context, int index) {
+            return Card(
+              margin: EdgeInsets.all(10),
+              elevation: 12,
+              child: ListTile(
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          displayDialogMedecin(context, index);
+                        },
+                        icon: Icon(Icons.remove_red_eye_outlined)),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                              int id = _dataRV[index]['idRendezVous'];
+                              Deleterv(id);
+                          });
+                        },
+                        icon: Icon(Icons.delete_forever , color: Colors.red,)),
+                  ],
+                ),
+                leading: CircleAvatar(
+                  backgroundColor: Colors.amber,
+                  radius: 30,
+                  child:
+                  Text("N°: " + (_dataRV[index]['idRendezVous']).toString()),
+                ),
+                title: Text(
+                    _dataRV[index]['date_rv'] + " at " +
+                        _dataRV[index]['heure']),
+                subtitle: Text(
+                  _dataRV[index]['medecin']['prenom'] +
+                      ' ' +
+                      _dataRV[index]['medecin']['nom'],
+                  maxLines: 2,
+                ),
               ),
-              leading: CircleAvatar(
-                backgroundColor: Colors.amber,
-                radius: 30,
-                child:
-                    Text("N°: " + (_dataRV[index]['idRendezVous']).toString()),
-              ),
-              title: Text(
-                  _dataRV[index]['date_rv'] + " at " + _dataRV[index]['heure']),
-              subtitle: Text(
-                _dataRV[index]['medecin']['prenom'] +
-                    ' ' +
-                    _dataRV[index]['medecin']['nom'],
-                maxLines: 2,
-              ),
-            ),
-            color: Colors.blueGrey,
-          );
-      },
-      separatorBuilder: (BuildContext context, int index) => (const Divider(
-        thickness: 10,
-      )),
-    ));
+              color: Colors.white70,
+            );
+          },
+          separatorBuilder: (BuildContext context, int index) =>
+          (const Divider(
+            thickness: 10,
+          )),
+        ));
   }
 
   Future<String> getAllRv() async {
     final http.Response response = await http.get(
-      Uri.parse("http://localhost:8008/api/RendezVous/patient/${patientC.getIdPatient}"),
+      Uri.parse("http://localhost:8008/api/RendezVous/patient/${patientC
+          .getIdPatient}"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Bearer token $token'
@@ -613,7 +646,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
   String convertDate(String date) {
     String datef =
-        new DateFormat("dd-MM-yyyy -- HH:mm").format(DateTime.parse(date));
+    new DateFormat("dd-MM-yyyy - HH:mm").format(DateTime.parse(date));
     return datef;
   }
 
@@ -634,9 +667,10 @@ class _AccueilPatientState extends State<AccueilPatient> {
 
     String _base_email_me = "http://localhost:8008/api/medecins/user";
     final http.Response response = await http
-        .get(Uri.parse(_base_email_me + "/" + emailMedecin), headers: <String, String>{
-      'Accept': 'application/json','Authorization': 'Bearer token $token'
-    });
+        .get(Uri.parse(_base_email_me + "/" + emailMedecin),
+        headers: <String, String>{
+          'Accept': 'application/json', 'Authorization': 'Bearer token $token'
+        });
     setState(() {
       var data = jsonDecode(response.body);
       medecinC = new Medecin(
@@ -656,58 +690,58 @@ class _AccueilPatientState extends State<AccueilPatient> {
     });
 
     final http.Response responseR2 =
-        await http.post(Uri.parse("http://localhost:8008/api/demandeRVs"),
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              'Authorization': 'Bearer token $token'
-            },
-            body: jsonEncode(
-                {
-                  "id": 0,
-                  "medecin": {
-                    "idMedecin": medecinC.getIdMedecin,
-                    "specialisation": medecinC.getSpecialisation,
-                    "initial": medecinC.getInitial,
-                    "prenom": medecinC.getPrenom,
-                    "num_licence": medecinC.getNumlicence,
-                    "adresse": medecinC.getAdresse,
-                    "user": {
-                      "iduser": 4,
-                      "email": medecinC.user?.getEmail,
-                      "password": medecinC.user?.getPassword,
-                      "role": medecinC.user?.getRole,
-                      "creatAt": ""
-                    },
-                    "genre": medecinC.getGenre,
-                    "nom": medecinC.getNom,
-                    "tel": medecinC.getTel,
-                    "taille": medecinC.getTaille,
-                    "age": medecinC.getAge,
-                    "creatAt": "2021-03-03"
-                  },
-                  "patient": {
-                    "statut_social": patientC,
-                    "prenom": patientC.getPrenom,
-                    "profession": patientC.getProfession,
-                    "adresse": patientC.getAdresse,
-                    "genre": patientC.getGenre,
-                    "user": {
-                      "iduser":patientC.user?.getIduser,
-                      "email": patientC.user?.getEmail,
-                      "password": patientC.user?.getPassword,
-                      "role": patientC.user?.getRole,
-                      "creatAt": ""
-                    },
-                    "nom": patientC.getNom,
-                    "tel": patientC.getTel,
-                    "taille": patientC.getTaille,
-                    "age": patientC.getAge,
-                    "creatAt": "",
-                    "id": patientC.getIdPatient
-                  },
-                }
-            )
-           );
+    await http.post(Uri.parse("http://localhost:8008/api/demandeRVs"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer token $token'
+        },
+        body: jsonEncode(
+            {
+              "id": 0,
+              "medecin": {
+                "idMedecin": medecinC.getIdMedecin,
+                "specialisation": medecinC.getSpecialisation,
+                "initial": medecinC.getInitial,
+                "prenom": medecinC.getPrenom,
+                "num_licence": medecinC.getNumlicence,
+                "adresse": medecinC.getAdresse,
+                "user": {
+                  "iduser": 4,
+                  "email": medecinC.user?.getEmail,
+                  "password": medecinC.user?.getPassword,
+                  "role": medecinC.user?.getRole,
+                  "creatAt": ""
+                },
+                "genre": medecinC.getGenre,
+                "nom": medecinC.getNom,
+                "tel": medecinC.getTel,
+                "taille": medecinC.getTaille,
+                "age": medecinC.getAge,
+                "creatAt": "2021-03-03"
+              },
+              "patient": {
+                "statut_social": patientC,
+                "prenom": patientC.getPrenom,
+                "profession": patientC.getProfession,
+                "adresse": patientC.getAdresse,
+                "genre": patientC.getGenre,
+                "user": {
+                  "iduser": patientC.user?.getIduser,
+                  "email": patientC.user?.getEmail,
+                  "password": patientC.user?.getPassword,
+                  "role": patientC.user?.getRole,
+                  "creatAt": ""
+                },
+                "nom": patientC.getNom,
+                "tel": patientC.getTel,
+                "taille": patientC.getTaille,
+                "age": patientC.getAge,
+                "creatAt": "",
+                "id": patientC.getIdPatient
+              },
+            }
+        )
+    );
 
     if (responseR2.statusCode == 200) {
       Fluttertoast.showToast(
@@ -720,13 +754,15 @@ class _AccueilPatientState extends State<AccueilPatient> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => AccueilPatient(email: email, token: token)));
+              builder: (context) =>
+                  AccueilPatient(email: email, token: token)));
     } else {
-      print( responseR2.body );
+      print(responseR2.body);
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => AccueilPatient(email: email, token: token)));
+              builder: (context) =>
+                  AccueilPatient(email: email, token: token)));
       Fluttertoast.showToast(
           msg: "demande non envoye",
           webPosition: "center",
@@ -743,7 +779,8 @@ class _AccueilPatientState extends State<AccueilPatient> {
     final http.Response response = await http.get(
       Uri.parse("http://localhost:8008/api/medecins"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8','Authorization': 'Bearer token $token'
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
       },
     );
     setState(() {
@@ -753,10 +790,9 @@ class _AccueilPatientState extends State<AccueilPatient> {
   }
 
 
-
   // delete demande rendez-vous
 
-  Future<String> DeleteDemandeRv(int index) async{
+  Future<String> DeleteDemandeRv(int index) async {
     final http.Response response = await http.delete(
         Uri.parse("http://localhost:8008/api/demandeRVs/${index}"),
         headers: <String, String>{
@@ -773,6 +809,42 @@ class _AccueilPatientState extends State<AccueilPatient> {
     } else {
       Fluttertoast.showToast(
           msg: "message non supprimé",
+          webPosition: "center",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+    }
+    return "success";
+  }
+
+
+
+//  delete rv
+  Future<String> Deleterv(int id) async {
+
+    final http.Response response = await http.delete(
+      Uri.parse("http://localhost:8008/api/RendezVous/${id}"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
+      },
+    );
+    var rps = response.body;
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "rv supprimé avec succés",
+          webPosition: "center",
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AccueilPatient(email: email, token: token)));
+    } else {
+      Fluttertoast.showToast(
+          msg: "rv non supprimé",
           webPosition: "center",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
