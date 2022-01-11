@@ -73,7 +73,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
     print("email" + emailmedecin);
     super.initState();
     getMedecinById(emailmedecin, token);
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 1), () {
       print(this.medecinC);
       Fluttertoast.showToast(
           msg: "Bienvenue  " + this.medecinC.getInitial,
@@ -99,7 +99,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
         child: Scaffold(
             appBar: AppBar(
                 elevation: 10,
-                title: Text("Médecin : " + this.medecinC.getInitial),
+                title: Text(this.medecinC.getPrenom+ " "+ this.medecinC.getNom),
                 backgroundColor: Colors.cyan,
                 actions: [
                   new IconButton(
@@ -242,18 +242,29 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
               });
             },
             child: ListTile(
-              trailing: IconButton(
-                color: Colors.lightBlue,
-                icon: Icon(Icons.remove_red_eye),
-                onPressed: () {
-                  setState(() {
-                    displayDialog(context, index);
-                  });
-                },
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    color: Colors.lightBlue,
+                      onPressed: () {
+                      setState(() {
+                            displayDialog(context, index);
+                          });
+                      },
+                      icon: Icon(Icons.remove_red_eye_outlined)
+                  ),
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          int id = _dataMemos[index]['idMemos'];
+                          DeleteMemos(id);
+                        });
+                      },
+                      icon: Icon(Icons.delete_forever , color: Colors.red,)),
+                ],
               ),
-              onTap: () {
-                displayDialog(context, index);
-              },
+
               leading: CircleAvatar(
                 backgroundColor: Colors.amber,
                 radius: 30,
@@ -417,6 +428,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
               ),
               child: Container(
                 child: Card(
+                  shadowColor: Colors.white70,
                   margin: EdgeInsets.all(10),
                   elevation: 12,
                   child: ListTile(
@@ -429,7 +441,10 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                       child: Text(
                           "N°: " + (_dataDemandeRv[index]['id']).toString()),
                     ),
-                    trailing: new TextButton(
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextButton(
                         onPressed: () {
                           print(_dataDemandeRv[index]["patient"]['user']
                               ['email']);
@@ -446,7 +461,38 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                                         ['medecin']['user']['email'])),
                           );
                         },
-                        child: new Icon(Icons.lock_clock)),
+                        child: new Icon(Icons.lock_clock)
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                int id = _dataDemandeRv[index]['id'];
+                                DeleteDemandeRv(id);
+                              });
+                            },
+                            icon: Icon(Icons.delete_forever , color: Colors.red,)),
+                      ],
+                    ),
+                    // trailing:
+                    // new TextButton(
+                    //     onPressed: () {
+                    //       print(_dataDemandeRv[index]["patient"]['user']
+                    //           ['email']);
+                    //       print(_dataDemandeRv[index]["medecin"]['user']
+                    //           ['email']);
+                    //       Navigator.push(
+                    //         context,
+                    //         new MaterialPageRoute(
+                    //             builder: (context) => new MedecinNewRv(
+                    //                 token: token,
+                    //                 emailPatient: _dataDemandeRv[index]
+                    //                     ["patient"]['user']['email'],
+                    //                 emailMedecin: _dataDemandeRv[index]
+                    //                     ['medecin']['user']['email'])),
+                    //       );
+                    //     },
+                    //     child: new Icon(Icons.lock_clock)
+                    //     ),
                     title: Text(
                         convertDate(_dataDemandeRv[index]['date_demande'])),
                     subtitle: Text(
@@ -545,7 +591,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
         child: ListView.separated(
       itemCount: _dataRV == null ? 0 : _dataRV.length,
       itemBuilder: (BuildContext context, int index) {
-        String i = _dataRV[index]["idrendezVous"].toString();
+        String i = _dataRV[index]["idRendezVous"].toString();
 
         return Dismissible(
             key: Key(i),
@@ -568,8 +614,8 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
             ),
             onDismissed: (direction) {
               setState(() {
-                print(_dataDemandeRv[index]["id"]);
-                int id = _dataMemos[index]['id'];
+                print(_dataRV[index]["idRendezVous"]);
+                int id = _dataRV[index]['idRendezVous'];
                 Deleterv(id);
               });
             },
@@ -585,6 +631,14 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                           displayDialogPatientRV(context, index);
                         },
                         icon: Icon(Icons.remove_red_eye_outlined)),
+                    IconButton(
+                        onPressed: () {
+                          setState(() {
+                            int id = _dataRV[index]['idRendezVous'];
+                            DeleteMemos(id);
+                          });
+                        },
+                        icon: Icon(Icons.delete_forever , color: Colors.red,)),
                   ],
                 ),
                 leading: CircleAvatar(
@@ -636,7 +690,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text('Détail Patient'),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.white70,
           content: SingleChildScrollView(
               child: Column(
             children: [
@@ -712,7 +766,7 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 1, horizontal: 4),
               child: Card(
-                color: Colors.blueGrey,
+                color: Colors.white70,
                 elevation: 20,
                 child: ListTile(
                   leading: CircleAvatar(
@@ -740,7 +794,8 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
                               timeInSecForIosWeb: 2);
                         }
                       },
-                      child: new Icon(Icons.medical_services)),
+                      child: new Icon(Icons.medical_services)
+                  ),
                 ),
               ),
             );
@@ -939,6 +994,11 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AcceuilMedecin( token: token, emailmedecin: emailmedecin,)));
     } else {
       Fluttertoast.showToast(
           msg: "message non supprimé",
@@ -1174,7 +1234,6 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
   }
 
   Future<String> Deleterv(int id) async {
-
     final http.Response response = await http.delete(
       Uri.parse("http://localhost:8008/api/RendezVous/${id}"),
       headers: <String, String>{
@@ -1182,7 +1241,46 @@ class _AcceuilMedecinState extends State<AcceuilMedecin> {
         'Authorization': 'Bearer token $token'
       },
     );
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "Rendez-vous supprimé avec succes",
+          webPosition: "center",
+          backgroundColor: Colors.green,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AcceuilMedecin( token: token, emailmedecin: emailmedecin,)));
+    }
+    return "success";
+  }
 
+//  delete memos
+  Future<String> DeleteMemos(int id) async {
+    final http.Response response = await http.delete(
+      Uri.parse("http://localhost:8008/api/Memos/${id}"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Bearer token $token'
+      },
+    );
+    if (response.statusCode == 200) {
+      Fluttertoast.showToast(
+          msg: "mémos supprimé avec succes",
+          webPosition: "center",
+          backgroundColor: Colors.green,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AcceuilMedecin( token: token, emailmedecin: emailmedecin,)));
+    }
     return "success";
   }
 }

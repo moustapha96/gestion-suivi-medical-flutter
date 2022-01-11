@@ -33,7 +33,6 @@ class DetailDmScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                        Text(
-                        'Prenom & Nom : ' +
                             this.data[index]['patient']['prenom'] +
                             ' ' +
                             this.data[index]['patient']['nom'],
@@ -41,23 +40,22 @@ class DetailDmScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold, fontSize: 20),
                       ),
                       Text(
-                        'adresse :' + this.data[index]['patient']['adresse'],
+                         this.data[index]['patient']['adresse'],
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                       ),
                       Text(
-                        'taille :' +
                             this.data[index]['patient']['taille'].toString(),
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                       ),
                       Text(
-                        'genre :' + this.data[index]['patient']['genre'],
+                         this.data[index]['patient']['genre'],
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                       ),
                       Text(
-                        'Age :' + this.data[index]['patient']['age'].toString(),
+                         this.data[index]['patient']['age'].toString()+ " ans",
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15),
                       ),
@@ -75,6 +73,7 @@ class DetailDmScreen extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 1, horizontal: 4),
                                 child: Card(
+                                  shadowColor: Colors.white70,
                                   child: ListTile(
                                     title: Text(cons[indice]['diagnostic']),
                                     subtitle: Text(cons[indice]['traitement']),

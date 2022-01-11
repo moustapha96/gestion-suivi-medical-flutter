@@ -63,12 +63,31 @@ class _Login extends State<Login> {
                 child: Column(
                   children: <Widget>[
                     Container(
+                      height: 100,
+                      child: Card(
+                        color: Colors.transparent,
+                        child: Center(
+                          child: Text("GESTION SUIVI MEDICAL DES PATIENTS" ,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        elevation: 5,
+                        margin: EdgeInsets.all(10),
+                      ),
+                    ),
+                    Container(
                         margin: EdgeInsets.fromLTRB(0, 50, 0, 0),
                         alignment: Alignment.center,
                         child: Text(
                           'Connexion',
                           style: TextStyle(
-                              color: Colors.black,
+                              color: Colors.lightBlue,
                               fontWeight: FontWeight.bold,
                               fontSize: 25),
                         )),
@@ -77,6 +96,8 @@ class _Login extends State<Login> {
                       margin: EdgeInsets.fromLTRB(0, 20, 0, 0),
                       child: TextField(
                         controller: emailController,
+                        cursorColor: Colors.white,
+                        style: TextStyle( color: Colors.white ),
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           labelText: 'Email',
@@ -87,6 +108,8 @@ class _Login extends State<Login> {
                       padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                       child: TextField(
                         obscureText: true,
+                        cursorColor: Colors.white,
+                        style: TextStyle( color: Colors.white ),
                         controller: passwordController,
                         decoration: InputDecoration(
                           border: OutlineInputBorder(),
@@ -103,7 +126,7 @@ class _Login extends State<Login> {
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
-                                color: Colors.black),
+                                color: Colors.lightBlue),
                           ),
                           onPressed: login,
                         )),

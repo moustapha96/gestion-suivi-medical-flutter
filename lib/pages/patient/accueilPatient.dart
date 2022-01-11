@@ -67,13 +67,13 @@ class _AccueilPatientState extends State<AccueilPatient> {
     super.initState();
 
     getPatientById();
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 1), () {
       Fluttertoast.showToast(
           msg: "Bienvenue  " + this.patientC.user!.getEmail,
           webPosition: "center",
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 2);
+          timeInSecForIosWeb: 1);
 
       getDmPatient();
       getAllDemandeRv();
@@ -92,7 +92,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
         child: Scaffold(
             appBar: AppBar(
                 elevation: 10,
-                title: Text("Patient : " + this.patientC.user!.getEmail),
+                title: Text( this.patientC.getPrenom +" "+this.patientC.getNom),
                 backgroundColor: Colors.cyan,
                 actions: [
                   new IconButton(
@@ -254,30 +254,37 @@ class _AccueilPatientState extends State<AccueilPatient> {
         child: ListView.separated(
           itemCount: _dataMemos == null ? 0 : _dataMemos.length,
           itemBuilder: (BuildContext context, int index) {
-            return ListTile(
-              trailing: IconButton(
-                color: Colors.lightBlue,
-                icon: Icon(Icons.remove_red_eye),
-                onPressed: () {
-                  setState(() {
-                    displayDialog(context, index);
-                  });
+            if( _dataMemos.length == 0 ){
+              return ListTile(
+                trailing: IconButton(
+                  color: Colors.lightBlue,
+                  icon: Icon(Icons.remove_red_eye),
+                  onPressed: () {
+                    setState(() {
+                      displayDialog(context, index);
+                    });
+                  },
+                ),
+                onTap: () {
+                  displayDialog(context, index);
                 },
-              ),
-              onTap: () {
-                displayDialog(context, index);
-              },
-              leading: CircleAvatar(
-                backgroundColor: Colors.amber,
-                radius: 30,
-                child: Text((_dataMemos[index]['titre'][0]).toUpperCase()),
-              ),
-              title: Text(_dataMemos[index]['titre']),
-              subtitle: Text(
-                _dataMemos[index]['message'],
-                maxLines: 2,
-              ),
-            );
+                leading: CircleAvatar(
+                  backgroundColor: Colors.amber,
+                  radius: 30,
+                  child: Text((_dataMemos[index]['titre'][0]).toUpperCase()),
+                ),
+                title: Text(_dataMemos[index]['titre']),
+                subtitle: Text(
+                  _dataMemos[index]['message'],
+                  maxLines: 2,
+                ),
+              );
+            } else {
+              return Center(
+                child: Text(" pas de publication "),
+              );
+            }
+
           },
           separatorBuilder: (BuildContext context, int index) =>
           (const Divider(
@@ -287,7 +294,6 @@ class _AccueilPatientState extends State<AccueilPatient> {
   }
 
 // parti dossier medical
-
   Future<String> getDmPatient() async {
     final http.Response response = await http.get(
       Uri.parse("http://localhost:8008/api/dms/patient/" + this.email),
@@ -415,6 +421,19 @@ class _AccueilPatientState extends State<AccueilPatient> {
                   margin: EdgeInsets.all(10),
                   elevation: 12,
                   child: ListTile(
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              setState(() {
+                                int id = _dataDemandeRv[index]['id'];
+                                DeleteDemandeRv(id);
+                              });
+                            },
+                            icon: Icon(Icons.delete_forever , color: Colors.red,)),
+                      ],
+                    ),
                     onTap: () {
                       displayDialogMedecin(context, index);
                     },
@@ -789,9 +808,7 @@ class _AccueilPatientState extends State<AccueilPatient> {
     return "succes";
   }
 
-
   // delete demande rendez-vous
-
   Future<String> DeleteDemandeRv(int index) async {
     final http.Response response = await http.delete(
         Uri.parse("http://localhost:8008/api/demandeRVs/${index}"),
@@ -806,6 +823,11 @@ class _AccueilPatientState extends State<AccueilPatient> {
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 2);
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  AccueilPatient(email: email, token: token)));
     } else {
       Fluttertoast.showToast(
           msg: "message non supprimé",
@@ -816,8 +838,6 @@ class _AccueilPatientState extends State<AccueilPatient> {
     }
     return "success";
   }
-
-
 
 //  delete rv
   Future<String> Deleterv(int id) async {
